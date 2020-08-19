@@ -70,7 +70,7 @@ enum ItemType
     I_COUNT
 };
 
-enum Direction
+enum DIRECTION
 {
     UP,
     DOWN,
@@ -82,7 +82,7 @@ enum Direction
 struct SGameChar
 {
     COORD m_cLocation;
-    Direction direction = NONE;
+    DIRECTION direction = NONE;
     bool  m_bActive;
     bool moving;
 };
