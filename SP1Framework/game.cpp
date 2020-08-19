@@ -30,15 +30,15 @@ Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nu
 Box* boxPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 Position* boxPosPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 bool bCarryBox[6] = { false, false, false, false, false, false };
-
+Map map;
+Col col;
 
 // Console object
 int g_ConsoleX = 80;
 int g_ConsoleY = 25;
 Console g_Console(g_ConsoleX, g_ConsoleY, "SP1 Framework");
 
-Map map;
-Col col;
+
 //--------------------------------------------------------------
 // Purpose  : Initialisation function
 //            Initialize variables, allocate memory, load data from file, etc. 
@@ -275,7 +275,6 @@ void update(double dt)
             break;
     }
 }
-
 
 void updateSplashScreen()    // Splash screen logic
 {
