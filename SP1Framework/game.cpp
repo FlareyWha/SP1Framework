@@ -318,75 +318,109 @@ void updateGame()       // game logic
 
 void moveCharacter()
 {    
-    // COLLISION WITH ENVIRONMENT IS SOLVED HERE
-    // Updating the location of the character based on the key release
-    // providing a beep sound whenver we shift the character
-    if (g_skKeyEvent[K_UP].keyDown) // changed .keyPressed into . keyDown
+    // PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+    if (g_skKeyEvent[K_UP].keyDown)
     {
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == 0)
+        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == 0) 
         {
-            g_sChar.m_cLocation.Y--;
+            if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0) 
+            {
+                g_sChar.m_cLocation.Y--;
+                boxPosPtr->setX(g_sChar.m_cLocation.X);
+                boxPosPtr->setY(g_sChar.m_cLocation.Y-1);
+            }
         }
         g_ePreviousGameState = g_eGameState;
     }
-    if (g_skKeyEvent[K_LEFT].keyDown) // changed .keyPressed into . keyDown
+    if (g_skKeyEvent[K_LEFT].keyDown)
     {
         if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == 0)
         {
-            g_sChar.m_cLocation.X--;
+            if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, -1, map) == 0) 
+            {
+                g_sChar.m_cLocation.X--;
+                boxPosPtr->setX(g_sChar.m_cLocation.X-1);
+                boxPosPtr->setY(g_sChar.m_cLocation.Y);               
+            }
         }
         g_ePreviousGameState = g_eGameState;
     }
-    if (g_skKeyEvent[K_DOWN].keyDown)// changed .keyPressed into . keyDown
+    if (g_skKeyEvent[K_DOWN].keyDown)
     {
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == 0)
+        g_sChar.m_cLocation.Y++;
+        g_sChar.m_cLocation.Y--;
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), +1, 0, map) == 0)
         {
-            g_sChar.m_cLocation.Y++;
+            if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == 0)
+            {
+                g_sChar.m_cLocation.Y++;
+                boxPosPtr->setX(g_sChar.m_cLocation.X);
+                boxPosPtr->setY(g_sChar.m_cLocation.Y+1);   
+            }
         }
         g_ePreviousGameState = g_eGameState;
     }
-    if (g_skKeyEvent[K_RIGHT].keyDown) // changed .keyPressed into . keyDown
+    if (g_skKeyEvent[K_RIGHT].keyDown)
     {
         if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == 0)
         {
-            g_sChar.m_cLocation.X++;
+            if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, +1, map) == 0)
+            {
+                g_sChar.m_cLocation.X++;
+                boxPosPtr->setX(g_sChar.m_cLocation.X+1);
+                boxPosPtr->setY(g_sChar.m_cLocation.Y);  
+            }
         }
         g_ePreviousGameState = g_eGameState;
     }
-   
-    
 }
 
 void moveBoxes()  //todo
 {
-    if (g_skKeyEvent[K_RIGHT].keyDown) {
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, +1, map) == 0)
-        {
-            boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
-            boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        }
-    }
-    else if (g_skKeyEvent[K_LEFT].keyDown) {
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, -1, map) == 0)
-        {
-            boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
-            boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        }
-    }
-    else if (g_skKeyEvent[K_UP].keyDown) {
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
-        {
-            boxPosPtr->setX(g_sChar.m_cLocation.X);
-            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-        }
-    }
-    else if (g_skKeyEvent[K_DOWN].keyDown) {
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
-        {
-            boxPosPtr->setX(g_sChar.m_cLocation.X);
-            boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-        }
-    }
+    //if (g_skKeyEvent[K_RIGHT].keyDown) {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+    //}
+    //else if (g_skKeyEvent[K_LEFT].keyDown) {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+    //}
+    //else if (g_skKeyEvent[K_UP].keyDown) {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+    //}
+    //else if (g_skKeyEvent[K_DOWN].keyDown) {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
+    //}
+    //if (g_skKeyEvent[K_RIGHT].keyDown) {
+    //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, +1, map) == 0)
+    //    {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+    //    }
+    //}
+    //else if (g_skKeyEvent[K_LEFT].keyDown) {
+    //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, -1, map) == 0)
+    //    {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+    //    }
+    //}
+    //else if (g_skKeyEvent[K_UP].keyDown) {
+    //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
+    //    {
+            //boxPosPtr->setX(g_sChar.m_cLocation.X);
+            //boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+    //    }
+    //}
+    //else if (g_skKeyEvent[K_DOWN].keyDown) {
+    //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
+    //    {
+    //        boxPosPtr->setX(g_sChar.m_cLocation.X);
+    //        boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
+    //    }
+    //}
        if (p.isHoldingProduct() == false) {
            BoxColour = 0x77; //empty box grey
        }
