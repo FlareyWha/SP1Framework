@@ -353,8 +353,6 @@ void moveCharacter()
         }
         g_ePreviousGameState = g_eGameState;
     }
-   
-    
 }
 
 void moveBoxes() 
