@@ -357,28 +357,36 @@ void moveCharacter()
     
 }
 
-void moveBoxes() 
+void moveBoxes()  //todo
 {
-       if (g_skKeyEvent[K_RIGHT].keyDown) {
+    if (g_skKeyEvent[K_RIGHT].keyDown) {
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, +1, map) == 0)
+        {
             boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
             boxPosPtr->setY(g_sChar.m_cLocation.Y);
-
-       }
-       else if (g_skKeyEvent[K_LEFT].keyDown) {
-           boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
-           boxPosPtr->setY(g_sChar.m_cLocation.Y);
-
-       }
-       else if (g_skKeyEvent[K_UP].keyDown) {
-           boxPosPtr->setX(g_sChar.m_cLocation.X);
-           boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-
-       }
-       else if (g_skKeyEvent[K_DOWN].keyDown) {
-           boxPosPtr->setX(g_sChar.m_cLocation.X);
-           boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-       }
-
+        }
+    }
+    else if (g_skKeyEvent[K_LEFT].keyDown) {
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, -1, map) == 0)
+        {
+            boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+            boxPosPtr->setY(g_sChar.m_cLocation.Y);
+        }
+    }
+    else if (g_skKeyEvent[K_UP].keyDown) {
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
+        {
+            boxPosPtr->setX(g_sChar.m_cLocation.X);
+            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+        }
+    }
+    else if (g_skKeyEvent[K_DOWN].keyDown) {
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0)
+        {
+            boxPosPtr->setX(g_sChar.m_cLocation.X);
+            boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
+        }
+    }
        if (p.isHoldingProduct() == false) {
            BoxColour = 0x77; //empty box grey
        }
