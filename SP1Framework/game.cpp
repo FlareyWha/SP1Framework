@@ -12,6 +12,7 @@
 #include <time.h>
 #include "Customer.h"
 #include "Box.h"
+#include "Player.h"
 
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
@@ -27,9 +28,11 @@ EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 
-Box* boxPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
-Position* boxPosPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
-bool bCarryBox[6] = { false, false, false, false, false, false };
+Player p;
+
+Box* boxPtr;
+Position* boxPosPtr;
+WORD BoxColour;
 
 
 // Console object
@@ -66,14 +69,14 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
+    
+
     //init box and box pos
-    for (int i = 0; i < 6; i++) {
-        if (boxPtr[i] == nullptr) {
-            boxPtr[i] = new Box; // need to delete at end of game
-            boxPosPtr[i] = new Position; //need to delete at end of game
-            boxPosPtr[i]->setX(1);
-            boxPosPtr[i]->setY(i + 2);
-        }
+    if (boxPtr == nullptr) {
+        boxPtr = new Box;
+        boxPosPtr = new Position;
+        boxPosPtr->setX(18);
+        boxPosPtr->setY(2);
     }
 
     g_sChar.m_bActive = true;
@@ -351,55 +354,114 @@ void moveCharacter()
         g_ePreviousGameState = g_eGameState;
     }
    
-    if (g_skKeyEvent[K_SPACE].keyReleased)
-    {
-        g_sChar.m_bActive = !g_sChar.m_bActive;        
-    }
+    
 }
 
 void moveBoxes() 
 {
-    for (int i = 0; i < 6; i++) {
+       if (g_skKeyEvent[K_RIGHT].keyDown) {
+            boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
+            boxPosPtr->setY(g_sChar.m_cLocation.Y);
 
-        if (g_skKeyEvent[K_SPACE].keyDown && bCarryBox[i] == true) { //have to hold down space and move away to let go
-            bCarryBox[i] = false;
-        }
+       }
+       else if (g_skKeyEvent[K_LEFT].keyDown) {
+           boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+           boxPosPtr->setY(g_sChar.m_cLocation.Y);
 
-        if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-        {
-            bCarryBox[i] = true;
-        }
-        else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY()) {
-            bCarryBox[i] = true;
-        }
-        else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() + 1) {
-            bCarryBox[i] = true;
-        }
-        else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() - 1) {
-            bCarryBox[i] = true;
-        }
+       }
+       else if (g_skKeyEvent[K_UP].keyDown) {
+           boxPosPtr->setX(g_sChar.m_cLocation.X);
+           boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+
+       }
+       else if (g_skKeyEvent[K_DOWN].keyDown) {
+           boxPosPtr->setX(g_sChar.m_cLocation.X);
+           boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
+       }
+
+       if (p.isHoldingProduct() == false) {
+           BoxColour = 0x77; //empty box grey
+       }
+
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 3)
+       {
+           BoxColour = 0x55; //toilet paper purple
+           p.holdsProduct();
+       }
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 4)
+       {
+           BoxColour = 0x111; //instant noodle dark blue          
+           p.holdsProduct();
+       }
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 5)
+       {
+           BoxColour = 0xBB; //canned food teal
+        
+           p.holdsProduct();
+       }
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 6)
+       {
+           BoxColour = 0xEE; //rice cream
+           
+           p.holdsProduct();
+       }
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 7)
+       {
+           BoxColour = 0xAA; //vegetable green
+           
+           p.holdsProduct();
+       }
+       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 8)
+       {
+           BoxColour = 0x99;//bandages blue
+           
+           p.holdsProduct();
+       }
 
 
-        if (bCarryBox[i] == true && g_skKeyEvent[K_RIGHT].keyDown) {
-            boxPosPtr[i]->setX(g_sChar.m_cLocation.X + 1);
-            boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
+   
 
-        }
-        else if (bCarryBox[i] == true && g_skKeyEvent[K_LEFT].keyDown) {
-            boxPosPtr[i]->setX(g_sChar.m_cLocation.X - 1);
-            boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
+    //for (int i = 0; i < 6; i++) {
 
-        }
-        else if (bCarryBox[i] == true && g_skKeyEvent[K_UP].keyDown) {
-            boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
-            boxPosPtr[i]->setY(g_sChar.m_cLocation.Y - 1);
+    //    if (g_skKeyEvent[K_SPACE].keyDown && bCarryBox[i] == true) { //have to hold down space and move away to let go
+    //        bCarryBox[i] = false;
+    //    }
 
-        }
-        else if (bCarryBox[i] == true && g_skKeyEvent[K_DOWN].keyDown) {
-            boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
-            boxPosPtr[i]->setY(g_sChar.m_cLocation.Y + 1);
-        }
-    }
+    //    if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+    //    {
+    //        bCarryBox[i] = true;
+    //    }
+    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY()) {
+    //        bCarryBox[i] = true;
+    //    }
+    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() + 1) {
+    //        bCarryBox[i] = true;
+    //    }
+    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() - 1) {
+    //        bCarryBox[i] = true;
+    //    }
+
+
+    //    if (bCarryBox[i] == true && g_skKeyEvent[K_RIGHT].keyDown) {
+    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X + 1);
+    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
+
+    //    }
+    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_LEFT].keyDown) {
+    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X - 1);
+    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
+
+    //    }
+    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_UP].keyDown) {
+    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
+    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y - 1);
+
+    //    }
+    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_DOWN].keyDown) {
+    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
+    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y + 1);
+    //    }
+    //}
 }
 
 void checkEnd() //Check if day has ended
@@ -741,13 +803,50 @@ void renderTutorialLevel()
 
 void renderBoxes() 
 {   
-   
-    g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), (char)1, 0x55); //toilet paper purple
-    g_Console.writeToBuffer(boxPosPtr[1]->getX(), boxPosPtr[1]->getY(), (char)1, 0x111); //instant noodle dark blue
-    g_Console.writeToBuffer(boxPosPtr[2]->getX(), boxPosPtr[2]->getY(), (char)1, 0xBB); //canned food teal
-    g_Console.writeToBuffer(boxPosPtr[3]->getX(), boxPosPtr[3]->getY(), (char)1, 0xEE); //rice cream
-    g_Console.writeToBuffer(boxPosPtr[4]->getX(), boxPosPtr[4]->getY(), (char)1, 0xAA); //vegetable green
-    g_Console.writeToBuffer(boxPosPtr[5]->getX(), boxPosPtr[5]->getY(), (char)1, 0x99); //bandages blue
+    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, BoxColour); 
+    //if (p.isHoldingProduct() == false)
+    //g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x77); //empty box grey
+
+
+    //if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 2)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x55); //toilet paper purple
+    //    p.holdsProduct();
+    //}
+    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 4)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x111); //instant noodle dark blue
+    //    p.holdsProduct();
+    //}
+    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 5)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xBB); //canned food teal
+    //    p.holdsProduct();
+    //}
+    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 6)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xEE); //rice cream
+    //    p.holdsProduct();
+    //}
+    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 7)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xAA); //vegetable green
+    //    p.holdsProduct();
+    //}
+    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 8)
+    //{
+    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x99); //bandages blue
+    //    p.holdsProduct();
+    //}
+
+
+
+    //g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), (char)1, 0x55); //toilet paper purple
+    //g_Console.writeToBuffer(boxPosPtr[1]->getX(), boxPosPtr[1]->getY(), (char)1, 0x111); //instant noodle dark blue
+    //g_Console.writeToBuffer(boxPosPtr[2]->getX(), boxPosPtr[2]->getY(), (char)1, 0xBB); //canned food teal
+    //g_Console.writeToBuffer(boxPosPtr[3]->getX(), boxPosPtr[3]->getY(), (char)1, 0xEE); //rice cream
+    //g_Console.writeToBuffer(boxPosPtr[4]->getX(), boxPosPtr[4]->getY(), (char)1, 0xAA); //vegetable green
+    //g_Console.writeToBuffer(boxPosPtr[5]->getX(), boxPosPtr[5]->getY(), (char)1, 0x99); //bandages blue
 
 
 }
