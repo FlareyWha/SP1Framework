@@ -302,6 +302,7 @@ void updateHome() // Home logic
 
 void updateTutorial() //Tutorial level logic
 {
+    g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
 }
@@ -484,6 +485,10 @@ void checkEnd() //Check if day has ended
     if (g_skKeyEvent[K_F4].keyDown)
     {
         g_dElapsedWorkTime = 0.0;
+        COORD c;
+        c.X = 18;
+        c.Y = 1;
+        g_sChar.m_cLocation = c;
         g_eGameState = S_ENDOFWORKSCREEN;
     }
 }
