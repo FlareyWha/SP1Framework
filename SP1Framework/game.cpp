@@ -36,8 +36,7 @@ Box* boxPtr;
 Position* boxPosPtr;
 WORD BoxColour;
 Map map;
-
-
+int framesPassed;
 
 // Console object
 int g_ConsoleX = 80;
@@ -724,13 +723,18 @@ void renderGame()
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
+    framesPassed++; // counts frames
     COORD c;
-    // displays the elapsed time
     std::ostringstream ss;
-    ss.str("");
+    ss.str("");     // displays the elapsed time
     ss << g_dElapsedWorkTime << "secs";
     c.X = 36; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x59); 
+    ss.str(""); //probably can be implemented cleaner
+    ss << framesPassed << "frames";
+    c.X = 36; 
+    c.Y = 24;  
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
