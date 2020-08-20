@@ -742,17 +742,16 @@ void renderShelfAmount()
 {
     for (int i = 0; i < 2; i++) {
         int amt = sPtr[i]->getAmount();
+        amt = sPtr[i]->getAmount();
+
         switch (amt) {
-        case 4:
+        case 5:
             renderItem(i);
             break;
-        case 8:
+        case 10:
             renderItem(i);
             break;
-        case 12:
-            renderItem(i);
-            break;
-        case 16:
+        case 15:
             renderItem(i);
             break;
         case 20:
@@ -776,8 +775,8 @@ void renderItem(int shelf)
     for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
     }
-    c.X = 25;
-    for (int i = 0; i <= amt / 4; i++) {
+    c.X = 26;
+    for (int i = 0; i <= amt / 5; i++) {
         c.X += 2;
         g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
