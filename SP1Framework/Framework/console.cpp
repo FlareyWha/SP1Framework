@@ -52,7 +52,8 @@ void cls( HANDLE hConsole )
     BOOL bSuccess;
     DWORD cCharsWritten;
     CONSOLE_SCREEN_BUFFER_INFO csbi; /* to get buffer info */ 
-    DWORD dwConSize;                 /* number of character cells in
+    DWORD dwConSize;                 /* 
+                                     ber of character cells in
                                         the current buffer */ 
 
     /* get the number of character cells in the current buffer */ 

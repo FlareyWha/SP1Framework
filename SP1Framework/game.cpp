@@ -974,6 +974,11 @@ void renderBoxes()
     g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), ' ', BoxColour);
 }
 
+void moveCustomer()
+{
+    //todo
+}
+
 void renderCustomer()
 {   
     COORD c = g_Console.getConsoleSize();
@@ -1006,8 +1011,7 @@ void renderCustomer()
                     if (time % 35 != 1) {
                         c.X = 37;
                         c.Y = 7;
-
-                        sPtr[0]->decreaseItem();
+                        //sPtr[0]->decreaseItem();
                         g_Console.writeToBuffer(c, ' ', 0x20);
                         map.setGrid(c.Y, c.X, 'C');
                     }
@@ -1015,7 +1019,7 @@ void renderCustomer()
                    if (time % 35 != 2) {
                         c.X = 37;
                         c.Y = 13;
-                        sPtr[1]->decreaseItem();
+                        //sPtr[1]->decreaseItem();
                         g_Console.writeToBuffer(c, ' ', 0x20);
                         map.setGrid(c.Y, c.X, 'C');
                    };
