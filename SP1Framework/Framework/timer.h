@@ -12,7 +12,7 @@ private:
     UINT            m_uTimerRes;
     
     // function declarations
-    double          LiToSecs( LARGE_INTEGER & liInput ) ;
+    double LiToSecs( LARGE_INTEGER & liInput ) ;
 
 public:
     
