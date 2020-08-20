@@ -723,6 +723,7 @@ void renderGame()
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
+    renderShelfAmount();
     COORD c;
     // displays the elapsed time
     std::ostringstream ss;
@@ -735,7 +736,17 @@ void renderGame()
 
 void renderShelfAmount()
 {
-
+    COORD c;
+    std::ostringstream ss;
+    c.X = 27;
+    c.Y = 0;
+    for (int i = 0; i < 2; i++)
+    {
+        ss.str("");
+        ss << sPtr[i]->getAmount();
+        c.Y += 6;
+        g_Console.writeToBuffer(c, ss.str(), 0x6F);
+    }
 }
 
 void renderMap()
