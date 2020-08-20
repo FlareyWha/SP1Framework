@@ -6,6 +6,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 {
 	itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
 	quantity = rand() % 10 + 1;
+	bSatisfied = false;
 
 	pos.setX(40); //change when we spawn them
 	pos.setY(13); // ^
@@ -72,3 +73,31 @@ bool Customer::shelfWaiting(void)
 	//after 20 seconds trigger this function to set it to true
 	return true;
 }
+
+void Customer::isSatisfied()
+{
+	bSatisfied = true;
+}
+
+void Customer::unSatisfied()
+{
+	bSatisfied = false;
+
+}
+
+bool Customer::getState()
+{
+	
+	return bSatisfied;
+}
+
+int Customer::getQuantity()
+{
+	return quantity;
+}
+
+int Customer::getItemToBuy()
+{
+	return itemToBuy;
+}
+

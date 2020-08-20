@@ -7,13 +7,17 @@ class Customer :
 private:
     int itemToBuy;//to determine which item the customer is going to buy
     int quantity;//to determine how many of the item the customer is going to buy
-
+    bool bSatisfied;
 public:
     Customer();
-    Customer(Map map);
     ~Customer();
     void moveToShelfContainingItem(int itemToBuy);
     bool entranceWaiting(void);
     bool shelfWaiting(void);
+    void isSatisfied();
+    void unSatisfied();
+    bool getState();
+    int getQuantity();
+    int getItemToBuy();
 };
 

@@ -21,6 +21,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
+double timer[6];
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
@@ -53,7 +54,7 @@ Console g_Console(g_ConsoleX, g_ConsoleY, "SP1 Framework");
 //--------------------------------------------------------------
 void init( void )
 {
-
+    
     // initialise random seed for random generation
     srand((unsigned int)time(NULL));
 
@@ -105,6 +106,10 @@ void init( void )
     if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') {
         sPtr[5] = new Shelf;
         sPtr[5]->setShelf(0x10);
+    }
+
+    for (int i = 0; i < 6; i++) {
+        timer[i] = -1;
     }
 
     g_sChar.m_bActive = true;
@@ -292,6 +297,13 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
+
+    for (int i = 0; i < 6; i++) 
+    {
+        if (timer[i] != -1) {
+            timer[i] += dt;
+        }
+    }
 
     switch (g_eGameState)
     {
@@ -551,6 +563,11 @@ void restockShelf(){
     }
     
 }
+
+//void updateCustomer()
+//{
+//    if
+//}
 
 void checkEnd() //Check if day has ended and update variables
 {
@@ -984,47 +1001,48 @@ void renderCustomer()
     COORD c = g_Console.getConsoleSize();
     c.X = 79;
     c.Y = 13;
-    int time = g_dElapsedWorkTime;
-    
-        for (int i = 0; i < 6; i++) {
-            if (customerPtr[i] == nullptr) {
-                customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
-                c.X = customerPtr[i]->getPos().getX();
-                c.Y = customerPtr[i]->getPos().getY();
-                /*g_Console.writeToBuffer(c, ' ', 0x77);*/
-            }
-        }
-        for (int i = 0; i < 6; i++)
-        {
-            if (customerPtr[i] != nullptr && time % 20 != 0) {
-                int num = rand() % 6 + 1; // randomizing customer item
 
-                switch (i) {
-                case 0:
-                    if (time % 10 != 0) {
-                        c.X = 79;
-                        c.Y = 13;
-                        g_Console.writeToBuffer(c, ' ', 0x20);
-                        map.setGrid(c.Y, c.X, 'C');
-                    }
-                case 1:
-                    if (time % 35 != 1) {
-                        c.X = 37;
-                        c.Y = 7;
-                        //sPtr[0]->decreaseItem();
-                        g_Console.writeToBuffer(c, ' ', 0x20);
-                        map.setGrid(c.Y, c.X, 'C');
-                    }
-                case 2:
-                   if (time % 35 != 2) {
-                        c.X = 37;
-                        c.Y = 13;
-                        //sPtr[1]->decreaseItem();
-                        g_Console.writeToBuffer(c, ' ', 0x20);
-                        map.setGrid(c.Y, c.X, 'C');
-                   };
-            }
+    for (int i = 0; i < 6; i++) {
+        if (customerPtr[i] == nullptr) {
+            customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
+            timer[i] = 0;
+            c.X = customerPtr[i]->getPos().getX();
+            c.Y = customerPtr[i]->getPos().getY();
+            /*g_Console.writeToBuffer(c, ' ', 0x77);*/
         }
+    }
+
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+         {
+            if (timer[i] == 1) {
+                c.X = 79;
+                c.Y = 13;
+                g_Console.writeToBuffer(c, ' ', 0x20);
+                map.setGrid(c.Y, c.X, 'C');
+            }
+            switch (customerPtr[i]->getItemToBuy()) {
+            case 1:
+                if (timer[i] == 35 && sPtr[0]->getAmount() != 0) {
+                    c.X = 37;
+                    c.Y = 7;
+                    if (sPtr[0]->getAmount() == 0)
+                        //sPtr[0] ->decreaseItem();
+                        g_Console.writeToBuffer(c, ' ', 0x20);
+                    map.setGrid(c.Y, c.X, 'C');
+                }
+            case 2:
+                if (timer[i] == 35) {
+                    c.X = 37;
+                    c.Y = 13;
+                    //sPtr[1]->decreaseItem();
+                    g_Console.writeToBuffer(c, ' ', 0x20);
+                    map.setGrid(c.Y, c.X, 'C');
+                }
+            }
+         }
+        
     }
 }
 
