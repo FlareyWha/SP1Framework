@@ -80,7 +80,6 @@ void init( void )
     }
 
     g_sChar.m_bActive = true;
-    g_sChar.moving = false;
     // sets the width, height and the font name to use in the console
     g_Console.setConsoleFont(0, 16, L"Consolas");
 
@@ -312,113 +311,80 @@ void updateGame()       // game logic
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter(); 
-    moveBoxes();        
-    
+    actuallyMoving();
+    pickUpBoxes();
 }
 
-void moveCharacter()
-{    
-    // PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+void moveCharacter()//to check if the player is pressing a key
+{     
     if (g_skKeyEvent[K_UP].keyDown)
     {
+        g_sChar.moving.UP = true;
+    }
+    if (g_skKeyEvent[K_RIGHT].keyDown)
+    {
+        g_sChar.moving.RIGHT = true;
+    }
+    if (g_skKeyEvent[K_DOWN].keyDown)
+    {
+        g_sChar.moving.DOWN = true;
+    }
+    if (g_skKeyEvent[K_LEFT].keyDown)
+    {
+        g_sChar.moving.LEFT = true;
+    }
+
+    if (g_skKeyEvent[K_UP].keyReleased)
+    {
+        g_sChar.moving.UP = false;
+    }
+    if (g_skKeyEvent[K_RIGHT].keyReleased)
+    {
+        g_sChar.moving.RIGHT = false;
+    }
+    if (g_skKeyEvent[K_DOWN].keyReleased)
+    {
+        g_sChar.moving.DOWN = false;
+    }
+    if (g_skKeyEvent[K_LEFT].keyReleased)
+    {
+        g_sChar.moving.LEFT = false;
+    } 
+}
+
+void actuallyMoving()
+{
+    //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+
+    switch (g_sChar.moving.UP) 
+    {
+    case true:
+        
         if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == 0)
         {
             g_sChar.m_cLocation.Y--;
         }
+        boxPosPtr->setX(g_sChar.m_cLocation.X);
+        boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
+        {
+            g_sChar.m_cLocation.Y++;
+            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+        }
+        break;
+
+    case false:
+        break;
     }
-    if (g_skKeyEvent[K_DOWN].keyDown)
+
+    switch (g_sChar.moving.DOWN) 
     {
+    case true:
+        
         if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == 0)
         {
             g_sChar.m_cLocation.Y++;
         }
-    }
-    if (g_skKeyEvent[K_LEFT].keyDown)
-    {
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == 0)
-        {
-            g_sChar.m_cLocation.X--;
-        }
-    }
-    if (g_skKeyEvent[K_RIGHT].keyDown)
-    {
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == 0)
-        {
-            g_sChar.m_cLocation.X++;
-        }
-    }
-
-
-        //if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == 0) 
-        //{
-        //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), -1, 0, map) == 0) 
-        //    {
-        //        g_sChar.m_cLocation.Y--;
-                //boxPosPtr->setX(g_sChar.m_cLocation.X);
-                //boxPosPtr->setY(g_sChar.m_cLocation.Y-1);
-        //    }
-        //}
-        //g_ePreviousGameState = g_eGameState;
-  
-        //if (g_skKeyEvent[K_LEFT].keyDown)
-        //{
-        //    if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == 0)
-        //    {
-        //        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, -1, map) == 0) 
-        //        {
-        //            g_sChar.m_cLocation.X--;
-        //            boxPosPtr->setX(g_sChar.m_cLocation.X-1);
-        //            boxPosPtr->setY(g_sChar.m_cLocation.Y);               
-        //        }
-        //    }
-        //    g_ePreviousGameState = g_eGameState;
-        //}
-        //if (g_skKeyEvent[K_DOWN].keyDown)
-        //{
-        //    g_sChar.m_cLocation.Y++;
-        //    g_sChar.m_cLocation.Y--;
-        //    if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), +1, 0, map) == 0)
-        //    {
-        //        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == 0)
-        //        {
-        //            g_sChar.m_cLocation.Y++;
-        //            boxPosPtr->setX(g_sChar.m_cLocation.X);
-        //            boxPosPtr->setY(g_sChar.m_cLocation.Y+1);   
-        //        }
-        //    }
-        //    g_ePreviousGameState = g_eGameState;
-        //}
-        //if (g_skKeyEvent[K_RIGHT].keyDown)
-        //{
-        //    if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == 0)
-        //    {
-        //        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, +1, map) == 0)
-        //        {
-        //            g_sChar.m_cLocation.X++;
-        //            boxPosPtr->setX(g_sChar.m_cLocation.X+1);
-        //            boxPosPtr->setY(g_sChar.m_cLocation.Y);  
-        //        }
-        //    }
-        //    g_ePreviousGameState = g_eGameState;
-        //}
-}
-
-void moveBoxes()  //todo
-{
-    if (g_skKeyEvent[K_UP].keyDown)
-        {
-            boxPosPtr->setX(g_sChar.m_cLocation.X);
-            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-            if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
-            {
-                g_sChar.m_cLocation.Y++;
-                boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-            }
-        }
-    
-    
-    if (g_skKeyEvent[K_DOWN].keyDown)
-    {
         boxPosPtr->setX(g_sChar.m_cLocation.X);
         boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
         if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
@@ -426,10 +392,18 @@ void moveBoxes()  //todo
             g_sChar.m_cLocation.Y--;
             boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
         }
+        break;
+    case false:
+        break;
     }
-    
-    if (g_skKeyEvent[K_LEFT].keyDown)
+    switch (g_sChar.moving.LEFT) 
     {
+    case true:
+        
+        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == 0)
+        {
+            g_sChar.m_cLocation.X--;
+        }
         boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
         boxPosPtr->setY(g_sChar.m_cLocation.Y);
         if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
@@ -437,10 +411,18 @@ void moveBoxes()  //todo
             g_sChar.m_cLocation.X++;
             boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
         }
+        break;
+    case false:
+        break;
     }
-    
-    if (g_skKeyEvent[K_RIGHT].keyDown)
+    switch (g_sChar.moving.RIGHT)
     {
+    case true:
+        
+        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == 0)
+        {
+            g_sChar.m_cLocation.X++;
+        }
         boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
         boxPosPtr->setY(g_sChar.m_cLocation.Y);
         if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
@@ -448,91 +430,52 @@ void moveBoxes()  //todo
             g_sChar.m_cLocation.X--;
             boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
         }
+        break;
+    case false:
+        break;
     }
-   
-       if (p.isHoldingProduct() == false) {
-           BoxColour = 0x77; //empty box grey
-       }
+}
 
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 3)
-       {
-           BoxColour = 0x55; //toilet paper purple
-           p.holdsProduct();
-       }
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 4)
-       {
-           BoxColour = 0x111; //instant noodle dark blue          
-           p.holdsProduct();
-       }
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 5)
-       {
-           BoxColour = 0xBB; //canned food teal
+void pickUpBoxes()  //todo
+{
+    if (p.isHoldingProduct() == false) {
+        BoxColour = 0x77; //empty box grey
+    }
+
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3)
+    {
+        BoxColour = 0x55; //toilet paper purple
+        p.holdsProduct();
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4)
+    {
+        BoxColour = 0x111; //instant noodle dark blue          
+        p.holdsProduct();
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5)
+    {
+        BoxColour = 0xBB; //canned food teal
         
-           p.holdsProduct();
-       }
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 6)
-       {
-           BoxColour = 0xEE; //rice cream
+        p.holdsProduct();
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6)
+    {
+        BoxColour = 0xEE; //rice cream
            
-           p.holdsProduct();
-       }
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 7)
-       {
-           BoxColour = 0xAA; //vegetable green
+        p.holdsProduct();
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7)
+    {
+        BoxColour = 0xAA; //vegetable green
            
-           p.holdsProduct();
-       }
-       if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 2 && g_sChar.m_cLocation.Y == 8)
-       {
-           BoxColour = 0x99;//bandages blue
+        p.holdsProduct();
+    }
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8)
+    {
+        BoxColour = 0x99;//bandages blue
            
-           p.holdsProduct();
-       }
-
-
-   
-
-    //for (int i = 0; i < 6; i++) {
-
-    //    if (g_skKeyEvent[K_SPACE].keyDown && bCarryBox[i] == true) { //have to hold down space and move away to let go
-    //        bCarryBox[i] = false;
-    //    }
-
-    //    if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-    //    {
-    //        bCarryBox[i] = true;
-    //    }
-    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY()) {
-    //        bCarryBox[i] = true;
-    //    }
-    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() + 1) {
-    //        bCarryBox[i] = true;
-    //    }
-    //    else if (bCarryBox[i] == false && g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY() - 1) {
-    //        bCarryBox[i] = true;
-    //    }
-
-
-    //    if (bCarryBox[i] == true && g_skKeyEvent[K_RIGHT].keyDown) {
-    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X + 1);
-    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
-
-    //    }
-    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_LEFT].keyDown) {
-    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X - 1);
-    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y);
-
-    //    }
-    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_UP].keyDown) {
-    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
-    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y - 1);
-
-    //    }
-    //    else if (bCarryBox[i] == true && g_skKeyEvent[K_DOWN].keyDown) {
-    //        boxPosPtr[i]->setX(g_sChar.m_cLocation.X);
-    //        boxPosPtr[i]->setY(g_sChar.m_cLocation.Y + 1);
-    //    }
-    //}
+        p.holdsProduct();
+    }
 }
 
 void checkEnd() //Check if day has ended
@@ -875,51 +818,6 @@ void renderTutorialLevel()
 void renderBoxes() 
 {   
     g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, BoxColour); 
-    //if (p.isHoldingProduct() == false)
-    //g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x77); //empty box grey
-
-
-    //if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 2)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x55); //toilet paper purple
-    //    p.holdsProduct();
-    //}
-    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 4)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x111); //instant noodle dark blue
-    //    p.holdsProduct();
-    //}
-    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 5)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xBB); //canned food teal
-    //    p.holdsProduct();
-    //}
-    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 6)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xEE); //rice cream
-    //    p.holdsProduct();
-    //}
-    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 7)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0xAA); //vegetable green
-    //    p.holdsProduct();
-    //}
-    //else if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 1 && g_sChar.m_cLocation.Y == 8)
-    //{
-    //    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, 0x99); //bandages blue
-    //    p.holdsProduct();
-    //}
-
-
-
-    //g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), (char)1, 0x55); //toilet paper purple
-    //g_Console.writeToBuffer(boxPosPtr[1]->getX(), boxPosPtr[1]->getY(), (char)1, 0x111); //instant noodle dark blue
-    //g_Console.writeToBuffer(boxPosPtr[2]->getX(), boxPosPtr[2]->getY(), (char)1, 0xBB); //canned food teal
-    //g_Console.writeToBuffer(boxPosPtr[3]->getX(), boxPosPtr[3]->getY(), (char)1, 0xEE); //rice cream
-    //g_Console.writeToBuffer(boxPosPtr[4]->getX(), boxPosPtr[4]->getY(), (char)1, 0xAA); //vegetable green
-    //g_Console.writeToBuffer(boxPosPtr[5]->getX(), boxPosPtr[5]->getY(), (char)1, 0x99); //bandages blue
-
-
 }
 
 void renderCustomer()

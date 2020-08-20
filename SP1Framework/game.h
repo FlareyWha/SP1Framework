@@ -70,21 +70,19 @@ enum ItemType
     I_COUNT
 };
 
-enum DIRECTION
+struct DIRECTION
 {
-    UP,
-    DOWN,
-    LEFT,
-    RIGHT,
-    NONE
+    bool UP;
+    bool DOWN;
+    bool LEFT;
+    bool RIGHT;
 };
 // struct for the game character
 struct SGameChar
 {
     COORD m_cLocation;
-    DIRECTION direction = NONE;
+    DIRECTION moving;
     bool  m_bActive;
-    bool moving;
 };
 
 void init        ( void );      // initialize your variables, allocate memory, etc
@@ -101,7 +99,8 @@ void updateTutorial();        // Tutorial logic
 void updateGame();          // Game logic
 
 void moveCharacter(); // moves the character, collision detection, physics, etc
-void moveBoxes();
+void actuallyMoving();
+void pickUpBoxes();
 
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
