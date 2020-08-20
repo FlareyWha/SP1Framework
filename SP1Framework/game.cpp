@@ -935,7 +935,7 @@ void renderEndOfWorkScreen()
 
 void renderTutorialLevel()
 {
-    map.chooseMap(3, g_Console);
+    map.chooseMap(1, g_Console);
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
