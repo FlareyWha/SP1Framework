@@ -786,7 +786,7 @@ void renderGame()
 
 void renderShelfAmount()
 {
-    for (int i = 0; i < 2; i++) {
+    for (int i = 0; i < 6; i++) {
         int amt = sPtr[i]->getAmount();
         amt = sPtr[i]->getAmount();
         renderItem(i);
@@ -801,18 +801,31 @@ void renderItem(int shelf)
 
     COORD c;
     std::ostringstream ss;
-    c.X = 27;
+    c.X = 26;
     c.Y = 0;
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
     }
-    c.X = 26;
     for (int i = 0; i < amt / 5; i++) {
         c.X += 2;
         g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
-    c.X = 27;
+    if (shelf >= 3)
+    {
+        c.X += 21;
+    }
+    for (int x = 3; x <= shelf; x++) {
+        switch (x)
+        {
+        case 3: c.Y = 6;
+            break;
+        case 4: c.Y = 12;
+            break;
+        case 5: c.Y = 18;
+            break;
+        }
+    }
     ss.str("");
     ss << amt;
     g_Console.writeToBuffer(c, ss.str(), colors[2]);
@@ -935,7 +948,7 @@ void renderEndOfWorkScreen()
 
 void renderTutorialLevel()
 {
-    map.chooseMap(1, g_Console);
+    map.chooseMap(5, g_Console);
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
