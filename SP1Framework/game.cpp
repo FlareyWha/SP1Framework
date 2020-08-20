@@ -489,6 +489,8 @@ void checkEnd() //Check if day has ended
         c.X = 18;
         c.Y = 1;
         g_sChar.m_cLocation = c;
+        boxPosPtr->setX(18);
+        boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
     }
 }
