@@ -1,5 +1,6 @@
 #include "Customer.h"
 #include "Position.h"
+#include "Windows.h"
 #include <stdlib.h>
 
 Customer::Customer()//sets which item they want to buy and how much to do so
@@ -8,7 +9,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	quantity = rand() % 10 + 1;
 	bSatisfied = false;
 
-	pos.setX(40); //change when we spawn them
+	pos.setX(79); //change when we spawn them
 	pos.setY(13); // ^
 }
 
@@ -99,5 +100,17 @@ int Customer::getQuantity()
 int Customer::getItemToBuy()
 {
 	return itemToBuy;
+}
+
+void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map)
+{
+	COORD c;
+	if (spawned == true)
+	{
+		c.X = pos.getX();
+		c.Y = pos.getY();
+		console.writeToBuffer(c, ' ', 0x20);
+		map.setGrid(c.Y, c.X, 'C');
+	}
 }
 

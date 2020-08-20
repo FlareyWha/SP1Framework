@@ -21,6 +21,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
+bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
@@ -110,6 +111,11 @@ void init( void )
 
     for (int i = 0; i < 6; i++) {
         timer[i] = -1;
+        /*
+        spawned[i] = false;
+        customerPtr[i] = nullptr;
+        sPtr[i] = nullptr;
+        */
     }
 
     g_sChar.m_bActive = true;
@@ -1034,12 +1040,9 @@ void renderCustomer()
     for (int i = 0; i < 6; i++)
     {
         if (customerPtr[i] != nullptr)
-         {
-            if (timer[i] == 1) {
-                c.X = 79;
-                c.Y = 13;
-                g_Console.writeToBuffer(c, ' ', 0x20);
-                map.setGrid(c.Y, c.X, 'C');
+        {
+            if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) {
+                spawned[i] = true;
             }
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
@@ -1048,7 +1051,7 @@ void renderCustomer()
                     c.Y = 7;
                     if (sPtr[0]->getAmount() == 0)
                         //sPtr[0] ->decreaseItem();
-                        g_Console.writeToBuffer(c, ' ', 0x20);
+                    g_Console.writeToBuffer(c, ' ', 0x20);
                     map.setGrid(c.Y, c.X, 'C');
                 }
             case 2:
@@ -1060,9 +1063,10 @@ void renderCustomer()
                     map.setGrid(c.Y, c.X, 'C');
                 }
             }
-         }
-        
+        }
+        customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
     }
+    
 }
 
 void renderCharacter()

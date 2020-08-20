@@ -1,6 +1,8 @@
 #pragma once
 #include "Entity.h"
 #include "Map.h"
+#include "Windows.h"
+#include "Position.h"
 class Customer :
     public Entity
 {
@@ -19,5 +21,6 @@ public:
     bool getState();
     int getQuantity();
     int getItemToBuy();
+    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map);
 };
 
