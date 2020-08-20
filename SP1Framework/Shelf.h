@@ -19,7 +19,7 @@ public:
     void setAmount(int amount);
     int getItemtag();
     void setItemtag(int itemtag);
-
+    void decreaseItem();
     void setShelf(WORD c);
     WORD returnShelfColour();
 };

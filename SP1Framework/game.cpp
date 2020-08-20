@@ -891,26 +891,28 @@ void renderCustomer()
         }
         for (int i = 0; i < 6; i++)
         {
-            if (customerPtr[i] != nullptr) {
+            if (customerPtr[i] != nullptr && time % 20 != 0) {
                 int num = rand() % 6 + 1; // randomizing customer item
 
                 switch (i) {
                 case 0:
-                    if (time % 10 != 1) {
+                    if (time % 10 != 0) {
                         c.X = 79;
                         c.Y = 13;
                         g_Console.writeToBuffer(c, char(1), 0x122);
                     }
                 case 1:
-                    if (time % 25 != 2) {
+                    if (time % 35 != 1) {
                         c.X = 37;
                         c.Y = 7;
+                        sPtr[0]->decreaseItem();
                         g_Console.writeToBuffer(c, char(1), 0x122);
                     }
                 case 2:
-                   if (time % 10 != 0) {
+                   if (time % 35 != 2) {
                         c.X = 37;
                         c.Y = 13;
+                        sPtr[1]->decreaseItem();
                         g_Console.writeToBuffer(c, char(1), 0x122);
                    }
             }

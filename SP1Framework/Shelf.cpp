@@ -33,6 +33,11 @@ void Shelf::setItemtag(int itemtag)
     this->itemtag = itemtag;
 }
 
+void Shelf::decreaseItem()
+{
+    amount--;
+}
+
 void Shelf::setShelf(WORD c) {
     colour = c;
 }
