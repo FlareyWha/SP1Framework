@@ -458,38 +458,38 @@ void pickUpBoxes()  //todo
         BoxColour = 0x70; //empty box grey
     }
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
-        
+
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
-           
+
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
-           
+
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8)
+    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
-           
+
         p.holdsProduct();
     }
 }
@@ -497,12 +497,12 @@ void pickUpBoxes()  //todo
 void restockShelf(){
     for (int i = 27; i < 37; i++) { //shelf 1 purple
         if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[0]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 + 2 || g_sChar.m_cLocation.Y == 6 - 2) && g_sChar.m_cLocation.X == i) {
-            sPtr[0]->setAmount(20);
+            sPtr[0]->increaseItem(5);
             p.releaseProduct();
         }
 
         if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[1]->returnShelfColour() && (g_sChar.m_cLocation.Y == 12 + 2 || g_sChar.m_cLocation.Y == 12 - 2) && g_sChar.m_cLocation.X == i) {
-            sPtr[1]->setAmount(20);
+            sPtr[1]->increaseItem(5);
             p.releaseProduct();
         }
     }

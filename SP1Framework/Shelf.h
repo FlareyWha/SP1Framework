@@ -20,6 +20,9 @@ public:
     int getItemtag();
     void setItemtag(int itemtag);
 
+    void increaseItem(int i);
+    void decreaseItem();
+
     void setShelf(WORD c);
     WORD returnShelfColour();
 };
