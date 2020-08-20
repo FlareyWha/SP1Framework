@@ -92,19 +92,19 @@ void init( void )
     }
     if (sPtr[2] == nullptr && map.getGrid(5, 1) != 'A') {
         sPtr[2] = new Shelf;
-        sPtr[2]->setShelf(0x50);
+        sPtr[2]->setShelf(0xB0);
     }
     if (sPtr[3] == nullptr && map.getGrid(6, 1) != 'A') {
         sPtr[3] = new Shelf;
-        sPtr[3]->setShelf(0x10);
+        sPtr[3]->setShelf(0xE0);
     }
     if (sPtr[4] == nullptr && map.getGrid(7, 1) != 'A') {
         sPtr[4] = new Shelf;
-        sPtr[4]->setShelf(0x50);
+        sPtr[4]->setShelf(0xA0);
     }
     if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') {
         sPtr[5] = new Shelf;
-        sPtr[5]->setShelf(0x10);
+        sPtr[5]->setShelf(0x90);
     }
 
     g_sChar.m_bActive = true;
