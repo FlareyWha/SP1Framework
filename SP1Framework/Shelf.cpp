@@ -48,5 +48,9 @@ WORD Shelf::returnShelfColour() {
 
 void Shelf::increaseItem(int i) {
     amount = amount + i;
+    if (amount > capacity)
+    {
+        amount = capacity;
+    }
 }
 

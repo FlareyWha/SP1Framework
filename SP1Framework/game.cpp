@@ -790,20 +790,6 @@ void renderShelfAmount()
         int amt = sPtr[i]->getAmount();
         amt = sPtr[i]->getAmount();
         renderItem(i);
-        /*switch (amt) {
-        case 5:
-            renderItem(i);
-            break;
-        case 10:
-            renderItem(i);
-            break;
-        case 15:
-            renderItem(i);
-            break;
-        case 20:
-            renderItem(i);
-            break;
-        }*/
     }
 }
 
