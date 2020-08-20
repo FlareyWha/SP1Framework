@@ -302,6 +302,7 @@ void updateHome() // Home logic
 
 void updateTutorial() //Tutorial level logic
 {
+    g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
 }
@@ -478,12 +479,18 @@ void pickUpBoxes()  //todo
     }
 }
 
-void checkEnd() //Check if day has ended
+void checkEnd() //Check if day has ended and update variables
 {
     //if (g_dElapsedWorkTime >= 5)
     if (g_skKeyEvent[K_F4].keyDown)
     {
         g_dElapsedWorkTime = 0.0;
+        COORD c;
+        c.X = 18;
+        c.Y = 1;
+        g_sChar.m_cLocation = c;
+        boxPosPtr->setX(18);
+        boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
     }
 }
@@ -585,9 +592,9 @@ void processInputHome()
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
         COORD c = g_Console.getConsoleSize();
-        if (g_mouseEvent.mousePosition.X >= c.X - 20
-            && g_mouseEvent.mousePosition.X <= c.X - 13
-            && g_mouseEvent.mousePosition.Y == c.Y / 5 + 4) //Change to main game state once mouse clicks on the button
+        if ((g_mouseEvent.mousePosition.X >= c.X - 20
+            && g_mouseEvent.mousePosition.X <= c.X - 13)
+            && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
             g_eGameState = S_GAME;
         }
@@ -890,7 +897,7 @@ void renderFramerate()
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    c.Y = 24;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
