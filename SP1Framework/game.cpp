@@ -28,7 +28,7 @@ EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 
-Shelf* sPtr[2] = { nullptr, nullptr };
+Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 
 Player p;
 
@@ -72,25 +72,39 @@ void init( void )
     g_sChar.m_cLocation.Y = 1;
 
     
-    //init shelf
-    for (int i = 0; i < 2; i++) {
-        if (sPtr[i] == nullptr) {
-            sPtr[i] = new Shelf;
-        }
-    }
-    if (sPtr[0] != nullptr) {
-        sPtr[0]->setShelf(0x50);
-    }
-    if (sPtr[1] != nullptr) {
-        sPtr[1]->setShelf(0x10);
-    }
-
     //init box and box pos
     if (boxPtr == nullptr) {
         boxPtr = new Box;
         boxPosPtr = new Position;
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
+    }
+
+    //init shelf
+
+    if (sPtr[0] == nullptr && map.getGrid(3, 1) != 'A') { //need to delete Shelf eventually
+        sPtr[0] = new Shelf;
+        sPtr[0]->setShelf(0x50);
+    }
+    if (sPtr[1] == nullptr && map.getGrid(4, 1) != 'A') {
+        sPtr[1] = new Shelf;
+        sPtr[1]->setShelf(0x10);
+    }
+    if (sPtr[2] == nullptr && map.getGrid(5, 1) != 'A') {
+        sPtr[2] = new Shelf;
+        sPtr[2]->setShelf(0x50);
+    }
+    if (sPtr[3] == nullptr && map.getGrid(6, 1) != 'A') {
+        sPtr[3] = new Shelf;
+        sPtr[3]->setShelf(0x10);
+    }
+    if (sPtr[4] == nullptr && map.getGrid(7, 1) != 'A') {
+        sPtr[4] = new Shelf;
+        sPtr[4]->setShelf(0x50);
+    }
+    if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') {
+        sPtr[5] = new Shelf;
+        sPtr[5]->setShelf(0x10);
     }
 
     g_sChar.m_bActive = true;
@@ -507,15 +521,32 @@ void pickUpBoxes()  //todo
 }
 
 void restockShelf(){
-    for (int i = 27; i < 37; i++) { //shelf 1 purple
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[0]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 + 2 || g_sChar.m_cLocation.Y == 6 - 2) && g_sChar.m_cLocation.X == i) {
-            sPtr[0]->increaseItem(5);
-            p.releaseProduct();
-        }
+    for (int i = 27; i < 37; i++) { //3 SHELVES ON THE LEFT
+        for (int j = 0; j < 3; j++) {
 
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[1]->returnShelfColour() && (g_sChar.m_cLocation.Y == 12 + 2 || g_sChar.m_cLocation.Y == 12 - 2) && g_sChar.m_cLocation.X == i) {
-            sPtr[1]->increaseItem(5);
-            p.releaseProduct();
+            if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (1 + j) + 2 || g_sChar.m_cLocation.Y == 6 * (1 + j) - 2) && g_sChar.m_cLocation.X == i) {
+                    sPtr[j]->increaseItem(5);
+                    p.releaseProduct();
+                }
+            }
+        }
+    }
+
+    for (int i = 48; i < 58; i++) { //3 shelves on the right
+
+        for (int j = 3; j < 6;j++) {
+
+            if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
+
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (j - 2) + 2 || g_sChar.m_cLocation.Y == 6 * (j - 2) - 2) && g_sChar.m_cLocation.X == i) {
+
+                    sPtr[j]->increaseItem(5);
+                    p.releaseProduct();
+
+                }
+
+            }
         }
     }
     
