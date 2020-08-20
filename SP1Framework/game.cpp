@@ -764,7 +764,7 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    map.chooseMap(1, g_Console);       // renders the map to the buffer first
+    map.chooseMap(5, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -786,17 +786,26 @@ void renderGame()
 
 void renderShelfAmount()
 {
-    for (int i = 0; i < 6; i++) {
-        int amt = sPtr[i]->getAmount();
-        amt = sPtr[i]->getAmount();
-        renderItem(i);
+    if (g_eGameState == S_GAME) {
+        for (int i = 0; i < 6; i++) {
+            int amt = sPtr[i]->getAmount();
+            amt = sPtr[i]->getAmount();
+            renderItem(i);
+        }
+    }
+    else if (g_eGameState == S_TUT) {
+        for (int i = 0; i < 2; i++) {
+            int amt = sPtr[i]->getAmount();
+            amt = sPtr[i]->getAmount();
+            renderItem(i);
+        }
     }
 }
 
 void renderItem(int shelf)
 {
     const WORD colors[] = {
-        0x55, 0x11, 0x60
+        0x50, 0x10, 0xB0, 0xE0, 0xA0, 0x90, 0x60
     };
 
     COORD c;
@@ -806,10 +815,6 @@ void renderItem(int shelf)
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
-    }
-    for (int i = 0; i < amt / 5; i++) {
-        c.X += 2;
-        g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
     if (shelf >= 3)
     {
@@ -826,9 +831,20 @@ void renderItem(int shelf)
             break;
         }
     }
+    for (int i = 0; i < amt / 5; i++) {
+        c.X += 2;
+        g_Console.writeToBuffer(c, " ", colors[shelf]);
+    }
+    if (shelf >= 3)
+    {
+        c.X = 48;
+    }
+    else {
+        c.X = 26;
+    }
     ss.str("");
     ss << amt;
-    g_Console.writeToBuffer(c, ss.str(), colors[2]);
+    g_Console.writeToBuffer(c, ss.str(), colors[6]);
 }
 
 void renderMap()
@@ -948,7 +964,7 @@ void renderEndOfWorkScreen()
 
 void renderTutorialLevel()
 {
-    map.chooseMap(5, g_Console);
+    map.chooseMap(1, g_Console);
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
