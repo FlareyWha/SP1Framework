@@ -49,7 +49,3 @@ WORD Shelf::returnShelfColour() {
 void Shelf::increaseItem(int i) {
     amount = amount + i;
 }
-
-void Shelf::decreaseItem() {
-    amount--;
-}
