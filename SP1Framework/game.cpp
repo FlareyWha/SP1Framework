@@ -789,8 +789,8 @@ void renderShelfAmount()
     for (int i = 0; i < 2; i++) {
         int amt = sPtr[i]->getAmount();
         amt = sPtr[i]->getAmount();
-
-        switch (amt) {
+        renderItem(i);
+        /*switch (amt) {
         case 5:
             renderItem(i);
             break;
@@ -803,7 +803,7 @@ void renderShelfAmount()
         case 20:
             renderItem(i);
             break;
-        }
+        }*/
     }
 }
 
