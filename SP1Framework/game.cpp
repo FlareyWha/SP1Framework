@@ -12,6 +12,7 @@
 #include "Customer.h"
 #include "Box.h"
 #include "Player.h"
+#include "Shelf.h"
 
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
@@ -27,12 +28,16 @@ EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 
+Shelf* sPtr[2] = { nullptr, nullptr };
+
 Player p;
 
 Box* boxPtr;
 Position* boxPosPtr;
 WORD BoxColour;
 Map map;
+
+
 
 // Console object
 int g_ConsoleX = 80;
@@ -68,6 +73,18 @@ void init( void )
     g_sChar.m_cLocation.Y = 1;
 
     
+    //init shelf
+    for (int i = 0; i < 2; i++) {
+        if (sPtr[i] == nullptr) {
+            sPtr[i] = new Shelf;
+        }
+    }
+    if (sPtr[0] != nullptr) {
+        sPtr[0]->setShelf(0x50);
+    }
+    if (sPtr[1] != nullptr) {
+        sPtr[1]->setShelf(0x10);
+    }
 
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -312,6 +329,7 @@ void updateGame()       // game logic
     moveCharacter(); 
     actuallyMoving();
     pickUpBoxes();
+    restockShelf();
 }
 
 void moveCharacter()//to check if the player is pressing a key
@@ -438,43 +456,58 @@ void actuallyMoving()
 void pickUpBoxes()  //todo
 {
     if (p.isHoldingProduct() == false) {
-        BoxColour = 0x77; //empty box grey
+        BoxColour = 0x70; //empty box grey
     }
 
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3)
     {
-        BoxColour = 0x55; //toilet paper purple
+        BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4)
     {
-        BoxColour = 0x111; //instant noodle dark blue          
+        BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5)
     {
-        BoxColour = 0xBB; //canned food teal
+        BoxColour = 0xB0; //canned food teal
         
         p.holdsProduct();
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6)
     {
-        BoxColour = 0xEE; //rice cream
+        BoxColour = 0xE0; //rice cream
            
         p.holdsProduct();
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7)
     {
-        BoxColour = 0xAA; //vegetable green
+        BoxColour = 0xA0; //vegetable green
            
         p.holdsProduct();
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8)
     {
-        BoxColour = 0x99;//bandages blue
+        BoxColour = 0x90;//bandages blue
            
         p.holdsProduct();
     }
+}
+
+void restockShelf(){
+    for (int i = 27; i < 37; i++) { //shelf 1 purple
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[0]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 + 2 || g_sChar.m_cLocation.Y == 6 - 2) && g_sChar.m_cLocation.X == i) {
+            sPtr[0]->setAmount(20);
+            p.releaseProduct();
+        }
+
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[1]->returnShelfColour() && (g_sChar.m_cLocation.Y == 12 + 2 || g_sChar.m_cLocation.Y == 12 - 2) && g_sChar.m_cLocation.X == i) {
+            sPtr[1]->setAmount(20);
+            p.releaseProduct();
+        }
+    }
+    
 }
 
 void checkEnd() //Check if day has ended and update variables
@@ -822,7 +855,7 @@ void renderTutorialLevel()
 
 void renderBoxes() 
 {   
-    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), (char)1, BoxColour); 
+    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), ' ', BoxColour);
 }
 
 void renderCustomer()
@@ -877,7 +910,7 @@ void renderCharacter()
     {
         charColor = 0xCC;
     }
-    g_Console.writeToBuffer(g_sChar.m_cLocation, (char)1, charColor);
+    g_Console.writeToBuffer(g_sChar.m_cLocation, ' ', charColor);
 }
 
 void renderFramerate()

@@ -1,6 +1,6 @@
 #include "Shelf.h"
 
-Shelf::Shelf() : capacity{ 20 } , amount{0} , itemtag{ ' ' }
+Shelf::Shelf() : capacity{ 20 } , amount{0} , itemtag{ ' ' }, colour{ 0x00 }
 {
 }
 
@@ -31,4 +31,12 @@ int Shelf::getItemtag()
 void Shelf::setItemtag(int itemtag)
 {
     this->itemtag = itemtag;
+}
+
+void Shelf::setShelf(WORD c) {
+    colour = c;
+}
+
+WORD Shelf::returnShelfColour() {
+    return colour;
 }

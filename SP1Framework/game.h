@@ -102,6 +102,8 @@ void moveCharacter(); // moves the character, collision detection, physics, etc
 void actuallyMoving();
 void pickUpBoxes();
 
+void restockShelf();
+
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
