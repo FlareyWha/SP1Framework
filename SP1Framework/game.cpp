@@ -733,6 +733,11 @@ void renderGame()
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
+void renderShelfAmount()
+{
+
+}
+
 void renderMap()
 {
     // Set up sample colours, and output shadings

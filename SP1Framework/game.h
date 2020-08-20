@@ -108,6 +108,7 @@ void processUserInput();    // checks if you should change states or do somethin
 void clearScreen();         // clears the current screen and draw from scratch 
 void renderSplashScreen();  // renders the splash screen
 void renderGame();          // renders the game stuff
+void renderShelfAmount(); //renders the shelf stuff
 void renderMap();           // renders the map to the buffer first
 
 void renderMainMenu(); //renders the main menu
