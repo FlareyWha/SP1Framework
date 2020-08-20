@@ -765,20 +765,26 @@ void renderShelfAmount()
 void renderItem(int shelf)
 {
     const WORD colors[] = {
-        0x55, 0x11
+        0x55, 0x11, 0x60
     };
 
     COORD c;
-    c.X = 25;
+    std::ostringstream ss;
+    c.X = 27;
     c.Y = 0;
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
     }
+    c.X = 25;
     for (int i = 0; i <= amt / 4; i++) {
         c.X += 2;
         g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
+    c.X = 27;
+    ss.str("");
+    ss << amt;
+    g_Console.writeToBuffer(c, ss.str(), colors[2]);
 }
 
 void renderMap()
