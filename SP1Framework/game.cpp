@@ -177,6 +177,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_HOME: gameplayKBHandler(keyboardEvent); // handle home menu keyboard menu
         break;
+    case S_TUT: gameplayKBHandler(keyboardEvent);
+        break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
     }
@@ -209,6 +211,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_ENDOFWORKSCREEN: gameplayMouseHandler(mouseEvent);
         break;
     case S_HOME: gameplayMouseHandler(mouseEvent); // handle mouse input for home menu
+        break;
+    case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
     case S_GAME: gameplayMouseHandler(mouseEvent); // handle gameplay mouse event
         break;
@@ -299,7 +303,7 @@ void update(double dt)
             break;
         case S_HOME: updateHome();
             break;
-        case S_TUT: updateTutorial();
+        case S_TUT: g_dElapsedWorkTime += dt;  updateTutorial();
             break;
         case S_GAME: g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
@@ -333,6 +337,9 @@ void updateTutorial() //Tutorial level logic
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
     moveCharacter();    // moves the character, collision detection, physics, etc
+    actuallyMoving();
+    pickUpBoxes();
+    restockShelf();
 }
 
 void updateGame()       // game logic
@@ -601,7 +608,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_GAME;
+            g_eGameState = S_TUT;
         }
     }
     else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -681,6 +688,7 @@ void processUserInput()
     case S_TUT:
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU;
+        checkEnd();
         break;
     case S_GAME:
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
@@ -711,6 +719,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_ENDOFWORKSCREEN: renderEndOfWorkScreen();
         break;
     case S_HOME: renderHome();
+        break;
+    case S_TUT: renderTutorialLevel();
         break;
     case S_GAME: renderGame();
         break;
@@ -754,7 +764,7 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    renderTutorialLevel();        // renders the map to the buffer first
+    map.chooseMap(1, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -940,6 +950,23 @@ void renderEndOfWorkScreen()
 void renderTutorialLevel()
 {
     map.chooseMap(1, g_Console);
+    renderCharacter();  // renders the character into the buffer
+    renderCustomer();
+    renderBoxes();
+    renderShelfAmount();
+    framesPassed++; // counts frames
+    COORD c;
+    std::ostringstream ss;
+    ss.str("");     // displays the elapsed time
+    ss << g_dElapsedWorkTime << "secs";
+    c.X = 36; //change to shift location of timer
+    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    ss.str(""); //probably can be implemented cleaner
+    ss << framesPassed << "frames";
+    c.X = 36;
+    c.Y = 24;
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
 void renderBoxes() 
