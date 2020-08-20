@@ -109,13 +109,13 @@
     <Text Include="Lvl2.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Lvl3txt">
-      <Filter>Resource Files</Filter>
-    </Text>
     <Text Include="Lvl4.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="Lvl5txt">
+    <Text Include="Lvl3.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Lvl5.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

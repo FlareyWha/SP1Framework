@@ -93,19 +93,19 @@ void init( void )
     }
     if (sPtr[2] == nullptr && map.getGrid(5, 1) != 'A') {
         sPtr[2] = new Shelf;
-        sPtr[2]->setShelf(0x50);
+        sPtr[2]->setShelf(0xB0);
     }
     if (sPtr[3] == nullptr && map.getGrid(6, 1) != 'A') {
         sPtr[3] = new Shelf;
-        sPtr[3]->setShelf(0x10);
+        sPtr[3]->setShelf(0xE0);
     }
     if (sPtr[4] == nullptr && map.getGrid(7, 1) != 'A') {
         sPtr[4] = new Shelf;
-        sPtr[4]->setShelf(0x50);
+        sPtr[4]->setShelf(0xA0);
     }
     if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') {
         sPtr[5] = new Shelf;
-        sPtr[5]->setShelf(0x10);
+        sPtr[5]->setShelf(0x90);
     }
 
     for (int i = 0; i < 6; i++) {
@@ -496,35 +496,35 @@ void pickUpBoxes()  //todo
         BoxColour = 0x70; //empty box grey
     }
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3 && map.getGrid(3, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4 && map.getGrid(4, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5 && map.getGrid(5, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6 && map.getGrid(6, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7 && map.getGrid(7, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8 && map.getGrid(8, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
 
@@ -537,7 +537,7 @@ void restockShelf(){
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (1 + j) + 2 || g_sChar.m_cLocation.Y == 6 * (1 + j) - 2) && g_sChar.m_cLocation.X == i) {
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) {
                     sPtr[j]->increaseItem(5);
                     p.releaseProduct();
                 }
@@ -551,7 +551,7 @@ void restockShelf(){
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (j - 2) + 2 || g_sChar.m_cLocation.Y == 6 * (j - 2) - 2) && g_sChar.m_cLocation.X == i) {
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) {
 
                     sPtr[j]->increaseItem(5);
                     p.releaseProduct();
@@ -582,7 +582,11 @@ void checkEnd() //Check if day has ended and update variables
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
+        for (int i = 0; i < 6; i++) {
+            sPtr[i]->setAmount(0);
+        }
     }
+    
 }
 
 void processDebugState() //Toggle debug options
@@ -781,7 +785,7 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    map.chooseMap(1, g_Console);       // renders the map to the buffer first
+    map.chooseMap(5, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -803,23 +807,18 @@ void renderGame()
 
 void renderShelfAmount()
 {
-    for (int i = 0; i < 2; i++) {
-        int amt = sPtr[i]->getAmount();
-        amt = sPtr[i]->getAmount();
-
-        switch (amt) {
-        case 5:
+    if (g_eGameState == S_GAME) {
+        for (int i = 0; i < 6; i++) {
+            int amt = sPtr[i]->getAmount();
+            amt = sPtr[i]->getAmount();
             renderItem(i);
-            break;
-        case 10:
+        }
+    }
+    else if (g_eGameState == S_TUT) {
+        for (int i = 0; i < 2; i++) {
+            int amt = sPtr[i]->getAmount();
+            amt = sPtr[i]->getAmount();
             renderItem(i);
-            break;
-        case 15:
-            renderItem(i);
-            break;
-        case 20:
-            renderItem(i);
-            break;
         }
     }
 }
@@ -827,7 +826,7 @@ void renderShelfAmount()
 void renderItem(int shelf)
 {
     const WORD colors[] = {
-        0x55, 0x11, 0x60
+        0x50, 0x10, 0xB0, 0xE0, 0xA0, 0x90, 0x60
     };
 
     COORD c;
@@ -838,15 +837,35 @@ void renderItem(int shelf)
     for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
     }
-    c.X = 26;
+    if (shelf >= 3)
+    {
+        c.X += 21;
+    }
+    for (int x = 3; x <= shelf; x++) {
+        switch (x)
+        {
+        case 3: c.Y = 6;
+            break;
+        case 4: c.Y = 12;
+            break;
+        case 5: c.Y = 18;
+            break;
+        }
+    }
     for (int i = 0; i < amt / 5; i++) {
         c.X += 2;
         g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
-    c.X = 27;
+    if (shelf >= 3)
+    {
+        c.X = 48;
+    }
+    else {
+        c.X = 27;
+    }
     ss.str("");
     ss << amt;
-    g_Console.writeToBuffer(c, ss.str(), colors[2]);
+    g_Console.writeToBuffer(c, ss.str(), colors[6]);
 }
 
 void renderMap()
