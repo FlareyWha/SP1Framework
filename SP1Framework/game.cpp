@@ -479,7 +479,7 @@ void pickUpBoxes()  //todo
     }
 }
 
-void checkEnd() //Check if day has ended
+void checkEnd() //Check if day has ended and update variables
 {
     //if (g_dElapsedWorkTime >= 5)
     if (g_skKeyEvent[K_F4].keyDown)
@@ -897,7 +897,7 @@ void renderFramerate()
     ss.str("");
     ss << g_dElapsedTime << "secs";
     c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    c.Y = 24;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
