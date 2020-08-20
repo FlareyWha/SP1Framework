@@ -733,7 +733,7 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    renderTutorialLevel();        // renders the map to the buffer first
+    map.chooseMap(1, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
