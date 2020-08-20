@@ -6,15 +6,16 @@
 class Map
 {
 private:
-	int mapArray[25][80];
+	char mapArray[25][80];
 
 public:
 	Map();
 	~Map();
 	
-	int getGrid(int y, int x);
+	char getGrid(int y, int x);
 	void setGrid(int y, int x, char character);
 	void chooseMap(int lvl, Console& console);
 	void printMap(std::fstream& level, Console& console);
+	char collision(int currentY, int currentX, int moveToY, int moveToX, Map& map);
 };
 

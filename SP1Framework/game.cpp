@@ -3,7 +3,6 @@
 //
 #include "game.h"
 #include "Map.h"
-#include "Collision.h"
 #include "Framework\console.h"
 #include <iostream>
 #include <iomanip>
@@ -34,7 +33,6 @@ Box* boxPtr;
 Position* boxPosPtr;
 WORD BoxColour;
 Map map;
-Col col;
 
 // Console object
 int g_ConsoleX = 80;
@@ -361,13 +359,13 @@ void actuallyMoving()
     {
     case true:
         
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == 0)
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
         {
             g_sChar.m_cLocation.Y--;
         }
         boxPosPtr->setX(g_sChar.m_cLocation.X);
         boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
+        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y++;
             boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
@@ -382,13 +380,13 @@ void actuallyMoving()
     {
     case true:
         
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == 0)
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
         {
             g_sChar.m_cLocation.Y++;
         }
         boxPosPtr->setX(g_sChar.m_cLocation.X);
         boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
+        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y--;
             boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
@@ -401,13 +399,13 @@ void actuallyMoving()
     {
     case true:
         
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == 0)
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
         {
             g_sChar.m_cLocation.X--;
         }
         boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
         boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
+        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.X++;
             boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
@@ -420,13 +418,13 @@ void actuallyMoving()
     {
     case true:
         
-        if (col.collidingWith(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == 0)
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
         {
             g_sChar.m_cLocation.X++;
         }
         boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
         boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (col.collidingWith(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != 0)
+        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.X--;
             boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
