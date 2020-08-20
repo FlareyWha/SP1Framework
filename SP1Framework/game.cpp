@@ -936,22 +936,26 @@ void renderCustomer()
                     if (time % 10 != 0) {
                         c.X = 79;
                         c.Y = 13;
-                        g_Console.writeToBuffer(c, char(1), 0x122);
+                        g_Console.writeToBuffer(c, ' ', 0x20);
+                        map.setGrid(c.Y, c.X, 'C');
                     }
                 case 1:
                     if (time % 35 != 1) {
                         c.X = 37;
                         c.Y = 7;
+
                         sPtr[0]->decreaseItem();
-                        g_Console.writeToBuffer(c, char(1), 0x122);
+                        g_Console.writeToBuffer(c, ' ', 0x20);
+                        map.setGrid(c.Y, c.X, 'C');
                     }
                 case 2:
                    if (time % 35 != 2) {
                         c.X = 37;
                         c.Y = 13;
                         sPtr[1]->decreaseItem();
-                        g_Console.writeToBuffer(c, char(1), 0x122);
-                   }
+                        g_Console.writeToBuffer(c, ' ', 0x20);
+                        map.setGrid(c.Y, c.X, 'C');
+                   };
             }
         }
     }

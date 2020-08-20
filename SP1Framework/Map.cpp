@@ -70,6 +70,9 @@ void Map::printMap(std::fstream& level, Console& console)
 			case 'B':
 				console.writeToBuffer(c, ' ', 0x60); //shelf -- dark yellow
 				break;
+			case 'C':
+				console.writeToBuffer(c, ' ', 0x20); //customer -- dark green
+				break;
 			case '0':
 				console.writeToBuffer(c, ' ', 0xF0); //floor -- white
 				break;
