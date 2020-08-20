@@ -13,7 +13,7 @@ public:
 	~Map();
 	
 	int getGrid(int y, int x);
-	void setGrid(int y, int x, int number);
+	void setGrid(int y, int x, char character);
 	void chooseMap(int lvl, Console& console);
 	void printMap(std::fstream& level, Console& console);
 };
