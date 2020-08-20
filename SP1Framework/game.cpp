@@ -776,7 +776,7 @@ void renderItem(int shelf)
         c.Y += 6;
     }
     c.X = 26;
-    for (int i = 0; i <= amt / 5; i++) {
+    for (int i = 0; i < amt / 5; i++) {
         c.X += 2;
         g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
