@@ -566,6 +566,9 @@ void checkEnd() //Check if day has ended and update variables
         boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
     }
+    for (int i = 0; i < 6; i++) {
+        sPtr[i]->setAmount(0);
+    }
 }
 
 void processDebugState() //Toggle debug options
