@@ -36,8 +36,7 @@ Box* boxPtr;
 Position* boxPosPtr;
 WORD BoxColour;
 Map map;
-
-
+int framesPassed;
 
 // Console object
 int g_ConsoleX = 80;
@@ -724,28 +723,61 @@ void renderGame()
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
+    framesPassed++; // counts frames
     COORD c;
-    // displays the elapsed time
     std::ostringstream ss;
-    ss.str("");
+    ss.str("");     // displays the elapsed time
     ss << g_dElapsedWorkTime << "secs";
     c.X = 36; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x59); 
+    ss.str(""); //probably can be implemented cleaner
+    ss << framesPassed << "frames";
+    c.X = 36; 
+    c.Y = 24;  
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
 void renderShelfAmount()
 {
+    for (int i = 0; i < 2; i++) {
+        int amt = sPtr[i]->getAmount();
+        switch (amt) {
+        case 4:
+            renderItem(i);
+            break;
+        case 8:
+            renderItem(i);
+            break;
+        case 12:
+            renderItem(i);
+            break;
+        case 16:
+            renderItem(i);
+            break;
+        case 20:
+            renderItem(i);
+            break;
+        }
+    }
+}
+
+void renderItem(int shelf)
+{
+    const WORD colors[] = {
+        0x55, 0x11
+    };
+
     COORD c;
-    std::ostringstream ss;
-    c.X = 27;
+    c.X = 25;
     c.Y = 0;
-    for (int i = 0; i < 2; i++)
-    {
-        ss.str("");
-        ss << sPtr[i]->getAmount();
+    int amt = sPtr[shelf]->getAmount();
+    for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
-        g_Console.writeToBuffer(c, ss.str(), 0x6F);
+    }
+    for (int i = 0; i <= amt / 4; i++) {
+        c.X += 2;
+        g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
 }
 
