@@ -41,6 +41,30 @@ void Map::chooseMap(int lvl, Console& console) //this is to choose the map to pr
 		printMap(tutorialLevel, console);
 		break;
 	}
+	case 2:
+	{
+		std::fstream threeshelf("Lvl2.txt");
+		printMap(threeshelf, console);
+		break;
+	}
+	case 3:
+	{
+		std::fstream fourshelf("Lvl3.txt");
+		printMap(fourshelf, console);
+		break;
+	}
+	case 4:
+	{
+		std::fstream fiveshelf("Lvl4.txt");
+		printMap(fiveshelf, console);
+		break;
+	}
+	case 5:
+	{
+		std::fstream finallevel("Lvl5.txt");
+		printMap(finallevel, console);
+		break;
+	}
 	}
 }
 

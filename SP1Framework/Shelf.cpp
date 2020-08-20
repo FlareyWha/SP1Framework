@@ -35,7 +35,7 @@ void Shelf::setItemtag(int itemtag)
 
 void Shelf::decreaseItem()
 {
-    amount--;
+    amount;
 }
 
 void Shelf::setShelf(WORD c) {
