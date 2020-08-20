@@ -371,6 +371,11 @@ void moveCharacter()//to check if the player is pressing a key
 void actuallyMoving()
 {
     //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+    if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0') //quick fix for customer collision with player
+    {
+        g_sChar.m_cLocation.Y++;
+        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+    }
 
     switch (g_sChar.moving.UP) 
     {
