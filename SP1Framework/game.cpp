@@ -814,7 +814,7 @@ void renderItem(int shelf)
 
     COORD c;
     std::ostringstream ss;
-    c.X = 26;
+    c.X = 27;
     c.Y = 0;
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {
@@ -844,7 +844,7 @@ void renderItem(int shelf)
         c.X = 48;
     }
     else {
-        c.X = 26;
+        c.X = 27;
     }
     ss.str("");
     ss << amt;
