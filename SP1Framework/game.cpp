@@ -587,7 +587,7 @@ void processInputHome()
         COORD c = g_Console.getConsoleSize();
         if (g_mouseEvent.mousePosition.X >= c.X - 20
             && g_mouseEvent.mousePosition.X <= c.X - 13
-            && g_mouseEvent.mousePosition.Y == c.Y / 5 + 4) //Change to main game state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == c.Y / 5 + 5) //Change to main game state once mouse clicks on the button
         {
             g_eGameState = S_GAME;
         }
