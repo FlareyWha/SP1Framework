@@ -484,35 +484,35 @@ void pickUpBoxes()  //todo
         BoxColour = 0x70; //empty box grey
     }
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3 && map.getGrid(3, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 4 && map.getGrid(4, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 5 && map.getGrid(5, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 6 && map.getGrid(6, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 7 && map.getGrid(7, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 8 && map.getGrid(8, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
 
@@ -525,7 +525,7 @@ void restockShelf(){
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (1 + j) + 2 || g_sChar.m_cLocation.Y == 6 * (1 + j) - 2) && g_sChar.m_cLocation.X == i) {
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i) {
                     sPtr[j]->increaseItem(5);
                     p.releaseProduct();
                 }
@@ -539,7 +539,7 @@ void restockShelf(){
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (g_sChar.m_cLocation.Y == 6 * (j - 2) + 2 || g_sChar.m_cLocation.Y == 6 * (j - 2) - 2) && g_sChar.m_cLocation.X == i) {
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i) {
 
                     sPtr[j]->increaseItem(5);
                     p.releaseProduct();
