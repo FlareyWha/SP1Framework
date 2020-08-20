@@ -736,16 +736,44 @@ void renderGame()
 
 void renderShelfAmount()
 {
+    for (int i = 0; i < 2; i++) {
+        int amt = sPtr[i]->getAmount();
+        switch (amt) {
+        case 4:
+            renderItem(i);
+            break;
+        case 8:
+            renderItem(i);
+            break;
+        case 12:
+            renderItem(i);
+            break;
+        case 16:
+            renderItem(i);
+            break;
+        case 20:
+            renderItem(i);
+            break;
+        }
+    }
+}
+
+void renderItem(int shelf)
+{
+    const WORD colors[] = {
+        0x55, 0x11
+    };
+
     COORD c;
-    std::ostringstream ss;
-    c.X = 27;
+    c.X = 25;
     c.Y = 0;
-    for (int i = 0; i < 2; i++)
-    {
-        ss.str("");
-        ss << sPtr[i]->getAmount();
+    int amt = sPtr[shelf]->getAmount();
+    for (int x = 0; x <= shelf; x++) {
         c.Y += 6;
-        g_Console.writeToBuffer(c, ss.str(), 0x6F);
+    }
+    for (int i = 0; i <= amt / 4; i++) {
+        c.X += 2;
+        g_Console.writeToBuffer(c, " ", colors[shelf]);
     }
 }
 
