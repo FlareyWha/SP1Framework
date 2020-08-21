@@ -1,10 +1,7 @@
 #include "Player.h"
 
-int Player::strikes = 0;
-
-int Player::savings = 0;
-
-Player::Player() {
+Player::Player() : strikes{ 0 }, savings{0}, dayEarnings{0}
+{
 	holdingProduct = false;
 }
 
@@ -18,6 +15,21 @@ int Player::getStrikes() {
 
 int Player::getSavings() {
 	return savings;
+}
+
+int Player::getTotalEarned()
+{
+	return dayEarnings;
+}
+
+void Player::AddDayEarnings(int earned)
+{
+	dayEarnings += earned;
+}
+
+void Player::resetDayEarnings()
+{
+	dayEarnings = 0;
 }
 
 void Player::receiveStrike() {

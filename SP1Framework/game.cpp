@@ -22,7 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level;
+int level, day; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -75,8 +75,10 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
-    //init level
+    //init level and day and strikes
     level = 1;
+    day = 0;
+  
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -350,12 +352,14 @@ void updateMenu() // Menu logic
 void updateEndofWorkScreen()
 {
     processUserInput();
+    
 }
 
 void updateHome() // Home logic
 {
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+    updateSons();
 }
 
 void updateTutorial() //Tutorial level logic
@@ -583,11 +587,20 @@ void restockShelf(){
 //    if
 //}
 
+void updateSons()
+{
+    
+}
+
 void checkEnd() //Check if day has ended and update variables
 {
     //if (g_dElapsedWorkTime >= 5)
     if (g_skKeyEvent[K_F4].keyDown)
     {
+        g_sChar.moving.UP = false;
+        g_sChar.moving.DOWN = false;
+        g_sChar.moving.LEFT = false;
+        g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
         COORD c;
         c.X = 18;
@@ -596,9 +609,12 @@ void checkEnd() //Check if day has ended and update variables
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
+        p.releaseProduct();
+        cPtr[0]->ChancesOfFallingSick();
+        cPtr[1]->ChancesOfFallingSick();
     }
     
 }
@@ -699,6 +715,7 @@ void processInputHome()
             && g_mouseEvent.mousePosition.X <= c.X - 13)
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
+            day++;
             g_eGameState = S_GAME;
         }
 
@@ -708,6 +725,12 @@ void processInputHome()
             && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
         {
             cPtr[0]->isFed();
+        }
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
+        {
+            cPtr[1]->isFed();
         }
     }
 }
@@ -802,8 +825,8 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-
-    map.chooseMap(5, g_Console);       // renders the map to the buffer first
+    level = 5;
+    map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -834,16 +857,33 @@ void renderHUD()
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
+    ss.str("");//display strikes
+    ss << "Strikes:" << p.getStrikes();
+    c.X = 4;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    ss.str("");// display the current day
+    ss << "Day:" << day;
+    c.X = 20;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    
+    ss.str("");// display the daily income
+    ss << "Money earned: $" << p.getTotalEarned();
+    c.X = 60;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+
     ss.str("");     // displays the elapsed time
-    ss << "Time left:" << g_dElapsedWorkTime << "secs";
+    ss << "Time left : " << 60 - g_dElapsedWorkTime << "secs";
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str(""); //probably can be implemented cleaner
     ss << framesPassed << "frames";
     c.X = 36;
     c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
 }
 
 void renderItem(int shelf)
@@ -963,6 +1003,7 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
+    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Sick", 0xF0);
     }
@@ -987,10 +1028,25 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.X += 8;
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "Sick", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+    }
+    c.X -= 8;
     c.Y += 1;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    if (cPtr[1]->getStatusFed() == true) {
+        c.X += 14;
+        g_Console.writeToBuffer(c, " ", 0x00);
+        c.X -= 14;
+    }
 }
 
 void renderEndOfWorkScreen()
