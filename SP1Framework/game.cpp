@@ -13,6 +13,7 @@
 #include "Box.h"
 #include "Player.h"
 #include "Shelf.h"
+#include "Son.h"
 
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
@@ -31,6 +32,7 @@ EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
+Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
@@ -83,6 +85,10 @@ void init( void )
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
     }
+
+    //init Son objects
+    cPtr[0] = new Son;
+    cPtr[1] = new Son;
 
     //init shelf
 
@@ -695,6 +701,19 @@ void processInputHome()
         {
             g_eGameState = S_GAME;
         }
+
+        // Expenses toggling
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+        {
+            cPtr[0]->isFed();
+        }
+        else if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 8) {
+            cPtr[0]->isnotFed();
+        }
     }
 }
 
@@ -965,6 +984,10 @@ void renderHome()
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
+}
+
+void renderHomeExpenses()
+{
 }
 
 void renderEndOfWorkScreen()
