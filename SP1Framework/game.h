@@ -116,7 +116,7 @@ void renderHUD();        // renders the HUD
 void renderMainMenu(); //renders the main menu
 void renderHome(); //renders home
 void renderEndOfWorkScreen();
-void renderTutorialLevel(); // renders the tutorial level
+void renderTutorialLevel(); // renders tutorial level
 
 void renderBoxes();
 void renderCustomer();

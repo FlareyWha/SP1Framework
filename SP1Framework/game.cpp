@@ -73,6 +73,8 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
+    //init level
+    level = 1;
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -786,25 +788,12 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    map.chooseMap(5, g_Console);       // renders the map to the buffer first
+    map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
     renderHUD();
-    framesPassed++; // counts frames
-    COORD c;
-    std::ostringstream ss;
-    ss.str("");     // displays the elapsed time
-    ss << g_dElapsedWorkTime << "secs";
-    c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59); 
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36; 
-    c.Y = 24;  
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
 void renderShelfAmount()
@@ -823,6 +812,23 @@ void renderShelfAmount()
             renderItem(i);
         }
     }
+}
+
+void renderHUD()
+{
+    framesPassed++; // counts frames
+    COORD c;
+    std::ostringstream ss;
+    ss.str("");     // displays the elapsed time
+    ss << g_dElapsedWorkTime << "secs";
+    c.X = 36; //change to shift location of timer
+    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    ss.str(""); //probably can be implemented cleaner
+    ss << framesPassed << "frames";
+    c.X = 36;
+    c.Y = 24;
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
 void renderItem(int shelf)
@@ -886,11 +892,6 @@ void renderMap()
         colour(colors[i]); //Change text colour
         g_Console.writeToBuffer(c, " ", colors[i]); //Change text background
     }
-}
-
-void renderHUD()
-{
-
 }
 
 void renderMainMenu() 
