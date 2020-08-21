@@ -594,8 +594,7 @@ void updateSons()
 
 void checkEnd() //Check if day has ended and update variables
 {
-    //if (g_dElapsedWorkTime >= 5)
-    if (g_skKeyEvent[K_F4].keyDown)
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 180)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
@@ -825,7 +824,13 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    level = 5;
+   
+    if (day < 5) {
+        level = day + 1;
+    }
+    else { 
+        level = 5;
+    }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
