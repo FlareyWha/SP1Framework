@@ -807,7 +807,8 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    map.chooseMap(level, g_Console);       // renders the map to the buffer first
+
+    map.chooseMap(5, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -839,8 +840,8 @@ void renderHUD()
     COORD c;
     std::ostringstream ss;
     ss.str("");     // displays the elapsed time
-    ss << g_dElapsedWorkTime << "secs";
-    c.X = 36; //change to shift location of timer
+    ss << "Time left:" << g_dElapsedWorkTime << "secs";
+    c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x59);
     ss.str(""); //probably can be implemented cleaner
@@ -1021,19 +1022,7 @@ void renderTutorialLevel()
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
-    framesPassed++; // counts frames
-    COORD c;
-    std::ostringstream ss;
-    ss.str("");     // displays the elapsed time
-    ss << g_dElapsedWorkTime << "secs";
-    c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36;
-    c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    renderHUD();
 }
 
 void renderBoxes() 
