@@ -865,6 +865,13 @@ void renderHUD()
     c.X = 20;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
+    
+    ss.str("");// display the daily earnings
+    ss << "Earnings:" << p.getTotalEarned();
+    c.X = 60;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+
     ss.str("");     // displays the elapsed time
     ss << "Time left:" << g_dElapsedWorkTime << "secs";
     c.X = 30; //change to shift location of timer
