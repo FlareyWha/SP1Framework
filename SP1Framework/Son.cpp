@@ -21,12 +21,18 @@ bool Son::getStatus() {
 
 void Son::isFed()
 {
-	btoggleFood = true;
+	if (btoggleFood == false) {
+		btoggleFood = true;
+	}
+	else
+	{
+		btoggleFood = false;
+	}
 }
 
-void Son::isnotFed()
+bool Son::getStatusFed()
 {
-	btoggleFood = false;
+	return btoggleFood;
 }
 
 void Son::ChancesOfFallingSick(Son s) {

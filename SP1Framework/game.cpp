@@ -709,11 +709,6 @@ void processInputHome()
         {
             cPtr[0]->isFed();
         }
-        else if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
-            && g_mouseEvent.mousePosition.Y == 8) {
-            cPtr[0]->isnotFed();
-        }
     }
 }
 
@@ -947,35 +942,7 @@ void renderHome()
     // Game Mechanic stuff
     c.Y /= 25;
     c.X = c.X / 2 - 5;
-    g_Console.writeToBuffer(c, "Home", 0xF0);
-    c.Y += 3;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Son 1", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "State : ", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 1 state
-    c.Y += 2;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
-    c.Y += 3;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
-    c.Y += 4;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Son 2", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "State : ", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
-    c.Y += 2;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
-
+    renderHomeExpenses(c);
     // Menu stuff
     c = g_Console.getConsoleSize();
     c.Y /= 5;
@@ -987,8 +954,43 @@ void renderHome()
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
 
-void renderHomeExpenses()
+void renderHomeExpenses(COORD c)
 {
+    g_Console.writeToBuffer(c, "Home", 0xF0);
+    c.Y += 3;
+    c.X = g_Console.getConsoleSize().X / 8;
+    g_Console.writeToBuffer(c, "Son 1", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.X += 8;
+    if (cPtr[0]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "Sick", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+    }
+    c.X -= 8;
+    c.Y += 1;
+    if (cPtr[0]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "X days without medicine", 0xF0);
+    } //Make this hidden according to Son 1 state
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    if (cPtr[0]->getStatusFed() == true) {
+        c.X += 14;
+        g_Console.writeToBuffer(c, " ", 0x00);
+        c.X -= 14;
+    }
+    c.Y += 3;
+    g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+    c.Y += 4;
+    g_Console.writeToBuffer(c, "Son 2", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
 }
 
 void renderEndOfWorkScreen()

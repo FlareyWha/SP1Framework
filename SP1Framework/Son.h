@@ -15,7 +15,7 @@ public:
     void Recovers(); //son recovers, bSick = false
     bool getStatus(); //return bSick
     void isFed(); // Home menu food option is toggled true
-    void isnotFed(); // Home menu food option is toggled false
+    bool getStatusFed(); // return btoggleFood
 
     void ChancesOfFallingSick(Son s); 
 };
