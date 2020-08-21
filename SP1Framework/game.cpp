@@ -21,6 +21,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
+int level;
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -796,6 +797,7 @@ void renderGame()
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
+    renderHUD();
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
@@ -890,6 +892,11 @@ void renderMap()
         colour(colors[i]); //Change text colour
         g_Console.writeToBuffer(c, " ", colors[i]); //Change text background
     }
+}
+
+void renderHUD()
+{
+
 }
 
 void renderMainMenu() 

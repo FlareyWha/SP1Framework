@@ -112,7 +112,7 @@ void renderGame();          // renders the game stuff
 void renderShelfAmount(); //renders the shelf stuff
 void renderItem(int shelf); //renders amount of items on shelf
 void renderMap();           // renders the map to the buffer first
-
+void renderHUD();        // renders the HUD
 void renderMainMenu(); //renders the main menu
 void renderHome(); //renders home
 void renderEndOfWorkScreen();
