@@ -824,7 +824,13 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-    level = 5;
+   
+    if (day < 5) {
+        level = day + 1;
+    }
+    else { 
+        level = 5;
+    }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
