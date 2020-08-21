@@ -588,6 +588,10 @@ void checkEnd() //Check if day has ended and update variables
     //if (g_dElapsedWorkTime >= 5)
     if (g_skKeyEvent[K_F4].keyDown)
     {
+        g_sChar.moving.UP = false;
+        g_sChar.moving.DOWN = false;
+        g_sChar.moving.LEFT = false;
+        g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
         COORD c;
         c.X = 18;
@@ -596,9 +600,10 @@ void checkEnd() //Check if day has ended and update variables
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
+        p.releaseProduct();
     }
     
 }
@@ -703,13 +708,17 @@ void processInputHome()
         }
 
         // Expenses toggling
-        if (g_mouseEvent.eventFlags == DOUBLE_CLICK) {
-            if ((g_mouseEvent.mousePosition.X >= 24
-                && g_mouseEvent.mousePosition.X <= 24)
-                && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
-            {
-                cPtr[0]->isFed();
-            }
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+        {
+            cPtr[0]->isFed();
+        }
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
+        {
+            cPtr[1]->isFed();
         }
     }
 }
@@ -804,8 +813,8 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-
-    map.chooseMap(5, g_Console);       // renders the map to the buffer first
+    level = 5;
+    map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -989,10 +998,25 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.X += 8;
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "Sick", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+    }
+    c.X -= 8;
     c.Y += 1;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    if (cPtr[1]->getStatusFed() == true) {
+        c.X += 14;
+        g_Console.writeToBuffer(c, " ", 0x00);
+        c.X -= 14;
+    }
 }
 
 void renderEndOfWorkScreen()
