@@ -7,6 +7,7 @@ class Customer :
     public Entity
 {
 private:
+    int passcheck;
     int itemToBuy;//to determine which item the customer is going to buy
     int quantity;//to determine how many of the item the customer is going to buy
     bool bSatisfied;
@@ -19,6 +20,7 @@ public:
     void isSatisfied();
     void unSatisfied();
     bool getState();
+    void setItemToBuy(int passcheck);
     int getQuantity();
     int getItemToBuy();
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map);

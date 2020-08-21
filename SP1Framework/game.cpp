@@ -1062,12 +1062,14 @@ void renderCustomer()
             }
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
+                if ((timer[i] >= 5.9) && (timer[i] <=6.1)) {
+                    customerPtr[i]->setItemToBuy(2);
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             case 2:
-                if ((timer[i] >= 20.9) && (timer[i] <= 21.1)) {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                if ((timer[i] >= 5.9) && (timer[i] <= 6.1)) {
+                    customerPtr[i]->setItemToBuy(2);
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             }
         }
