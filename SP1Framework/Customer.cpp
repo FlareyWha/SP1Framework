@@ -166,11 +166,15 @@ void Customer::moveCustomer(Map& map)
 
 void Customer::bumpIntoCustomer(int travelling, Map& map)
 {
-	if (travelling == 1)
+	// travelling 1-3 is for if the moving customer is on the right of a still customer
+	// travelling 4-6 is for if the moving customer is on the left of a still customer
+	if ((travelling == 1) || (travelling == 6))
 		pos.setY(pos.getY() + 1);
 	else if (travelling == 2)
 		pos.setX(pos.getX() - 2);
-	else if (travelling == 3)
+	else if (travelling == 4)
+		pos.setX(pos.getX() + 2);
+	else if ((travelling == 3) || (travelling == 5))
 		pos.setY(pos.getY() - 1);
 }
 
