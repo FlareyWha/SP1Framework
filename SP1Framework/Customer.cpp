@@ -8,7 +8,8 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	//itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
 	quantity = rand() % 10 + 1;
 	bSatisfied = false;
-
+	prevPos.setX(0);
+	prevPos.setY(0);
 	pos.setX(79); //change when we spawn them
 	pos.setY(13); // ^
 }
@@ -118,4 +119,60 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 		map.setGrid(c.Y, c.X, 'C');
 	}
 }
+
+void Customer::moveCustomer(Map& map)
+{
+	prevPos.setX(pos.getX());
+	prevPos.setY(pos.getY());
+
+	if ((endPoint.getY() - pos.getY()) != 0)
+	{
+		if (map.isNegative(endPoint.getY(), pos.getY()) == true)
+		{
+			if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				pos.setY(pos.getY() - 1);
+			else
+				pos.setY(pos.getY());
+		}
+		if (map.isNegative(endPoint.getY(), pos.getY()) == false)
+		{
+			if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
+				pos.setY(pos.getY() + 1);
+			else
+				pos.setY(pos.getY());
+		}
+	}
+	if ((endPoint.getX() - pos.getX()) != 0)
+	{
+		if (map.isNegative(endPoint.getX(), pos.getX()) == true)
+		{
+			if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
+				pos.setX(pos.getX() - 1);
+			else
+				pos.setX(pos.getX());
+		}
+
+		if (map.isNegative(endPoint.getX(), pos.getX()) == false)
+		{
+			if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
+				pos.setX(pos.getX() + 1);
+			else
+				pos.setX(pos.getX());
+		}
+	}
+
+	map.setGrid(prevPos.getY(), prevPos.getX(), '0');
+}
+
+void Customer::bumpIntoCustomer(int travelling, Map& map)
+{
+	if (travelling == 1)
+		pos.setY(pos.getY() + 1);
+	else if (travelling == 2)
+		pos.setX(pos.getX() - 2);
+	else if (travelling == 3)
+		pos.setY(pos.getY() - 1);
+}
+
+
 

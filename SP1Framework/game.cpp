@@ -1149,12 +1149,8 @@ void renderCustomer()
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
             }
-          
         }
-        
-
     }
-    
 }
 
 void renderCharacter()
