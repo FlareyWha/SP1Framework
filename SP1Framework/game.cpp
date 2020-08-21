@@ -1131,27 +1131,28 @@ void renderCustomer()
             if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) {
                 spawned[i] = true;
             }
-            /*else if ((timer[i] >= 10.9) && (timer[i] <= 11.1)) {
-                spawned[i] = false;
-            }*/
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
                 if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
-                else if ((timer[i] >= 20.9) && (timer[i] <= 21.1)) {
-                    spawned[i] = false;
-                }
+                
             case 2:
                 if ((timer[i] >= 15.9) && (timer[i] <= 16.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
-                else if ((timer[i] >= 20.9) && (timer[i] <= 21.1)) {
-                    spawned[i] = false;
-                }
             }
+            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
+            if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) {
+                spawned[i] = false;
+                delete customerPtr[i];
+                customerPtr[i] = nullptr;
+                timer[i] = -1;
+            }
+          
         }
-        customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
+        
+
     }
     
 }
