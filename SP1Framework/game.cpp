@@ -22,7 +22,9 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level, day; 
+int level, day;
+bool travelling[6];
+int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -75,10 +77,9 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
-    //init level and day and strikes
+    //init level and day
     level = 1;
     day = 0;
-  
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -121,6 +122,8 @@ void init( void )
 
     for (int i = 0; i < 6; i++) {
         timer[i] = -1;
+        travelling[i] = false;
+        avoiding[i] = 0; 
         /*
         spawned[i] = false;
         customerPtr[i] = nullptr;
@@ -1135,6 +1138,7 @@ void renderCustomer()
             case 1:
                 if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
+                    travelling[i] = true;
                 }
                 
             case 2:
@@ -1142,6 +1146,8 @@ void renderCustomer()
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             }
+            if (travelling[i] == true)
+                customerPtr[i]->moveCustomer(map);
             customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
             if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) {
                 spawned[i] = false;

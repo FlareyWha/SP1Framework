@@ -28,6 +28,6 @@ public:
     int getItemToBuy();
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map);
     void moveCustomer(Map& map);
-    void bumpIntoCustomer(int travelling, Map& map);
+    void bumpIntoCustomer(int avoiding, Map& map);
 };
 
