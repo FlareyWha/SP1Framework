@@ -1110,7 +1110,7 @@ void moveCustomer()
     //todo
 }
 
-void renderCustomer()
+void renderCustomer() // fix later yes
 {   
     COORD c = g_Console.getConsoleSize();
     c.X = 79;
