@@ -866,8 +866,8 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
     
-    ss.str("");// display the daily earnings
-    ss << "Earnings:" << p.getTotalEarned();
+    ss.str("");// display the daily income
+    ss << "Money earned: $" << p.getTotalEarned();
     c.X = 60;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
