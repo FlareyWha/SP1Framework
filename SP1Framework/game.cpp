@@ -22,7 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level, day;
+int level, day; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -352,6 +352,7 @@ void updateMenu() // Menu logic
 void updateEndofWorkScreen()
 {
     processUserInput();
+    
 }
 
 void updateHome() // Home logic
@@ -714,6 +715,7 @@ void processInputHome()
             && g_mouseEvent.mousePosition.X <= c.X - 13)
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
+            day++;
             g_eGameState = S_GAME;
         }
 
@@ -861,7 +863,7 @@ void renderHUD()
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str("");// display the current day
-    ss << "Day:" << level;
+    ss << "Day:" << day;
     c.X = 20;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
