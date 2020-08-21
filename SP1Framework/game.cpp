@@ -1129,15 +1129,18 @@ void renderCustomer()
         if (customerPtr[i] != nullptr)
         {
             if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) {
+                g_dElapsedWorkTime == 1;
                 spawned[i] = true;
             }
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
-                if ((timer[i] >= 5.9) && (timer[i] <=6.1)) {
+                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
+                    g_dElapsedWorkTime == 5;
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             case 2:
-                if ((timer[i] >= 5.9) && (timer[i] <= 6.1)) {
+                if ((timer[i] >= 15.9) && (timer[i] <= 16.1)) {
+                    g_dElapsedWorkTime == 5;
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             }
