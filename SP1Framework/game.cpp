@@ -818,14 +818,14 @@ void renderGame()
 void renderShelfAmount()
 {
     if (g_eGameState == S_GAME) {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < level + 1; i++) {
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
         }
     }
     else if (g_eGameState == S_TUT) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < level + 1; i++) {
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
