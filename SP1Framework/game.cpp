@@ -1046,21 +1046,12 @@ void renderCustomer()
             }
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
-                if (timer[i] == 35 && sPtr[0]->getAmount() != 0) {
-                    c.X = 37;
-                    c.Y = 7;
-                    if (sPtr[0]->getAmount() == 0)
-                        //sPtr[0] ->decreaseItem();
-                    g_Console.writeToBuffer(c, ' ', 0x20);
-                    map.setGrid(c.Y, c.X, 'C');
+                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             case 2:
-                if (timer[i] == 35) {
-                    c.X = 37;
-                    c.Y = 13;
-                    //sPtr[1]->decreaseItem();
-                    g_Console.writeToBuffer(c, ' ', 0x20);
-                    map.setGrid(c.Y, c.X, 'C');
+                if ((timer[i] >= 20.9) && (timer[i] <= 21.1)) {
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                 }
             }
         }

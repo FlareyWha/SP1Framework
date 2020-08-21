@@ -33,12 +33,12 @@ void Customer::moveToShelfContainingItem(int itemToBuy)//brings them to the shel
 	switch (itemToBuy)
 	{
 	case 1:
-		pos.setX(0); //change when we spawn them
-		pos.setY(0); // ^
+		pos.setX(37); //change when we spawn them
+		pos.setY(7); // ^
 		break;
 	case 2:
-		pos.setX(0); //change when we spawn them
-		pos.setY(0); // ^
+		pos.setX(37); //change when we spawn them
+		pos.setY(13); // ^
 		break;
 	case 3:
 		pos.setX(0); //change when we spawn them
