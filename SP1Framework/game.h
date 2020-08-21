@@ -115,6 +115,7 @@ void renderMap();           // renders the map to the buffer first
 void renderHUD();        // renders the HUD
 void renderMainMenu(); //renders the main menu
 void renderHome(); //renders home
+void renderHomeExpenses(); // renders info about sons and stuff
 void renderEndOfWorkScreen();
 void renderTutorialLevel(); // renders the tutorial level
 
