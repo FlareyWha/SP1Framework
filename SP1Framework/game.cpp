@@ -703,11 +703,13 @@ void processInputHome()
         }
 
         // Expenses toggling
-        if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
-            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
-        {
-            cPtr[0]->isFed();
+        if (g_mouseEvent.eventFlags == DOUBLE_CLICK) {
+            if ((g_mouseEvent.mousePosition.X >= 24
+                && g_mouseEvent.mousePosition.X <= 24)
+                && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+            {
+                cPtr[0]->isFed();
+            }
         }
     }
 }
