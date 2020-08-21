@@ -596,9 +596,10 @@ void checkEnd() //Check if day has ended and update variables
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
         g_eGameState = S_ENDOFWORKSCREEN;
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
+        p.releaseProduct();
     }
     
 }
@@ -804,8 +805,8 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
-
-    map.chooseMap(5, g_Console);       // renders the map to the buffer first
+    level = 5;
+    map.chooseMap(level, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
