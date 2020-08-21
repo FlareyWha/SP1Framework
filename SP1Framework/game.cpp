@@ -22,7 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level;
+int level, day, strikes;
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -75,8 +75,10 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
-    //init level
+    //init level and day and strikes
     level = 1;
+    day = 0;
+    strikes = 0;
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -853,6 +855,23 @@ void renderHUD()
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
+    ss.str("");//display strikes
+    ss << "Strikes:" << strikes;
+    c.X = 4;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    ss.str("");// display the current day
+    ss << "Day:" << level;
+    c.X = 20;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    
+    ss.str("");// display the daily income
+    ss << "Money earned: $" << p.getTotalEarned();
+    c.X = 60;
+    c.Y = 0;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+
     ss.str("");     // displays the elapsed time
     ss << "Time left : " << 60 - g_dElapsedWorkTime << "secs";
     c.X = 30; //change to shift location of timer
