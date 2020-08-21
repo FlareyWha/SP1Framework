@@ -704,13 +704,17 @@ void processInputHome()
         }
 
         // Expenses toggling
-        if (g_mouseEvent.eventFlags == DOUBLE_CLICK) {
-            if ((g_mouseEvent.mousePosition.X >= 24
-                && g_mouseEvent.mousePosition.X <= 24)
-                && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
-            {
-                cPtr[0]->isFed();
-            }
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+        {
+            cPtr[0]->isFed();
+        }
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
+        {
+            cPtr[1]->isFed();
         }
     }
 }
@@ -990,10 +994,25 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.X += 8;
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "Sick", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+    }
+    c.X -= 8;
     c.Y += 1;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    if (cPtr[1]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    if (cPtr[1]->getStatusFed() == true) {
+        c.X += 14;
+        g_Console.writeToBuffer(c, " ", 0x00);
+        c.X -= 14;
+    }
 }
 
 void renderEndOfWorkScreen()
