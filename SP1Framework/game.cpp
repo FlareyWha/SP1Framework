@@ -840,12 +840,12 @@ void renderHUD()
     ss << "Time left:" << g_dElapsedWorkTime << "secs";
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str(""); //probably can be implemented cleaner
     ss << framesPassed << "frames";
     c.X = 36;
     c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
 }
 
 void renderItem(int shelf)
