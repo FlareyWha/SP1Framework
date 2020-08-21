@@ -22,7 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level, day, strikes;
+int level, day;
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -78,7 +78,7 @@ void init( void )
     //init level and day and strikes
     level = 1;
     day = 0;
-    strikes = 0;
+  
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -856,7 +856,7 @@ void renderHUD()
     COORD c;
     std::ostringstream ss;
     ss.str("");//display strikes
-    ss << "Strikes:" << strikes;
+    ss << "Strikes:" << p.getStrikes();
     c.X = 4;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
