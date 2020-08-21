@@ -5,7 +5,7 @@
 
 Customer::Customer()//sets which item they want to buy and how much to do so
 {
-	itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
+	//itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
 	quantity = rand() % 10 + 1;
 	bSatisfied = false;
 
@@ -90,6 +90,11 @@ bool Customer::getState()
 {
 	
 	return bSatisfied;
+}
+
+void Customer::setItemToBuy(int passcheck)
+{
+	itemToBuy = rand() % passcheck + 1;
 }
 
 int Customer::getQuantity()

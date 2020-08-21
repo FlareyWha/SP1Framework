@@ -22,7 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
-int level, day, strikes;
+int level, day; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -78,7 +78,7 @@ void init( void )
     //init level and day and strikes
     level = 1;
     day = 0;
-    strikes = 0;
+  
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -352,6 +352,7 @@ void updateMenu() // Menu logic
 void updateEndofWorkScreen()
 {
     processUserInput();
+    
 }
 
 void updateHome() // Home logic
@@ -714,6 +715,7 @@ void processInputHome()
             && g_mouseEvent.mousePosition.X <= c.X - 13)
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
+            day++;
             g_eGameState = S_GAME;
         }
 
@@ -856,12 +858,12 @@ void renderHUD()
     COORD c;
     std::ostringstream ss;
     ss.str("");//display strikes
-    ss << "Strikes:" << strikes;
+    ss << "Strikes:" << p.getStrikes();
     c.X = 4;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str("");// display the current day
-    ss << "Day:" << level;
+    ss << "Day:" << day;
     c.X = 20;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
@@ -1125,12 +1127,14 @@ void renderCustomer()
             }
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
+                if ((timer[i] >= 5.9) && (timer[i] <=6.1)) {
+                    customerPtr[i]->setItemToBuy(2);
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             case 2:
-                if ((timer[i] >= 20.9) && (timer[i] <= 21.1)) {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                if ((timer[i] >= 5.9) && (timer[i] <= 6.1)) {
+                    customerPtr[i]->setItemToBuy(2);
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             }
         }
