@@ -13,6 +13,7 @@
 #include "Box.h"
 #include "Player.h"
 #include "Shelf.h"
+#include "Son.h"
 
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
@@ -21,6 +22,7 @@ SKeyEvent g_skKeyEvent[K_COUNT];
 SMouseEvent g_mouseEvent;
 
 // Game specific variables here
+int level;
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
 SGameChar   g_sChar;
@@ -29,8 +31,8 @@ EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
-
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
+Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
@@ -73,6 +75,8 @@ void init( void )
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
 
+    //init level
+    level = 1;
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -81,6 +85,10 @@ void init( void )
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
     }
+
+    //init Son objects
+    cPtr[0] = new Son;
+    cPtr[1] = new Son;
 
     //init shelf
 
@@ -687,16 +695,19 @@ void processInputHome()
         {
             g_eGameState = S_MENU;
         }
-        
-    }
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-    {
-        COORD c = g_Console.getConsoleSize();
         if ((g_mouseEvent.mousePosition.X >= c.X - 20
             && g_mouseEvent.mousePosition.X <= c.X - 13)
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
             g_eGameState = S_GAME;
+        }
+
+        // Expenses toggling
+        if ((g_mouseEvent.mousePosition.X >= 24
+            && g_mouseEvent.mousePosition.X <= 24)
+            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+        {
+            cPtr[0]->isFed();
         }
     }
 }
@@ -791,42 +802,48 @@ void renderSplashScreen()  // renders the splash screen
 
 void renderGame()
 {
+
     map.chooseMap(5, g_Console);       // renders the map to the buffer first
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
-    framesPassed++; // counts frames
-    COORD c;
-    std::ostringstream ss;
-    ss.str("");     // displays the elapsed time
-    ss << g_dElapsedWorkTime << "secs";
-    c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59); 
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36; 
-    c.Y = 24;  
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    renderHUD();
 }
 
 void renderShelfAmount()
 {
     if (g_eGameState == S_GAME) {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < level + 1; i++) {
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
         }
     }
     else if (g_eGameState == S_TUT) {
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < level + 1; i++) {
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
         }
     }
+}
+
+void renderHUD()
+{
+    framesPassed++; // counts frames
+    COORD c;
+    std::ostringstream ss;
+    ss.str("");     // displays the elapsed time
+    ss << "Time left:" << g_dElapsedWorkTime << "secs";
+    c.X = 30; //change to shift location of timer
+    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    ss.str(""); //probably can be implemented cleaner
+    ss << framesPassed << "frames";
+    c.X = 36;
+    c.Y = 24;
+    g_Console.writeToBuffer(c, ss.str(), 0x59);
 }
 
 void renderItem(int shelf)
@@ -925,35 +942,7 @@ void renderHome()
     // Game Mechanic stuff
     c.Y /= 25;
     c.X = c.X / 2 - 5;
-    g_Console.writeToBuffer(c, "Home", 0xF0);
-    c.Y += 3;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Son 1", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "State : ", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 1 state
-    c.Y += 2;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
-    c.Y += 3;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
-    c.Y += 4;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Son 2", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "State : ", 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
-    c.Y += 2;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
-
+    renderHomeExpenses(c);
     // Menu stuff
     c = g_Console.getConsoleSize();
     c.Y /= 5;
@@ -963,6 +952,45 @@ void renderHome()
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
+}
+
+void renderHomeExpenses(COORD c)
+{
+    g_Console.writeToBuffer(c, "Home", 0xF0);
+    c.Y += 3;
+    c.X = g_Console.getConsoleSize().X / 8;
+    g_Console.writeToBuffer(c, "Son 1", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.X += 8;
+    if (cPtr[0]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "Sick", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+    }
+    c.X -= 8;
+    c.Y += 1;
+    if (cPtr[0]->getStatus() == true) {
+        g_Console.writeToBuffer(c, "X days without medicine", 0xF0);
+    } //Make this hidden according to Son 1 state
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    if (cPtr[0]->getStatusFed() == true) {
+        c.X += 14;
+        g_Console.writeToBuffer(c, " ", 0x00);
+        c.X -= 14;
+    }
+    c.Y += 3;
+    g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+    c.Y += 4;
+    g_Console.writeToBuffer(c, "Son 2", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "State : ", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
 }
 
 void renderEndOfWorkScreen()
@@ -996,19 +1024,7 @@ void renderTutorialLevel()
     renderCustomer();
     renderBoxes();
     renderShelfAmount();
-    framesPassed++; // counts frames
-    COORD c;
-    std::ostringstream ss;
-    ss.str("");     // displays the elapsed time
-    ss << g_dElapsedWorkTime << "secs";
-    c.X = 36; //change to shift location of timer
-    c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36;
-    c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x59);
+    renderHUD();
 }
 
 void renderBoxes() 
