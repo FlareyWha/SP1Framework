@@ -1111,6 +1111,7 @@ void renderCustomer()
     for (int i = 0; i < 6; i++) {
         if (customerPtr[i] == nullptr) {
             customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
+            customerPtr[i]->setItemToBuy(2);
             timer[i] = 0;
             c.X = customerPtr[i]->getPos().getX();
             c.Y = customerPtr[i]->getPos().getY();
@@ -1128,12 +1129,10 @@ void renderCustomer()
             switch (customerPtr[i]->getItemToBuy()) {
             case 1:
                 if ((timer[i] >= 5.9) && (timer[i] <=6.1)) {
-                    customerPtr[i]->setItemToBuy(2);
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             case 2:
                 if ((timer[i] >= 5.9) && (timer[i] <= 6.1)) {
-                    customerPtr[i]->setItemToBuy(2);
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                 }
             }
