@@ -1,7 +1,6 @@
 #include "Son.h"
 
-Son::Son() {
-	bSick = false;
+Son::Son() : bSick{ false }, btoggleFood{ false }{
 }
 
 Son::~Son() {
@@ -18,6 +17,16 @@ void Son::Recovers() {
 
 bool Son::getStatus() {
 	return bSick;
+}
+
+void Son::isFed()
+{
+	btoggleFood = true;
+}
+
+void Son::isnotFed()
+{
+	btoggleFood = false;
 }
 
 void Son::ChancesOfFallingSick(Son s) {
