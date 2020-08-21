@@ -723,6 +723,10 @@ void processInputHome()
     }
 }
 
+void updateSons()
+{
+}
+
 void processUserInput()
 {
     switch (g_eGameState)
