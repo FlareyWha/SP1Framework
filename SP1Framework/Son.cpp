@@ -56,10 +56,10 @@ int Son::getNODUnfed()
 	return NoOfDaysUnfed;
 }
 
-void Son::ChancesOfFallingSick(Son s) {
+void Son::ChancesOfFallingSick() {
 	int getsSick = rand() % 10 + 1;
 	if (getsSick == 1) {
-		s.isSick();
+		isSick();
 	}
 }
 

@@ -356,6 +356,7 @@ void updateHome() // Home logic
 {
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+    updateSons();
 }
 
 void updateTutorial() //Tutorial level logic
@@ -583,6 +584,11 @@ void restockShelf(){
 //    if
 //}
 
+void updateSons()
+{
+    
+}
+
 void checkEnd() //Check if day has ended and update variables
 {
     //if (g_dElapsedWorkTime >= 5)
@@ -604,6 +610,8 @@ void checkEnd() //Check if day has ended and update variables
             sPtr[i]->setAmount(0);
         }
         p.releaseProduct();
+        cPtr[0]->ChancesOfFallingSick();
+        cPtr[1]->ChancesOfFallingSick();
     }
     
 }
@@ -721,10 +729,6 @@ void processInputHome()
             cPtr[1]->isFed();
         }
     }
-}
-
-void updateSons()
-{
 }
 
 void processUserInput()
@@ -978,6 +982,7 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
+    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Sick", 0xF0);
     }
