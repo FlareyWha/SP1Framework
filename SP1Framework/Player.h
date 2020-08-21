@@ -6,8 +6,10 @@ class Player :
 	public Entity 
 {
 private:
-	static int strikes;
-	static int savings; 
+	int strikes;
+	int savings; 
+
+	int dayEarnings;
 
 	bool holdingProduct;
 
@@ -15,8 +17,12 @@ public:
 	Player();
 	~Player();
 
-	static int getStrikes(); // return strikes
-	static int getSavings(); // return savings
+	int getStrikes(); // return strikes
+	int getSavings(); // return savings
+
+	int getTotalEarned();
+	void AddDayEarnings(int earned);
+	void resetDayEarnings();
 
 	void receiveStrike(); //set strikes, strikes++
 	void receivePay(int pay); //set savings, increase savings
