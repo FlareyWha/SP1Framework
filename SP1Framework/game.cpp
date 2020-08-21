@@ -873,7 +873,16 @@ void renderHUD()
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
     ss.str("");     // displays the elapsed time
-    ss << "Time left : " << 60 - g_dElapsedWorkTime << "secs";
+    int minute;
+    int secs = 180 - g_dElapsedWorkTime;
+    minute = secs / 60;
+    if (minute > 0) {
+        ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
+    }
+    else
+    {
+        ss << "Time left : " << secs - minute * 60 << " secs";
+    }
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x80);
