@@ -594,8 +594,7 @@ void updateSons()
 
 void checkEnd() //Check if day has ended and update variables
 {
-    //if (g_dElapsedWorkTime >= 5)
-    if (g_skKeyEvent[K_F4].keyDown)
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 180)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
