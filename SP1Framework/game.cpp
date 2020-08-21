@@ -854,7 +854,7 @@ void renderHUD()
     COORD c;
     std::ostringstream ss;
     ss.str("");     // displays the elapsed time
-    ss << "Time left:" << g_dElapsedWorkTime << "secs";
+    ss << "Time left : " << 60 - g_dElapsedWorkTime << "secs";
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x80);
