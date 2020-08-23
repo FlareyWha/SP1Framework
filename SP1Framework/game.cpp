@@ -1139,11 +1139,13 @@ void renderCustomer() // fix later yes
                 if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                     travelling[i] = true;
+                    break;
                 }
                 
             case 2:
                 if ((timer[i] >= 15.9) && (timer[i] <= 16.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
+                    break;
                 }
             }
             if (travelling[i] == true)
@@ -1154,6 +1156,8 @@ void renderCustomer() // fix later yes
                 delete customerPtr[i];
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
+                sPtr[i]->decreaseItem();
+                
             }
         }
     }
