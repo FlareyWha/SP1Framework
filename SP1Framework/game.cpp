@@ -599,7 +599,14 @@ void restockShelf(){
 
 void updateSons()
 {
-    
+    for (int i = 0; i < 2; i++) {
+        if (cPtr[i]->getStatusFed() == true) {
+            cPtr[i]->resetNODUnfed();
+        }
+        else {
+            cPtr[i]->increaseNODUnfed();
+        }
+    }
 }
 
 void checkEnd() //Check if day has ended and update variables
