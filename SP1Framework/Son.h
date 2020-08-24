@@ -23,6 +23,6 @@ public:
     void resetNODUnfed();
     int getNODUnfed();
 
-    void ChancesOfFallingSick(); 
+    void ChancesOfFallingSick(int daysUnfed); 
 };
 

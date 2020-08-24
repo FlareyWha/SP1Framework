@@ -56,9 +56,9 @@ int Son::getNODUnfed()
 	return NoOfDaysUnfed;
 }
 
-void Son::ChancesOfFallingSick() {
-	int getsSick = rand() % 10 + 1;
-	if (getsSick == 1) {
+void Son::ChancesOfFallingSick(int daysUnfed) {
+	int getsSick = rand() % 100 + 1;
+	if (getsSick <= 20) {
 		isSick();
 	}
 }

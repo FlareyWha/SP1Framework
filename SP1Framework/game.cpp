@@ -615,8 +615,8 @@ void checkEnd() //Check if day has ended and update variables
             sPtr[i]->setAmount(0);
         }
         p.releaseProduct();
-        cPtr[0]->ChancesOfFallingSick();
-        cPtr[1]->ChancesOfFallingSick();
+        cPtr[0]->ChancesOfFallingSick(cPtr[0]->getNODUnfed());
+        cPtr[1]->ChancesOfFallingSick(cPtr[1]->getNODUnfed());
     }
     
 }
