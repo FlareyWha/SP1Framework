@@ -27,17 +27,10 @@ bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
-double spawnTimer;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
-
-//test stuff
-//Customer testCustomer;
-//double testTimer = -1;
-//bool testSpawned = false;
-//bool testTravelling = false;
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
@@ -87,7 +80,6 @@ void init( void )
     //init level and day
     level = 1;
     day = 0;
-    spawnTimer = 0;
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -336,11 +328,6 @@ void update(double dt)
             timer[i] += dt;
         }
     }
-
-    //if (testTimer != -1)
-    //   testTimer += dt;
-
-    spawnTimer += dt;
 
     switch (g_eGameState)
     {
@@ -1243,40 +1230,33 @@ void moveCustomer()
 void renderCustomer() // fix later yes
 {   
     COORD c = g_Console.getConsoleSize();
-
     for (int i = 0; i < 6; i++)
     {
-        if (customerPtr[i] == nullptr);
+        if (customerPtr[i] == nullptr)
         {
-            customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
+            customerPtr[i] = new Customer;
             customerPtr[i]->setItemToBuy(2);
             timer[i] = 0;
             customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
+            spawned[i] = true;
         }
-    }
-
-    for (int i = 0; i < 6; i++)
-    {
-        if (customerPtr[i] != nullptr)
+    
+        else if (customerPtr[i] != nullptr)
         {
-            if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) 
-            {
-                spawned[i] = true;
-            }
-            switch (customerPtr[i]->getItemToBuy()) 
+            switch (customerPtr[i]->getItemToBuy())
             {
             case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) 
+                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     travelling[i] = true;
                     break;
                 }
-                
+
             case 2:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1)) 
+                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     travelling[i] = true;
                     break;
                 }
@@ -1301,45 +1281,6 @@ void renderCustomer() // fix later yes
             }
         }
     }
-    /*
-    if (testTimer == -1)
-        testTimer = 0;
-
-    testCustomer.setItemToBuy(2);
-
-    if ((testTimer >= 0.9) && (testTimer <= 1.1)) 
-    {
-        testSpawned = true;
-    }
-
-    switch (testCustomer.getItemToBuy()) 
-    {
-    case 1:
-        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
-            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
-            testTravelling = true;
-            break;
-        }
-
-    case 2:
-        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
-            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
-            testTravelling = true;
-            break;
-        }
-    }
-
-    if (testTravelling == true)
-        testCustomer.moveCustomer(map);
-
-    testCustomer.printOutCustomer(testSpawned, g_Console, testCustomer.getPos(), map);
-
-    if ((testTimer >= 30.9) && (testTimer <= 31.1)) 
-    {
-        testSpawned = false;
-        testTimer = -1;
-    }
-    */
 }
 
 void renderCharacter()
