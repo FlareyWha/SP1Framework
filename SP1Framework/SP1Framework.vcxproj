@@ -107,6 +107,7 @@
     <ClInclude Include="Son.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="HomeScreen.txt" />
     <Text Include="Lvl2.txt" />
     <Text Include="Lvl4.txt" />
     <Text Include="MainMenu.txt" />

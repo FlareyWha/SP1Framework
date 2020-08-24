@@ -118,5 +118,8 @@
     <Text Include="Lvl5.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="HomeScreen.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
