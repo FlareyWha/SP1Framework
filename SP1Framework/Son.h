@@ -8,6 +8,7 @@ private:
     bool btoggleFood; //Used to check if player has decided to feed his son
     bool bHospitalised;
     int NoOfDaysUnfed;
+    int NoOfDaysSick;
 
 public:
     Son();
@@ -25,6 +26,9 @@ public:
     void decreaseNODUnfed();
     void resetNODUnfed();
     int getNODUnfed();
+    void increaseNODSick();
+    void resetNODSick();
+    int getNODSick();
 
     void ChancesOfFallingSick(int daysUnfed); 
 };

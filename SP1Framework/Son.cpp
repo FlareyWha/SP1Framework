@@ -1,6 +1,6 @@
 #include "Son.h"
 
-Son::Son() : bSick{ false }, btoggleFood{ false }, NoOfDaysUnfed{0}
+Son::Son() : bSick{ false }, btoggleFood{ false }, bHospitalised{ false }, NoOfDaysUnfed{ 0 }, NoOfDaysSick { 0 }
 {
 }
 
@@ -64,6 +64,21 @@ void Son::resetNODUnfed()
 int Son::getNODUnfed()
 {
 	return NoOfDaysUnfed;
+}
+
+void Son::increaseNODSick()
+{
+	NoOfDaysSick++;
+}
+
+void Son::resetNODSick()
+{
+	NoOfDaysSick = 0;
+}
+
+int Son::getNODSick()
+{
+	return NoOfDaysSick;
 }
 
 void Son::ChancesOfFallingSick(int daysUnfed) {
