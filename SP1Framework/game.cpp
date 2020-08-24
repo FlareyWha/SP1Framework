@@ -32,7 +32,12 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
+//test stuff
 Customer testCustomer;
+double testTimer = 0;
+bool testSpawned = false;
+bool testTravelling = false;
+
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 Son* cPtr[2] = { nullptr, nullptr };
@@ -324,6 +329,8 @@ void update(double dt)
             timer[i] += dt;
         }
     }
+
+    testTimer += dt;
 
     switch (g_eGameState)
     {
@@ -1117,6 +1124,7 @@ void renderCustomer() // fix later yes
     c.X = 79;
     c.Y = 13;
 
+    /*
     for (int i = 0; i < 6; i++) {
         if (customerPtr[i] == nullptr) {
             customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
@@ -1124,7 +1132,7 @@ void renderCustomer() // fix later yes
             timer[i] = 0;
             c.X = customerPtr[i]->getPos().getX();
             c.Y = customerPtr[i]->getPos().getY();
-            /*g_Console.writeToBuffer(c, ' ', 0x77);*/
+            //g_Console.writeToBuffer(c, ' ', 0x77);
         }
     }
 
@@ -1161,11 +1169,41 @@ void renderCustomer() // fix later yes
                     sPtr[i]->decreaseItem();
                     
                 }
-                
-                
-                
             }
         }
+    }
+    */
+    if ((testTimer >= 0.9) && (testTimer <= 1.1)) 
+    {
+        testSpawned = true;
+    }
+
+    switch (testCustomer.getItemToBuy()) 
+    {
+    case 1:
+        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
+            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
+            testTravelling = true;
+            break;
+        }
+
+    case 2:
+        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
+            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
+            testTravelling = true;
+            break;
+        }
+    }
+
+    if (testTravelling == true)
+        testCustomer.moveCustomer(map);
+
+    testCustomer.printOutCustomer(testSpawned, g_Console, testCustomer.getPos(), map);
+
+    if ((testTimer >= 30.9) && (testTimer <= 31.1)) 
+    {
+        testSpawned = false;
+        testTimer = -1;
     }
 }
 
