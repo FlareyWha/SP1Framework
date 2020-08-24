@@ -1134,6 +1134,14 @@ void renderEndOfWorkScreen()
 
 void renderGameOver()
 {
+    COORD c = g_Console.getConsoleSize();
+    map.chooseMap(0, g_Console);
+    c.Y /= 25;
+    c.X = c.X / 2 - 5;
+    g_Console.writeToBuffer(c, "Game Over!", 0xF0);
+    c.Y += 6;
+    c.X = g_Console.getConsoleSize().X / 2 - 16;
+    g_Console.writeToBuffer(c, "Press ESC to head back to the main menu!", 0xF0);
 }
 
 void renderTutorialLevel()
