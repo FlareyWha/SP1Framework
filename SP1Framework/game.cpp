@@ -345,6 +345,8 @@ void update(double dt)
             break;
         case S_ENDOFWORKSCREEN: updateEndofWorkScreen();
             break;
+        case S_GAMEOVER: updateGameOver();
+            break;
         case S_HOME: updateHome();
             break;
         case S_TUT: g_dElapsedWorkTime += dt;  updateTutorial();
@@ -634,13 +636,22 @@ void checkEnd() //Check if day has ended and update variables
         g_sChar.m_cLocation = c;
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
-        g_eGameState = S_ENDOFWORKSCREEN;
         for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
         p.releaseProduct();
-        cPtr[0]->ChancesOfFallingSick(cPtr[0]->getNODUnfed());
-        cPtr[1]->ChancesOfFallingSick(cPtr[1]->getNODUnfed());
+        for (int i = 0; i < 2; i++) {
+            if (cPtr[i]->getStatus() == true) {
+                cPtr[i]->increaseNODSick();
+            }
+            cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            if (cPtr[i]->getNODSick() == 4) {
+                g_eGameState = S_GAMEOVER;
+            }
+            else {
+                g_eGameState = S_ENDOFWORKSCREEN;
+            }
+        }
     }
     
 }
@@ -731,6 +742,8 @@ void processInputGameOver()
 {
     if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
         g_eGameState = S_MENU;
+    day = 0;
+    g_ePreviousGameState = S_GAMEOVER;
 }
 
 void processInputHome()
@@ -781,7 +794,6 @@ void processUserInput()
     case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
         break;
     case S_GAMEOVER: processInputGameOver();
-        break;
     case S_HOME: processInputHome();
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU; 
@@ -818,6 +830,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_MENU: renderMainMenu();
         break;
     case S_ENDOFWORKSCREEN: renderEndOfWorkScreen();
+        break;
+    case S_GAMEOVER: renderGameOver();
         break;
     case S_HOME: renderHome();
         break;
@@ -1004,7 +1018,7 @@ void renderMap()
     }
 }
 
-void renderMainMenu() 
+void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
@@ -1013,7 +1027,7 @@ void renderMainMenu()
     g_Console.writeToBuffer(c, "Main Menu", 0xF0);
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    if (g_ePreviousGameState == S_SPLASHSCREEN)
+    if (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER)
         g_Console.writeToBuffer(c, "Start New", 0xF0);
     else if (g_ePreviousGameState == S_HOME)
         g_Console.writeToBuffer(c, "Back Home", 0xF0);
