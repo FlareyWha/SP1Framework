@@ -1270,6 +1270,10 @@ void renderCustomer() // fix later yes
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
+                else if (sPtr[i]->getAmount() <= 0)
+                {
+                    p.receiveStrike(); 
+                }
             }
         }
     }
