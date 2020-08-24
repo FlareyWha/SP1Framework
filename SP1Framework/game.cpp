@@ -363,7 +363,6 @@ void updateHome() // Home logic
 {
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    updateSons();
 }
 
 void updateTutorial() //Tutorial level logic
@@ -720,6 +719,7 @@ void processInputHome()
         {
             day++;
             g_eGameState = S_GAME;
+            updateSons();
         }
 
         // Expenses toggling
