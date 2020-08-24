@@ -32,6 +32,21 @@ void Player::resetDayEarnings()
 	dayEarnings = 0;
 }
 
+int Player::getUnsatisfiedCustomers()
+{
+	return unsatisfiedCustomers;
+}
+
+void Player::increaseUnsatisfiedCustomers()
+{
+	unsatisfiedCustomers++;
+}
+
+void Player::resetUnsatisfiedCustomers()
+{
+	unsatisfiedCustomers = 0;
+}
+
 void Player::receiveStrike() {
 	strikes++;
 }

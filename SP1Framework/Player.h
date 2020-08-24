@@ -9,6 +9,8 @@ private:
 	int strikes;
 	int savings; 
 
+	int unsatisfiedCustomers;
+
 	int dayEarnings;
 
 	bool holdingProduct;
@@ -23,6 +25,10 @@ public:
 	int getTotalEarned();
 	void AddDayEarnings(int earned);
 	void resetDayEarnings();
+
+	int getUnsatisfiedCustomers();
+	void increaseUnsatisfiedCustomers();
+	void resetUnsatisfiedCustomers();
 
 	void receiveStrike(); //set strikes, strikes++
 	void receivePay(int pay); //set savings, increase savings
