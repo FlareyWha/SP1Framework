@@ -1268,17 +1268,29 @@ void renderCustomer() // fix later yes
                 delete customerPtr[i];
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
+                bool bComplain = false;
                 if (sPtr[i]->getAmount() > 0) 
                 {
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
-                else 
+                else if (sPtr[i]->getAmount() == 0)
                 {                 
-                    //p.increaseUnsatisfiedCustomers(); 
+                    p.increaseUnsatisfiedCustomers(); 
+                    bComplain = true;
 
+                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
+                    {
+                        p.receiveStrike();
+
+                        if (p.getStrikes() == 3) {
+                            g_eGameState = S_GAMEOVER;
+                        }
+                    }
                 }
             }
+
+            
         }
         else
         {
@@ -1299,14 +1311,7 @@ void renderCustomer() // fix later yes
     }
 
 
-    /*if (p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9 )
-    {
-        p.receiveStrike();
-
-        if (p.getStrikes() == 3) {
-            g_eGameState = S_GAMEOVER;
-        }
-    }*/
+    
 }
 
 void renderCharacter()
