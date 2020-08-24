@@ -20,6 +20,16 @@ bool Son::getStatus() {
 	return bSick;
 }
 
+void Son::isHosp()
+{
+	bHospitalised = true;
+}
+
+bool Son::getHospState()
+{
+	return bHospitalised;
+}
+
 void Son::isFed()
 {
 	if (btoggleFood == false) {
@@ -62,7 +72,7 @@ void Son::ChancesOfFallingSick(int daysUnfed) {
 		getsSick = rand() % 100 + 1;
 	}
 	else if (daysUnfed != 0) {
-		int multiplier = 100 / (daysUnfed * 1.1);
+		int multiplier = 100 - (daysUnfed * 15);
 		getsSick = rand() % multiplier + 1;
 	}
 
