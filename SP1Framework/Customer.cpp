@@ -6,7 +6,7 @@
 Customer::Customer()//sets which item they want to buy and how much to do so
 {
 	//itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
-	quantity = rand() % 10 + 1;
+	quantity = rand() % 8 + 1;
 	bSatisfied = false;
 	prevPos.setX(0);
 	prevPos.setY(0);
@@ -174,5 +174,11 @@ void Customer::bumpIntoCustomer(int avoiding, Map& map)
 		pos.setY(pos.getY() - 1);
 }
 
+int Customer::getX() {
+	return pos.getX();
+}
 
+int Customer::getY() {
+	return pos.getY();
+}
 
