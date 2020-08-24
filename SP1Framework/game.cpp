@@ -979,6 +979,13 @@ void renderHUD()
     c.X = 36;
     c.Y = 24;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
+
+    ss.str(""); //probably can be implemented cleaner
+    ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
+    c.X = 54;
+    c.Y = 24;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+
 }
 
 void renderItem(int shelf)
@@ -1272,7 +1279,7 @@ void renderCustomer() // fix later yes
                 }
                 else 
                 {                 
-                    p.increaseUnsatisfiedCustomers();
+                    //p.increaseUnsatisfiedCustomers(); 
 
                 }
             }
@@ -1280,14 +1287,14 @@ void renderCustomer() // fix later yes
     }
 
 
-    if ((p.getUnsatisfiedCustomers() / 3 == 1 || p.getUnsatisfiedCustomers() / 3 == 2 || p.getUnsatisfiedCustomers() / 3 == 3) && p.getUnsatisfiedCustomers() % 3 == 0)
+    /*if (p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9 )
     {
         p.receiveStrike();
 
         if (p.getStrikes() == 3) {
             g_eGameState = S_GAMEOVER;
         }
-    }
+    }*/
 }
 
 void renderCharacter()
