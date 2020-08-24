@@ -65,6 +65,10 @@ void Map::chooseMap(int lvl, Console& console) //this is to choose the map to pr
 		printMap(finallevel, console);
 		break;
 	}
+	case 6:
+		std::fstream homescreen("HomeScreen.txt");
+		printMap(homescreen, console);
+		break;
 	}
 }
 

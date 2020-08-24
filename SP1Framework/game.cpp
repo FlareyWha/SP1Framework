@@ -1079,7 +1079,7 @@ void renderMainMenu()
 
 void renderHome() 
 {
-    map.chooseMap(0, g_Console);
+    map.chooseMap(6, g_Console);
     COORD c = g_Console.getConsoleSize();
     // Game Mechanic stuff
     c.Y /= 25;
