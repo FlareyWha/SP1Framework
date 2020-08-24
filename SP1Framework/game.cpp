@@ -1270,11 +1270,22 @@ void renderCustomer() // fix later yes
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
-                else if (sPtr[i]->getAmount() <= 0)
-                {
-                    p.receiveStrike(); 
+                else 
+                {                 
+                    p.increaseUnsatisfiedCustomers();
+
                 }
             }
+        }
+    }
+
+
+    if ((p.getUnsatisfiedCustomers() / 3 == 1 || p.getUnsatisfiedCustomers() / 3 == 2 || p.getUnsatisfiedCustomers() / 3 == 3) && p.getUnsatisfiedCustomers() % 3 == 0)
+    {
+        p.receiveStrike();
+
+        if (p.getStrikes() == 3) {
+            g_eGameState = S_GAMEOVER;
         }
     }
 }
