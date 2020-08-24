@@ -32,7 +32,12 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
+//test stuff
 Customer testCustomer;
+double testTimer = 0;
+bool testSpawned = false;
+bool testTravelling = false;
+
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 Son* cPtr[2] = { nullptr, nullptr };
@@ -324,6 +329,8 @@ void update(double dt)
             timer[i] += dt;
         }
     }
+
+    testTimer += dt;
 
     switch (g_eGameState)
     {
@@ -696,6 +703,8 @@ void processInputEndOfWorkScreen()
             && g_mouseEvent.mousePosition.X <= c.X / 6 + 36)
             && g_mouseEvent.mousePosition.Y == 13) //Change to home state once mouse clicks on the button
         {
+            p.receivePay(p.getTotalEarned()); //increase total savings
+            p.resetDayEarnings(); //reset daily amount earned back to 0
             g_eGameState = S_HOME;
         }
     }
@@ -1071,6 +1080,8 @@ void renderEndOfWorkScreen()
 {
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
+    std::ostringstream ss;
+    ss.str("");
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
@@ -1082,10 +1093,12 @@ void renderEndOfWorkScreen()
     g_Console.writeToBuffer(c, "Complaints given: [ ]", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
+    
     g_Console.writeToBuffer(c, "Strikes: [ ]", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Todays pay: [ ]", 0xF0);
+    ss << "Today's pay: $" << p.getTotalEarned();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
@@ -1117,6 +1130,7 @@ void renderCustomer() // fix later yes
     c.X = 79;
     c.Y = 13;
 
+    /*
     for (int i = 0; i < 6; i++) {
         if (customerPtr[i] == nullptr) {
             customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
@@ -1124,7 +1138,7 @@ void renderCustomer() // fix later yes
             timer[i] = 0;
             c.X = customerPtr[i]->getPos().getX();
             c.Y = customerPtr[i]->getPos().getY();
-            /*g_Console.writeToBuffer(c, ' ', 0x77);*/
+            //g_Console.writeToBuffer(c, ' ', 0x77);
         }
     }
 
@@ -1159,13 +1173,43 @@ void renderCustomer() // fix later yes
                 timer[i] = -1;
                 if (sPtr[i]->getAmount() > 0) {
                     sPtr[i]->decreaseItem();
-                    
+                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
-                
-                
-                
             }
         }
+    }
+    */
+    if ((testTimer >= 0.9) && (testTimer <= 1.1)) 
+    {
+        testSpawned = true;
+    }
+
+    switch (testCustomer.getItemToBuy()) 
+    {
+    case 1:
+        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
+            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
+            testTravelling = true;
+            break;
+        }
+
+    case 2:
+        if ((testTimer >= 10.9) && (testTimer <= 11.1)) {
+            testCustomer.moveToShelfContainingItem(testCustomer.getItemToBuy());
+            testTravelling = true;
+            break;
+        }
+    }
+
+    if (testTravelling == true)
+        testCustomer.moveCustomer(map);
+
+    testCustomer.printOutCustomer(testSpawned, g_Console, testCustomer.getPos(), map);
+
+    if ((testTimer >= 30.9) && (testTimer <= 31.1)) 
+    {
+        testSpawned = false;
+        testTimer = -1;
     }
 }
 
