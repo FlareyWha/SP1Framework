@@ -1054,6 +1054,7 @@ void renderMap()
 void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
+    renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
     c.Y /= 25;
     c.X = c.X / 2 - 5;
@@ -1080,6 +1081,7 @@ void renderMainMenu()
 void renderHome() 
 {
     map.chooseMap(6, g_Console);
+    renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
     // Game Mechanic stuff
     c.Y /= 25;
@@ -1094,6 +1096,30 @@ void renderHome()
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
+}
+
+void renderMenuAnimation()
+{
+    framesPassed++;
+    if (framesPassed % 50 == 0)
+    {
+        for (int pGy = 0; pGy < 25; pGy++)
+        {
+            for (int pGx = 0; pGx < 25; pGx++)
+            {
+                switch (map.getGrid(pGy, pGx))
+                {
+                case '6': map.setGrid(pGy, pGx, '7'); break;
+                case '5': map.setGrid(pGy, pGx, '6'); break;
+                case '4': map.setGrid(pGy, pGx, '5'); break;
+                case '3': map.setGrid(pGy, pGx, '4'); break;
+                case '2': map.setGrid(pGy, pGx, '3'); break;
+                case '1': map.setGrid(pGy, pGx, '2'); break;
+                case '7': map.setGrid(pGy, pGx, '1'); break;
+                }
+            }
+        }
+    }
 }
 
 void renderHomeExpenses(COORD c)
@@ -1526,6 +1552,3 @@ void renderInputEvents()
     }
     
 }
-
-
-
