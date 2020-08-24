@@ -371,6 +371,11 @@ void updateEndofWorkScreen()
     
 }
 
+void updateGameOver()
+{
+    processUserInput();
+}
+
 void updateHome() // Home logic
 {
     g_ePreviousGameState = g_eGameState;
@@ -722,6 +727,12 @@ void processInputEndOfWorkScreen()
     }
 }
 
+void processInputGameOver()
+{
+    if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
+        g_eGameState = S_MENU;
+}
+
 void processInputHome()
 {
     
@@ -763,9 +774,14 @@ void processUserInput()
 {
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: processInputSplash(); break;
-    case S_MENU: processInputMenu(); break;
-    case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); break;
+    case S_SPLASHSCREEN: processInputSplash(); 
+        break;
+    case S_MENU: processInputMenu(); 
+        break;
+    case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
+        break;
+    case S_GAMEOVER: processInputGameOver();
+        break;
     case S_HOME: processInputHome();
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU; 
@@ -1114,6 +1130,10 @@ void renderEndOfWorkScreen()
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
+}
+
+void renderGameOver()
+{
 }
 
 void renderTutorialLevel()
