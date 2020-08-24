@@ -1373,7 +1373,8 @@ void renderFramerate()
     for (int i = 0; i < 6; i++)
     {
         ss.str("");
-        ss << timer[i];
+        double display = timer[i];
+        ss << display;
         c.X = 0;
         c.Y = 14 + i;
         g_Console.writeToBuffer(c, ss.str(), 0x0F);
