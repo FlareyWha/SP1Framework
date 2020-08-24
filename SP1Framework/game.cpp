@@ -1156,7 +1156,12 @@ void renderCustomer() // fix later yes
                 delete customerPtr[i];
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
-                sPtr[i]->decreaseItem();
+                if (sPtr[i]->getAmount() > 0) {
+                    sPtr[i]->decreaseItem();
+                    
+                }
+                
+                
                 
             }
         }
