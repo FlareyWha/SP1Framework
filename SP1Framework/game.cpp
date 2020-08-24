@@ -578,7 +578,7 @@ void restockShelf(){
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
                 if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 
-                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) 
+                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 8) 
                 {          
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -594,7 +594,7 @@ void restockShelf(){
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
                 if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 
-                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) 
+                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 8) 
                 {
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
