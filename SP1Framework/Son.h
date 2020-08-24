@@ -6,6 +6,7 @@ class Son :
 private:
     bool bSick;
     bool btoggleFood; //Used to check if player has decided to feed his son
+    bool btoggleMedicine; //Used to check if player has decided to give medicine to his sick son
     bool bHospitalised;
     int NoOfDaysUnfed;
     int NoOfDaysSick;
@@ -22,6 +23,8 @@ public:
     bool getHospState();
     void isFed(); // Home menu food option is toggled true
     bool getStatusFed(); // return btoggleFood
+    void isTreated(); // Home menu medicine option toggled true or false
+    bool getTreatState();
 
     void increaseNODUnfed();
     void decreaseNODUnfed();
