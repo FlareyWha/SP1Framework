@@ -18,6 +18,7 @@ public:
     void Recovers(); //son recovers, bSick = false
     bool getStatus(); //return bSick
     void isHosp();
+    void resetHospState();
     bool getHospState();
     void isFed(); // Home menu food option is toggled true
     bool getStatusFed(); // return btoggleFood

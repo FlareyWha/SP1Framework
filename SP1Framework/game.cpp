@@ -747,8 +747,15 @@ void processInputEndOfWorkScreen()
 
 void processInputGameOver()
 {
-    if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
+    if (g_skKeyEvent[K_ESCAPE].keyReleased) {// opens main menu if player hits the escape key
+        for (int i = 0; i < 2; i++) {
+            cPtr[i]->resetNODSick();
+            cPtr[i]->resetNODUnfed();
+            cPtr[i]->Recovers();
+            cPtr[i]->resetHospState();
+        }
         g_eGameState = S_MENU;
+    }
     day = 0; level = 1;
     g_ePreviousGameState = S_GAMEOVER;
 }
