@@ -1254,6 +1254,21 @@ void renderFramerate()
     c.X = 36; //change to shift location of timer
     c.Y = 24;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x59);
+
+    // temporary: displays test customer position
+    ss.str("");
+    ss << "Customer Coords";
+    c.X = 0; //change to shift location of timer
+    c.Y = 14;  //we might use this or we might need to make a new timer to show when the game starts
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    c.Y += 1;
+    ss.str("");
+    ss << "X: "<< testCustomer.getPos().getX();
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    c.Y += 1;
+    ss.str("");
+    ss << "Y: " << testCustomer.getPos().getY();
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
 }
 
 // this is an example of how you would use the input events
