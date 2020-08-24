@@ -59,11 +59,11 @@ int Son::getNODUnfed()
 void Son::ChancesOfFallingSick(int daysUnfed) {
 	int getsSick{};
 	if (daysUnfed == 0) {
-		int getsSick = rand() % 100 + 1;
+		getsSick = rand() % 100 + 1;
 	}
 	else if (daysUnfed != 0) {
 		int multiplier = 100 / (daysUnfed * 1.1);
-		int getsSick = rand() % 100 + 1;
+		getsSick = rand() % multiplier + 1;
 	}
 
 	if (getsSick <= 15) {

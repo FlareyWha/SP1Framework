@@ -704,6 +704,8 @@ void processInputEndOfWorkScreen()
             && g_mouseEvent.mousePosition.X <= c.X / 6 + 36)
             && g_mouseEvent.mousePosition.Y == 13) //Change to home state once mouse clicks on the button
         {
+            p.receivePay(p.getTotalEarned()); //increase total savings
+            p.resetDayEarnings(); //reset daily amount earned back to 0
             g_eGameState = S_HOME;
         }
     }
@@ -1078,6 +1080,8 @@ void renderEndOfWorkScreen()
 {
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
+    std::ostringstream ss;
+    ss.str("");
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
@@ -1089,10 +1093,12 @@ void renderEndOfWorkScreen()
     g_Console.writeToBuffer(c, "Complaints given: [ ]", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
+    
     g_Console.writeToBuffer(c, "Strikes: [ ]", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Todays pay: [ ]", 0xF0);
+    ss << "Today's pay: $" << p.getTotalEarned();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
@@ -1167,7 +1173,7 @@ void renderCustomer() // fix later yes
                 timer[i] = -1;
                 if (sPtr[i]->getAmount() > 0) {
                     sPtr[i]->decreaseItem();
-                    
+                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
             }
         }
