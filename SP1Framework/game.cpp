@@ -581,15 +581,26 @@ void restockShelf(){
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 
-                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (1 + j) + 1 
+                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
                 {          
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
                 }
+
+                
             }
         }
     }
+
+    for (int j = 0; j < 3;j++) {
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j + 1) && boxPosPtr->getX() == 38 && sPtr[j]->getAmount() != 9)
+        {
+            sPtr[j]->increaseItem(1);
+            p.releaseProduct();
+        }
+    }
+   
 
     for (int i = 49; i < 59; i++) { //3 shelves on the right
 
@@ -597,13 +608,25 @@ void restockShelf(){
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 
-                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2) + 1 
+                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
                 {
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
                 }
+
+                
             }
+        }
+    }
+
+    for (int j = 3; j < 6;j++) {
+
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2)
+            && boxPosPtr->getX() == 59 && sPtr[j]->getAmount() != 9)
+        {
+            sPtr[j]->increaseItem(1);
+            p.releaseProduct();
         }
     }
 }
