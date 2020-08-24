@@ -647,6 +647,7 @@ void checkEnd() //Check if day has ended and update variables
             cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
             if (cPtr[i]->getNODSick() == 4) {
                 g_eGameState = S_GAMEOVER;
+                cPtr[i]->isHosp();
             }
             else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
@@ -1163,6 +1164,14 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "Game Over!", 0xF0);
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 2 - 16;
+    for (int i = 0; i < 2; i++) {
+        if (cPtr[i]->getHospState() == true)
+        {
+            g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
+        }
+    }
+    c.Y += 6;
+    c.X = g_Console.getConsoleSize().X / 2 - 20;
     g_Console.writeToBuffer(c, "Press ESC to head back to the main menu!", 0xF0);
 }
 
