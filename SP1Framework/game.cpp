@@ -663,7 +663,9 @@ void checkEnd() //Check if day has ended and update variables
             if (cPtr[i]->getStatus() == true) {
                 cPtr[i]->increaseNODSick();
             }
-            cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            if (day != 0) {
+                cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            }
             if (cPtr[i]->getNODSick() == 4) {
                 g_eGameState = S_GAMEOVER;
                 cPtr[i]->isHosp();
