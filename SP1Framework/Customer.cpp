@@ -11,7 +11,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	prevPos.setX(0);
 	prevPos.setY(0);
 	pos.setX(79); //change when we spawn them
-	pos.setY(13); // ^
+	pos.setY(9); // ^
 }
 
 //Customer::Customer(Map map)

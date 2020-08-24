@@ -34,10 +34,10 @@ EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 //test stuff
-Customer testCustomer;
-double testTimer = -1;
-bool testSpawned = false;
-bool testTravelling = false;
+//Customer testCustomer;
+//double testTimer = -1;
+//bool testSpawned = false;
+//bool testTravelling = false;
 
 Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
@@ -331,13 +331,14 @@ void update(double dt)
 
     for (int i = 0; i < 6; i++) 
     {
-        if (timer[i] != -1) {
+        if (timer[i] != -1) 
+        {
             timer[i] += dt;
         }
     }
 
-    if (testTimer != -1)
-        testTimer += dt;
+    //if (testTimer != -1)
+    //   testTimer += dt;
 
     spawnTimer += dt;
 
@@ -1209,60 +1210,58 @@ void moveCustomer()
 void renderCustomer() // fix later yes
 {   
     COORD c = g_Console.getConsoleSize();
-    c.X = 79;
-    c.Y = 13;
 
-    bool created = false;
-
-    if ((spawnTimer >= 4.9) && (spawnTimer <= 5.1))
+    for (int i = 0; i < 6; i++)
     {
-        for (int i = 0; i < 6; i++)
+        if (customerPtr[i] == nullptr);
         {
-            if ((customerPtr[i] == nullptr) && (created == false));
-            {
-                customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
-                customerPtr[i]->setItemToBuy(2);
-                timer[i] = 0;
-                c.X = customerPtr[i]->getPos().getX();
-                c.Y = customerPtr[i]->getPos().getY();
-                created = true;
-                //g_Console.writeToBuffer(c, ' ', 0x77);
-            }
+            customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
+            customerPtr[i]->setItemToBuy(2);
+            timer[i] = 0;
+            customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
         }
-        spawnTimer = 0;
     }
 
     for (int i = 0; i < 6; i++)
     {
         if (customerPtr[i] != nullptr)
         {
-            if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) {
+            if ((timer[i] >= 0.9) && (timer[i] <= 1.1)) 
+            {
                 spawned[i] = true;
             }
-            switch (customerPtr[i]->getItemToBuy()) {
+            switch (customerPtr[i]->getItemToBuy()) 
+            {
             case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) {
+                if ((timer[i] >= 10.9) && (timer[i] <=11.1)) 
+                {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                     travelling[i] = true;
                     break;
                 }
                 
             case 2:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1)) {
+                if ((timer[i] >= 10.9) && (timer[i] <= 11.1)) 
+                {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
                     travelling[i] = true;
                     break;
                 }
             }
+
             if (travelling[i] == true)
                 customerPtr[i]->moveCustomer(map);
+
             customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
-            if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) {
+
+            if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
+            {
                 spawned[i] = false;
                 delete customerPtr[i];
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
-                if (sPtr[i]->getAmount() > 0) {
+                if (sPtr[i]->getAmount() > 0) 
+                {
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
@@ -1340,12 +1339,14 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 
     // temporary: displays test customer position
+    /*
     ss.str("");
     ss << "Customer Coords";
     c.X = 0; //change to shift location of timer
     c.Y = 14;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
     c.Y += 1;
+    
     ss.str("");
     ss << "X: "<< testCustomer.getPos().getX();
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
@@ -1353,12 +1354,22 @@ void renderFramerate()
     ss.str("");
     ss << "Y: " << testCustomer.getPos().getY();
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
-
     ss.str("");
     ss << spawnTimer;
     c.X = 0;
     c.Y = 23;
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    */
+    for (int i = 0; i < 6; i++)
+    {
+        ss.str("");
+        ss << timer[i];
+        c.X = 0;
+        c.Y = 14 + i;
+        g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    }
+
+
 }
 
 // this is an example of how you would use the input events
