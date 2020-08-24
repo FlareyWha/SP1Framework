@@ -1113,7 +1113,7 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
-        ss << cPtr[0]->getNODSick() << " days without medicine";
+        ss << cPtr[1]->getNODSick() << " days without medicine";
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
         ss.str("");
         c.Y += 1;
