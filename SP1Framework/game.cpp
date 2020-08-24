@@ -648,7 +648,7 @@ void checkEnd() //Check if day has ended and update variables
             if (cPtr[i]->getNODSick() == 4) {
                 g_eGameState = S_GAMEOVER;
             }
-            else {
+            else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
             }
         }
@@ -688,7 +688,8 @@ void processInputSplash() // All input processing related to Splashscreen
 
 void processInputMenu() //All input processing related to Main Menu
 {
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && g_ePreviousGameState == S_SPLASHSCREEN)
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
+        && (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER))
     {
         COORD c = g_Console.getConsoleSize();
         if ((g_mouseEvent.mousePosition.X >= c.X / 2 - 7
@@ -743,7 +744,7 @@ void processInputGameOver()
 {
     if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
         g_eGameState = S_MENU;
-    day = 0;
+    day = 0; level = 1;
     g_ePreviousGameState = S_GAMEOVER;
 }
 
