@@ -34,7 +34,7 @@ EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
 //test stuff
 Customer testCustomer;
-double testTimer = 0;
+double testTimer = -1;
 bool testSpawned = false;
 bool testTravelling = false;
 
@@ -330,7 +330,8 @@ void update(double dt)
         }
     }
 
-    testTimer += dt;
+    if (testTimer != -1)
+        testTimer += dt;
 
     switch (g_eGameState)
     {
@@ -1186,6 +1187,11 @@ void renderCustomer() // fix later yes
         }
     }
     */
+    if (testTimer == -1)
+        testTimer = 0;
+
+    testCustomer.setItemToBuy(2);
+
     if ((testTimer >= 0.9) && (testTimer <= 1.1)) 
     {
         testSpawned = true;
