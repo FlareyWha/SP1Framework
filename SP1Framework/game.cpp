@@ -982,6 +982,13 @@ void renderHUD()
     c.X = 36;
     c.Y = 24;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
+
+    ss.str(""); //probably can be implemented cleaner
+    ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
+    c.X = 54;
+    c.Y = 24;
+    g_Console.writeToBuffer(c, ss.str(), 0x80);
+
 }
 
 void renderItem(int shelf)
@@ -1266,9 +1273,10 @@ void renderCustomer() // fix later yes
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
-                else if (sPtr[i]->getAmount() <= 0)
-                {
-                    p.receiveStrike(); 
+                else 
+                {                 
+                    //p.increaseUnsatisfiedCustomers(); 
+
                 }
             }
         }
@@ -1289,6 +1297,16 @@ void renderCustomer() // fix later yes
             }
         }
     }
+
+
+    /*if (p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9 )
+    {
+        p.receiveStrike();
+
+        if (p.getStrikes() == 3) {
+            g_eGameState = S_GAMEOVER;
+        }
+    }*/
 }
 
 void renderCharacter()
