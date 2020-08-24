@@ -25,6 +25,11 @@ void Son::isHosp()
 	bHospitalised = true;
 }
 
+void Son::resetHospState()
+{
+	bHospitalised = false;
+}
+
 bool Son::getHospState()
 {
 	return bHospitalised;

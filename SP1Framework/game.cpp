@@ -578,12 +578,12 @@ void pickUpBoxes()  //todo
 }
 
 void restockShelf(){
-    for (int i = 28; i < 37; i++) { //3 SHELVES ON THE LEFT
+    for (int i = 28; i < 38; i++) { //3 SHELVES ON THE LEFT
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
                 if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 
-                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 8) 
+                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
                 {          
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -592,14 +592,14 @@ void restockShelf(){
         }
     }
 
-    for (int i = 49; i < 58; i++) { //3 shelves on the right
+    for (int i = 49; i < 59; i++) { //3 shelves on the right
 
         for (int j = 3; j < 6;j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
                 if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 
-                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 8) 
+                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
                 {
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -748,8 +748,15 @@ void processInputEndOfWorkScreen()
 
 void processInputGameOver()
 {
-    if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
+    if (g_skKeyEvent[K_ESCAPE].keyReleased) {// opens main menu if player hits the escape key
+        for (int i = 0; i < 2; i++) {
+            cPtr[i]->resetNODSick();
+            cPtr[i]->resetNODUnfed();
+            cPtr[i]->Recovers();
+            cPtr[i]->resetHospState();
+        }
         g_eGameState = S_MENU;
+    }
     day = 0; level = 1;
     g_ePreviousGameState = S_GAMEOVER;
 }
@@ -971,7 +978,7 @@ void renderItem(int shelf)
 
     COORD c;
     std::ostringstream ss;
-    c.X = 36;
+    c.X = 37;
     c.Y = 0;
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {

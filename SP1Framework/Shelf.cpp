@@ -1,6 +1,6 @@
 #include "Shelf.h"
 
-Shelf::Shelf() : capacity{ 8 } , amount{0} , itemtag{ ' ' }, colour{ 0x00 }
+Shelf::Shelf() : capacity{ 9 } , amount{0} , itemtag{ ' ' }, colour{ 0x00 }
 {
 }
 
