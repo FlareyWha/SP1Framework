@@ -562,35 +562,35 @@ void pickUpBoxes()  //todo
 }
 
 void restockShelf(){
-    for (int i = 27; i < 37; i++) { //3 SHELVES ON THE LEFT
+    for (int i = 28; i < 37; i++) { //3 SHELVES ON THE LEFT
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) {
-                    sPtr[j]->increaseItem(5);
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (1 + j) + 1 
+                    || boxPosPtr->getY() == 6 * (1 + j) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) 
+                {          
+                    sPtr[j]->increaseItem(1);
                     p.releaseProduct();
                 }
             }
         }
     }
 
-    for (int i = 48; i < 58; i++) { //3 shelves on the right
+    for (int i = 49; i < 58; i++) { //3 shelves on the right
 
         for (int j = 3; j < 6;j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) {
-
-                    sPtr[j]->increaseItem(5);
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && (boxPosPtr->getY() == 6 * (j - 2) + 1 
+                    || boxPosPtr->getY() == 6 * (j - 2) - 1) && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 20) 
+                {
+                    sPtr[j]->increaseItem(1);
                     p.releaseProduct();
-
                 }
-
             }
         }
     }
-    
 }
 
 //void updateCustomer()
@@ -929,7 +929,7 @@ void renderItem(int shelf)
 
     COORD c;
     std::ostringstream ss;
-    c.X = 27;
+    c.X = 36;
     c.Y = 0;
     int amt = sPtr[shelf]->getAmount();
     for (int x = 0; x <= shelf; x++) {
@@ -950,9 +950,9 @@ void renderItem(int shelf)
             break;
         }
     }
-    for (int i = 0; i < amt / 5; i++) {
-        c.X += 2;
-        g_Console.writeToBuffer(c, " ", colors[shelf]);
+    for (int i = 0; i != amt; i++) {
+        g_Console.writeToBuffer(c, ' ', colors[shelf]);
+        c.X--;
     }
     if (shelf >= 3)
     {
@@ -961,9 +961,6 @@ void renderItem(int shelf)
     else {
         c.X = 27;
     }
-    ss.str("");
-    ss << amt;
-    g_Console.writeToBuffer(c, ss.str(), colors[6]);
 }
 
 void renderMap()
