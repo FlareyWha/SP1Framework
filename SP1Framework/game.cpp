@@ -27,6 +27,7 @@ bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
+double spawnTimer;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
@@ -328,6 +329,8 @@ void update(double dt)
             timer[i] += dt;
         }
     }
+
+    spawnTimer += dt;
 
     switch (g_eGameState)
     {
@@ -1098,7 +1101,12 @@ void renderHomeExpenses(COORD c)
     std::ostringstream ss;
     ss.str("");
     g_Console.writeToBuffer(c, "Home", 0xF0);
-    c.Y += 3;
+    c.Y += 1;
+    c.X = g_Console.getConsoleSize().X / 8;
+    ss << "Savings : $" << p.getSavings();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
     c.X = g_Console.getConsoleSize().X / 8;
     g_Console.writeToBuffer(c, "Son 1", 0xF0);
     c.Y += 1;
@@ -1229,18 +1237,11 @@ void moveCustomer()
 void renderCustomer() // fix later yes
 {   
     COORD c = g_Console.getConsoleSize();
+    bool created = false;
+
     for (int i = 0; i < 6; i++)
     {
-        if (customerPtr[i] == nullptr)
-        {
-            customerPtr[i] = new Customer;
-            customerPtr[i]->setItemToBuy(2);
-            timer[i] = 0;
-            customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
-            spawned[i] = true;
-        }
-    
-        else if (customerPtr[i] != nullptr)
+        if (customerPtr[i] != nullptr)
         {
             switch (customerPtr[i]->getItemToBuy())
             {
@@ -1272,29 +1273,50 @@ void renderCustomer() // fix later yes
                 delete customerPtr[i];
                 customerPtr[i] = nullptr;
                 timer[i] = -1;
+                bool bComplain = false;
                 if (sPtr[i]->getAmount() > 0) 
                 {
                     sPtr[i]->decreaseItem();
                     p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                 }
-                else 
+                else if (sPtr[i]->getAmount() == 0)
                 {                 
-                    //p.increaseUnsatisfiedCustomers(); 
+                    p.increaseUnsatisfiedCustomers(); 
+                    bComplain = true;
 
+                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
+                    {
+                        p.receiveStrike();
+
+                        if (p.getStrikes() == 3) {
+                            g_eGameState = S_GAMEOVER;
+                        }
+                    }
                 }
+            }
+
+            
+        }
+        else
+        {
+            if (spawnTimer >= 4.95 && spawnTimer <= 5.05)
+            {
+                if (created != true)
+                {
+                    customerPtr[i] = new Customer;
+                    customerPtr[i]->setItemToBuy(2);
+                    timer[i] = 0;
+                    customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
+                    spawned[i] = true;
+                    created = true;
+                }
+                spawnTimer = 0;
             }
         }
     }
 
 
-    /*if (p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9 )
-    {
-        p.receiveStrike();
-
-        if (p.getStrikes() == 3) {
-            g_eGameState = S_GAMEOVER;
-        }
-    }*/
+    
 }
 
 void renderCharacter()
@@ -1342,12 +1364,14 @@ void renderFramerate()
     ss.str("");
     ss << "Y: " << testCustomer.getPos().getY();
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    */
     ss.str("");
     ss << spawnTimer;
     c.X = 0;
     c.Y = 23;
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
-    */
+
+
     for (int i = 0; i < 6; i++)
     {
         ss.str("");
@@ -1356,9 +1380,16 @@ void renderFramerate()
         c.X = 0;
         c.Y = 14 + i;
         g_Console.writeToBuffer(c, ss.str(), 0x0F);
+
+        if (customerPtr[i] != nullptr)
+        {
+            ss.str("");
+            ss << customerPtr[i] << "pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY();
+            c.X = 30;
+            c.Y = 14 + i;
+            g_Console.writeToBuffer(c, ss.str(), 0x0F);
+        }
     }
-
-
 }
 
 // this is an example of how you would use the input events
