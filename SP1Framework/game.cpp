@@ -205,6 +205,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_ENDOFWORKSCREEN: gameplayKBHandler(keyboardEvent);
         break;
+    case S_GAMEOVER: gameplayKBHandler(keyboardEvent);
+        break;
     case S_HOME: gameplayKBHandler(keyboardEvent); // handle home menu keyboard menu
         break;
     case S_TUT: gameplayKBHandler(keyboardEvent);
@@ -239,6 +241,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_MENU: gameplayMouseHandler(mouseEvent); // handle mouse input for menu
         break;
     case S_ENDOFWORKSCREEN: gameplayMouseHandler(mouseEvent);
+        break;
+    case S_GAMEOVER: gameplayMouseHandler(mouseEvent);
         break;
     case S_HOME: gameplayMouseHandler(mouseEvent); // handle mouse input for home menu
         break;
@@ -341,6 +345,8 @@ void update(double dt)
             break;
         case S_ENDOFWORKSCREEN: updateEndofWorkScreen();
             break;
+        case S_GAMEOVER: updateGameOver();
+            break;
         case S_HOME: updateHome();
             break;
         case S_TUT: g_dElapsedWorkTime += dt;  updateTutorial();
@@ -365,6 +371,11 @@ void updateEndofWorkScreen()
 {
     processUserInput();
     
+}
+
+void updateGameOver()
+{
+    processUserInput();
 }
 
 void updateHome() // Home logic
@@ -625,13 +636,23 @@ void checkEnd() //Check if day has ended and update variables
         g_sChar.m_cLocation = c;
         boxPosPtr->setX(18);
         boxPosPtr->setY(2);
-        g_eGameState = S_ENDOFWORKSCREEN;
         for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
         p.releaseProduct();
-        cPtr[0]->ChancesOfFallingSick(cPtr[0]->getNODUnfed());
-        cPtr[1]->ChancesOfFallingSick(cPtr[1]->getNODUnfed());
+        for (int i = 0; i < 2; i++) {
+            if (cPtr[i]->getStatus() == true) {
+                cPtr[i]->increaseNODSick();
+            }
+            cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            if (cPtr[i]->getNODSick() == 4) {
+                g_eGameState = S_GAMEOVER;
+                cPtr[i]->isHosp();
+            }
+            else if (g_eGameState != S_GAMEOVER) {
+                g_eGameState = S_ENDOFWORKSCREEN;
+            }
+        }
     }
     
 }
@@ -668,7 +689,8 @@ void processInputSplash() // All input processing related to Splashscreen
 
 void processInputMenu() //All input processing related to Main Menu
 {
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && g_ePreviousGameState == S_SPLASHSCREEN)
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
+        && (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER))
     {
         COORD c = g_Console.getConsoleSize();
         if ((g_mouseEvent.mousePosition.X >= c.X / 2 - 7
@@ -713,9 +735,18 @@ void processInputEndOfWorkScreen()
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             g_eGameState = S_HOME;
         }
     }
+}
+
+void processInputGameOver()
+{
+    if (g_skKeyEvent[K_ESCAPE].keyReleased) // opens main menu if player hits the escape key
+        g_eGameState = S_MENU;
+    day = 0; level = 1;
+    g_ePreviousGameState = S_GAMEOVER;
 }
 
 void processInputHome()
@@ -759,9 +790,13 @@ void processUserInput()
 {
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: processInputSplash(); break;
-    case S_MENU: processInputMenu(); break;
-    case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); break;
+    case S_SPLASHSCREEN: processInputSplash(); 
+        break;
+    case S_MENU: processInputMenu(); 
+        break;
+    case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
+        break;
+    case S_GAMEOVER: processInputGameOver();
     case S_HOME: processInputHome();
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU; 
@@ -798,6 +833,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_MENU: renderMainMenu();
         break;
     case S_ENDOFWORKSCREEN: renderEndOfWorkScreen();
+        break;
+    case S_GAMEOVER: renderGameOver();
         break;
     case S_HOME: renderHome();
         break;
@@ -981,7 +1018,7 @@ void renderMap()
     }
 }
 
-void renderMainMenu() 
+void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
@@ -990,7 +1027,7 @@ void renderMainMenu()
     g_Console.writeToBuffer(c, "Main Menu", 0xF0);
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    if (g_ePreviousGameState == S_SPLASHSCREEN)
+    if (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER)
         g_Console.writeToBuffer(c, "Start New", 0xF0);
     else if (g_ePreviousGameState == S_HOME)
         g_Console.writeToBuffer(c, "Back Home", 0xF0);
@@ -1086,27 +1123,53 @@ void renderEndOfWorkScreen()
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
-    ss.str("");
+    
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Customers served: [ ]", 0xF0);
+    ss.str("");
+    ss << "Customers served: ";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Complaints given: [ ]", 0xF0);
+    ss.str("");
+    ss << "Complaints given: " << p.getUnsatisfiedCustomers();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    
-    g_Console.writeToBuffer(c, "Strikes: [ ]", 0xF0);
+    ss.str("");
+    ss << "Total number of Strikes: "<< p.getStrikes();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
+    ss.str("");
     ss << "Today's pay: $" << p.getTotalEarned();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
+}
+
+void renderGameOver()
+{
+    COORD c = g_Console.getConsoleSize();
+    map.chooseMap(0, g_Console);
+    c.Y /= 25;
+    c.X = c.X / 2 - 5;
+    g_Console.writeToBuffer(c, "Game Over!", 0xF0);
+    c.Y += 6;
+    c.X = g_Console.getConsoleSize().X / 2 - 16;
+    for (int i = 0; i < 2; i++) {
+        if (cPtr[i]->getHospState() == true)
+        {
+            g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
+        }
+    }
+    c.Y += 6;
+    c.X = g_Console.getConsoleSize().X / 2 - 20;
+    g_Console.writeToBuffer(c, "Press ESC to head back to the main menu!", 0xF0);
 }
 
 void renderTutorialLevel()

@@ -43,6 +43,7 @@ enum EGAMESTATES
     S_SPLASHSCREEN,
     S_MENU,
     S_ENDOFWORKSCREEN,
+    S_GAMEOVER,
     S_HOME,
     S_TUT,
     S_GAME,
@@ -94,6 +95,7 @@ void shutdown    ( void );      // do clean up, free memory
 void updateSplashScreen();    // waits for time to pass in splash screen
 void updateMenu();            // Menu logic
 void updateEndofWorkScreen(); // End of Work logic
+void updateGameOver(); // Game Over logic
 void updateHome();            // Home logic
 void updateTutorial();        // Tutorial logic
 void updateGame();          // Game logic
@@ -119,6 +121,7 @@ void renderMainMenu(); //renders the main menu
 void renderHome(); //renders home
 void renderHomeExpenses(COORD c); // renders info about sons and stuff
 void renderEndOfWorkScreen();
+void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 
 void renderBoxes();
