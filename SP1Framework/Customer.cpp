@@ -130,7 +130,7 @@ void Customer::moveCustomer(Map& map)
 			else
 				pos.setY(pos.getY());
 		}
-		if (map.isNegative(endPoint.getY(), pos.getY()) == false)
+		else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
 		{
 			if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
 				pos.setY(pos.getY() + 1);
@@ -148,7 +148,7 @@ void Customer::moveCustomer(Map& map)
 				pos.setX(pos.getX());
 		}
 
-		if (map.isNegative(endPoint.getX(), pos.getX()) == false)
+		else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
 		{
 			if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				pos.setX(pos.getX() + 1);
