@@ -639,7 +639,7 @@ void updateSons()
 
 void checkEnd() //Check if day has ended and update variables
 {
-    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 180)
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
@@ -962,7 +962,7 @@ void renderHUD()
 
     ss.str("");     // displays the elapsed time
     int minute;
-    int secs = 180 - g_dElapsedWorkTime;
+    int secs = 120 - g_dElapsedWorkTime;
     minute = secs / 60;
     if (minute > 0) {
         ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
