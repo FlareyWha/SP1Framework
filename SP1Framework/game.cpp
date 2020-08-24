@@ -622,6 +622,7 @@ void updateSons()
         else {
             cPtr[i]->increaseNODUnfed();
         }
+        cPtr[i]->isFed();
     }
 }
 
@@ -1109,7 +1110,9 @@ void renderHomeExpenses(COORD c)
         c.X -= 14;
     }
     c.Y += 3;
-    g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+    if (day % 6 == 0 && day != 0) {
+        g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+    }
     c.Y += 4;
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
     c.Y += 1;
