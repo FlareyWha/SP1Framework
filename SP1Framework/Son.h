@@ -22,6 +22,7 @@ public:
     void resetHospState();
     bool getHospState();
     void isFed(); // Home menu food option is toggled true
+    void resetFed();
     bool getStatusFed(); // return btoggleFood
     void isTreated(); // Home menu medicine option toggled true or false
     bool getTreatState();

@@ -46,6 +46,11 @@ void Son::isFed()
 	}
 }
 
+void Son::resetFed()
+{
+	btoggleFood = false;
+}
+
 bool Son::getStatusFed()
 {
 	return btoggleFood;
