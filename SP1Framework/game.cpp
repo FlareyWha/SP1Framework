@@ -1101,7 +1101,12 @@ void renderHomeExpenses(COORD c)
     std::ostringstream ss;
     ss.str("");
     g_Console.writeToBuffer(c, "Home", 0xF0);
-    c.Y += 3;
+    c.Y += 1;
+    c.X = g_Console.getConsoleSize().X / 8;
+    ss << "Savings : $" << p.getSavings();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
     c.X = g_Console.getConsoleSize().X / 8;
     g_Console.writeToBuffer(c, "Son 1", 0xF0);
     c.Y += 1;
