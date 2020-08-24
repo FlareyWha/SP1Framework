@@ -51,6 +51,15 @@ bool Son::getStatusFed()
 	return btoggleFood;
 }
 
+void Son::isTreated()
+{
+}
+
+bool Son::getTreatState()
+{
+	return false;
+}
+
 void Son::increaseNODUnfed()
 {
 	NoOfDaysUnfed++;
