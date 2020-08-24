@@ -1279,97 +1279,78 @@ void renderCustomer() // fix later yes
                     timer[i] = -1;
                     bool bComplain = false;
                     //only did first 2 shelves and its kinda inefficient
-                    if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7)
-                    {
-                        if (sPtr[0]->getAmount() > 0) 
-                        {
-                            sPtr[0]->decreaseItem();
-                            p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                        }
-                        
-                        else if (sPtr[0]->getAmount() == 0) {
-                            p.increaseUnsatisfiedCustomers();
-                            bComplain = true;
 
-                            if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                            {
-                                p.receiveStrike();
+                    for (int j = 0; j < 3; j++) {
 
-                                if (p.getStrikes() == 3) {
-                                    g_eGameState = S_GAMEOVER;
+                        if (sPtr[j] != nullptr) {
+
+                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j ) {
+
+                                if (sPtr[j]->getAmount() > 0)
+                                {
+                                    sPtr[j]->decreaseItem();
+                                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                                 }
+
+                                else if (sPtr[j]->getAmount() == 0) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    bComplain = true;
+
+                                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
+                                    {
+                                        p.receiveStrike();
+
+                                        if (p.getStrikes() == 3) {
+                                            g_eGameState = S_GAMEOVER;
+                                        }
+
+                                    }
+
+                                }
+
                             }
+
                         }
                     }
 
-                    if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 13)
-                    {
-                        if (sPtr[1]->getAmount() > 0)
-                        {
-                            sPtr[1]->decreaseItem();
-                            p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                        }
-                        
+                    for (int j = 3; j < 6;j++) {
 
-                        else if (sPtr[1]->getAmount() == 0) {
-                            p.increaseUnsatisfiedCustomers();
-                            bComplain = true;
+                        if (sPtr[j] != nullptr) {
 
-                            if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                            {
-                                p.receiveStrike();
+                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (p.getStrikes() == 3) {
-                                    g_eGameState = S_GAMEOVER;
+                                if (sPtr[j]->getAmount() > 0)
+                                {
+                                    sPtr[j]->decreaseItem();
+                                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                                 }
-                            }
-                        }
-                    }
 
+                                else if (sPtr[j]->getAmount() == 0) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    bComplain = true;
+
+                                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
+                                    {
+                                        p.receiveStrike();
+
+                                        if (p.getStrikes() == 3) {
+                                            g_eGameState = S_GAMEOVER;
+                                        }
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+    
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
                 }
                 
-
-                /*if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }*/
-
-                //if (sPtr[i]->getAmount() > 0) 
-                //{
-                //    sPtr[i]->decreaseItem();
-                //    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                //}
-                //else if (sPtr[i]->getAmount() == 0)
-                //{                 
-                //   
-
-                //    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                //    {
-                //        p.receiveStrike();
-
-                //        if (p.getStrikes() == 3) {
-                //            g_eGameState = S_GAMEOVER;
-                //        }
-                //    }
-                //}
             }
 
             
