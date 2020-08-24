@@ -733,6 +733,7 @@ void processInputEndOfWorkScreen()
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             g_eGameState = S_HOME;
         }
     }
@@ -1123,22 +1124,28 @@ void renderEndOfWorkScreen()
     map.chooseMap(0, g_Console);
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
-    ss.str("");
+    
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Customers served: [ ]", 0xF0);
+    ss.str("");
+    ss << "Customers served: ";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Complaints given: [ ]", 0xF0);
+    ss.str("");
+    ss << "Complaints given: " << p.getUnsatisfiedCustomers();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    
-    g_Console.writeToBuffer(c, "Strikes: [ ]", 0xF0);
+    ss.str("");
+    ss << "Total number of Strikes: "<< p.getStrikes();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
+    ss.str("");
     ss << "Today's pay: $" << p.getTotalEarned();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
