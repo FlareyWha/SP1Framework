@@ -1068,6 +1068,8 @@ void renderHome()
 
 void renderHomeExpenses(COORD c)
 {
+    std::ostringstream ss;
+    ss.str("");
     g_Console.writeToBuffer(c, "Home", 0xF0);
     c.Y += 3;
     c.X = g_Console.getConsoleSize().X / 8;
@@ -1085,7 +1087,11 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "X days without medicine", 0xF0);
+        ss << cPtr[0]->getNODSick() << " days without medicine";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
     } //Make this hidden according to Son 1 state
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
@@ -1110,7 +1116,11 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+        ss << cPtr[0]->getNODSick() << " days without medicine";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
     }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
