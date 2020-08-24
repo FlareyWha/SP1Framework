@@ -27,6 +27,7 @@ bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 double timer[6];
+double spawnTimer;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
@@ -86,6 +87,7 @@ void init( void )
     //init level and day
     level = 1;
     day = 0;
+    spawnTimer = 0;
     
     //init box and box pos
     if (boxPtr == nullptr) {
@@ -336,6 +338,8 @@ void update(double dt)
 
     if (testTimer != -1)
         testTimer += dt;
+
+    spawnTimer += dt;
 
     switch (g_eGameState)
     {
@@ -1065,6 +1069,8 @@ void renderHome()
 
 void renderHomeExpenses(COORD c)
 {
+    std::ostringstream ss;
+    ss.str("");
     g_Console.writeToBuffer(c, "Home", 0xF0);
     c.Y += 3;
     c.X = g_Console.getConsoleSize().X / 8;
@@ -1082,7 +1088,11 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "X days without medicine", 0xF0);
+        ss << cPtr[0]->getNODSick() << " days without medicine";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
     } //Make this hidden according to Son 1 state
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
@@ -1107,7 +1117,11 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "X days without medicine", 0xF0); //Make this hidden according to Son 2 state
+        ss << cPtr[0]->getNODSick() << " days without medicine";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
     }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
@@ -1198,16 +1212,24 @@ void renderCustomer() // fix later yes
     c.X = 79;
     c.Y = 13;
 
-    /*
-    for (int i = 0; i < 6; i++) {
-        if (customerPtr[i] == nullptr) {
-            customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
-            customerPtr[i]->setItemToBuy(2);
-            timer[i] = 0;
-            c.X = customerPtr[i]->getPos().getX();
-            c.Y = customerPtr[i]->getPos().getY();
-            //g_Console.writeToBuffer(c, ' ', 0x77);
+    bool created = false;
+
+    if ((spawnTimer >= 4.9) && (spawnTimer <= 5.1))
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            if ((customerPtr[i] == nullptr) && (created == false));
+            {
+                customerPtr[i] = new Customer; // spawn customer PS:needs to delete the customer 
+                customerPtr[i]->setItemToBuy(2);
+                timer[i] = 0;
+                c.X = customerPtr[i]->getPos().getX();
+                c.Y = customerPtr[i]->getPos().getY();
+                created = true;
+                //g_Console.writeToBuffer(c, ' ', 0x77);
+            }
         }
+        spawnTimer = 0;
     }
 
     for (int i = 0; i < 6; i++)
@@ -1226,8 +1248,9 @@ void renderCustomer() // fix later yes
                 }
                 
             case 2:
-                if ((timer[i] >= 15.9) && (timer[i] <= 16.1)) {
+                if ((timer[i] >= 10.9) && (timer[i] <= 11.1)) {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i] -> getItemToBuy());
+                    travelling[i] = true;
                     break;
                 }
             }
@@ -1246,7 +1269,7 @@ void renderCustomer() // fix later yes
             }
         }
     }
-    */
+    /*
     if (testTimer == -1)
         testTimer = 0;
 
@@ -1284,6 +1307,7 @@ void renderCustomer() // fix later yes
         testSpawned = false;
         testTimer = -1;
     }
+    */
 }
 
 void renderCharacter()
@@ -1328,6 +1352,12 @@ void renderFramerate()
     c.Y += 1;
     ss.str("");
     ss << "Y: " << testCustomer.getPos().getY();
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
+
+    ss.str("");
+    ss << spawnTimer;
+    c.X = 0;
+    c.Y = 23;
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
 }
 
