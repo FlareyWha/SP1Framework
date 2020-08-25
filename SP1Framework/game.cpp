@@ -1433,73 +1433,72 @@ void renderCustomer() // fix later yes ues
 
                 if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
                 {
+                    bool bComplain = false;
+                    //only did first 2 shelves and its kinda inefficient
 
+                    for (int j = 0; j < 3; j++) {
 
-                    if (customerPtr[i] != nullptr)
-                    {
+                        if (sPtr[j] != nullptr) {
 
-                        timer[i] = -1;
-                        bool bComplain = false;
-                        //only did first 2 shelves and its kinda inefficient
+                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                        for (int j = 0; j < 3; j++) {
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
-                            if (sPtr[j] != nullptr) {
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
-                                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
-
-                                    if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                                    {
-                                        sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                                        p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-
-                                    }
-
-                                    else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                                        p.increaseUnsatisfiedCustomers();
-
-                                    }
 
                                 }
 
-                            }
-                        }
-
-                        for (int j = 3; j < 6; j++) {
-
-                            if (sPtr[j] != nullptr) {
-
-                                if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
-
-                                    if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                                    {
-                                        sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-
-                                        p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-
-                                    }
-
-                                    else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                                        p.increaseUnsatisfiedCustomers();
-
-                                    }
+                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
 
                                 }
 
                             }
 
                         }
-
-                        spawned[i] = false;
-                        delete customerPtr[i];
-                        customerPtr[i] = nullptr;
-                        timer[i] = -1;
-                        travelling[i] = false;
                     }
+
+                    for (int j = 3; j < 6; j++) {
+
+                        if (sPtr[j] != nullptr) {
+
+                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
+
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+
+                                }
+
+                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                    customerPtr[i]->setEndPoint(79, 15);
+                    customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
+                }
+
+                if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
+                    spawned[i] = false;
+                    delete customerPtr[i];
+                    customerPtr[i] = nullptr;
+                    timer[i] = -1;
+                    travelling[i] = false;
                 }
             }
             else
@@ -1511,7 +1510,7 @@ void renderCustomer() // fix later yes ues
                         customerPtr[i] = new Customer;
                         customerPtr[i]->setItemToBuy(2);
                         timer[i] = 0;
-                        customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
+                        customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
                         spawned[i] = true;
                         created = true;
                     }
