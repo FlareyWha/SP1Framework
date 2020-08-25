@@ -331,9 +331,6 @@ void update(double dt)
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
-    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
-        spawnTimer += dt;
-
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
@@ -347,6 +344,7 @@ void update(double dt)
         case S_HOME: updateHome();
             break;
         case S_TUT: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
@@ -358,6 +356,7 @@ void update(double dt)
             break;
         }
         case S_GAME: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
@@ -809,6 +808,20 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
+void deleteCustomer()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+        {
+            delete customerPtr[i];
+            customerPtr[i] = nullptr;
+            travelling[i] = false;
+            timer[i] = -1;
+        }
+    }
+}
+
 void processInputHome()
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -826,6 +839,7 @@ void processInputHome()
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            deleteCustomer();
             g_eGameState = S_GAME;
             updateSons();
         }
@@ -1347,9 +1361,24 @@ void renderTutorialLevel()
     renderCustomer();
 }
 
-void renderBoxes() 
-{   
+void renderBoxes()
+{
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
+    //for (int i = 0; i < 6; i++) { //maybe useful
+    //    switch ('1') {
+    //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour); }
+
+    //        case '1': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour); }
+
+    //        case '2': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[0]->getY(), char(221), BoxColour); }
+
+    //        case '3': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour); }
+    //    }
+    //}
 }
 
 void moveCustomer()
@@ -1370,7 +1399,7 @@ void renderCustomer() // fix later yes ues
                 switch (customerPtr[i]->getItemToBuy())
                 {
                 case 1:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
@@ -1378,7 +1407,7 @@ void renderCustomer() // fix later yes ues
                     }
 
                 case 2:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
@@ -1399,6 +1428,8 @@ void renderCustomer() // fix later yes ues
                 }
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+                
+                boxPosPtr[i]->setX((customerPtr[i]->getX())+1); boxPosPtr[i]->setY((customerPtr[i]->getY())+1);
 
                 if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
                 {
