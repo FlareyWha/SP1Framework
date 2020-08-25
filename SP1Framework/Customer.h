@@ -32,6 +32,7 @@ public:
     void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int avoiding, Map& map);
     Position getEndPoint();
+    void setEndPoint(int x, int y);
     int getX();
     int getY();
 

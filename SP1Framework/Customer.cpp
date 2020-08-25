@@ -204,6 +204,12 @@ Position Customer::getEndPoint()
 	return endPoint;
 }
 
+void Customer::setEndPoint(int x, int y)
+{
+	endPoint.setX(x);
+	endPoint.setY(y);
+}
+
 int Customer::getX() {
 	return pos.getX();
 }
