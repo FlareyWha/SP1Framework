@@ -642,6 +642,9 @@ void updateSons()
 
 void checkEnd() //Check if day has ended and update variables
 {
+    if (p.getUnsatisfiedCustomers() == 10) {
+            g_eGameState = S_GAMEOVER;
+        }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
     {
         g_sChar.moving.UP = false;
@@ -669,10 +672,6 @@ void checkEnd() //Check if day has ended and update variables
             if (cPtr[i]->getNODSick() == 4) {
                 g_eGameState = S_GAMEOVER;
                 cPtr[i]->isHosp();
-            }
-            else if (p.getUnsatisfiedCustomers() == 10)
-            {
-                g_eGameState = S_GAMEOVER;
             }
             else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
