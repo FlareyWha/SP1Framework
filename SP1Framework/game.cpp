@@ -802,7 +802,7 @@ void processInputHome()
         if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
         {
-            if (p.getSavings() >= 30) {
+            if (p.getSavings() >= 30 && cPtr[0]->getStatusFed() == false) {
                 cPtr[0]->isFed();
                 p.payFood();
             }
@@ -814,7 +814,7 @@ void processInputHome()
         if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
         {
-            if (p.getSavings() >= 30) {
+            if (p.getSavings() >= 30 && cPtr[0]->getStatusFed() == false) {
                 cPtr[1]->isFed();
                 p.payFood();
             }
