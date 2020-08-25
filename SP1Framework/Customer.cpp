@@ -199,6 +199,11 @@ void Customer::bumpIntoCustomer(int avoiding, Map& map)
 		pos.setY(pos.getY() - 1);
 }
 
+Position Customer::getEndPoint()
+{
+	return endPoint;
+}
+
 int Customer::getX() {
 	return pos.getX();
 }
