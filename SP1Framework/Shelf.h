@@ -21,7 +21,7 @@ public:
     void setItemtag(int itemtag);
 
     void increaseItem(int i);
-    void decreaseItem();
+    void decreaseItem(int i);
 
     void setShelf(WORD c);
     WORD returnShelfColour();

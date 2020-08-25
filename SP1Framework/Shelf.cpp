@@ -33,10 +33,10 @@ void Shelf::setItemtag(int itemtag)
     this->itemtag = itemtag;
 }
 
-void Shelf::decreaseItem()
+void Shelf::decreaseItem(int i)
 {
  
-        amount--;
+    amount = amount - i;
     
 }
 
