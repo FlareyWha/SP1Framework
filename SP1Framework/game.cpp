@@ -673,7 +673,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
     else if (g_dElapsedWorkTime >= 30) {
         g_bRestocking = false;
     }
-    else if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
