@@ -16,6 +16,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	pos.setX(79); //change when we spawn them
 	pos.setY(9); // ^
 	itemToBuy = 0;
+	passcheck = 0;
 }
 
 //Customer::Customer(Map map)

@@ -24,7 +24,7 @@ int Player::getTotalEarned()
 
 void Player::AddDayEarnings(int i)
 {
-	dayEarnings = i* 30 + dayEarnings;
+	dayEarnings = i* 5 + dayEarnings;
 }
 
 void Player::resetDayEarnings()

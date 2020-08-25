@@ -578,7 +578,7 @@ void pickUpBoxes()  //todo
 }
 
 void restockShelf(){
-    for (int i = 28; i < 38; i++) { //3 SHELVES ON THE LEFT
+    for (int i = 29; i < 38; i++) { //3 SHELVES ON THE LEFT
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
@@ -603,7 +603,7 @@ void restockShelf(){
     }
    
 
-    for (int i = 49; i < 59; i++) { //3 shelves on the right
+    for (int i = 50; i < 59; i++) { //3 shelves on the right
 
         for (int j = 3; j < 6;j++) {
 
@@ -832,7 +832,7 @@ void processInputHome()
                 cPtr[1]->isFed();
                 p.payFood();
             }
-            else if (cPtr[0]->getStatusFed() == true) {
+            else if (cPtr[1]->getStatusFed() == true) {
                 cPtr[1]->isFed();
                 p.receivePay(30);
             }
