@@ -1050,7 +1050,7 @@ void renderHUD()
     }
     else if (g_bRestocking == true) {
         int secs = 30 - g_dElapsedWorkTime;
-        ss << "Time left : " << secs << " secs";
+        ss << "Restocking time : " << secs << " secs";
     }
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
