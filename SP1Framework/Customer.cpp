@@ -47,20 +47,20 @@ void Customer::moveToShelfContainingItem(int itemToBuy)//brings them to the shel
 		endPoint.setY(13); // ^
 		break;
 	case 3:
-		endPoint.setX(0); //change when we spawn them
-		endPoint.setY(0); // ^
+		endPoint.setX(37); //change when we spawn them
+		endPoint.setY(19); // ^
 		break;
 	case 4:
-		endPoint.setX(0); //change when we spawn them
-		endPoint.setY(0); // ^
+		endPoint.setX(58); //change when we spawn them
+		endPoint.setY(7); // ^
 		break;
 	case 5:
-		endPoint.setX(0); //change when we spawn them
-		endPoint.setY(0); // ^
+		endPoint.setX(58); //change when we spawn them
+		endPoint.setY(13); // ^
 		break;
 	case 6:
-		endPoint.setX(0); //change when we spawn them
-		endPoint.setY(0); // ^
+		endPoint.setX(58); //change when we spawn them
+		endPoint.setY(19); // ^
 		break;
 	}
 }
