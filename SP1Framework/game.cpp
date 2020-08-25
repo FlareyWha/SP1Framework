@@ -27,6 +27,8 @@ bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
+bool g_bRestocking;
+
 double timer[6];
 double spawnTimer;
 SGameChar   g_sChar;
@@ -68,6 +70,8 @@ void init( void )
     // Set precision for floating point output
     g_dElapsedTime = 0.0;
     g_dElapsedWorkTime = 0.0;
+
+    g_bRestocking = true;
 
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
@@ -656,13 +660,17 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             g_eGameState = S_GAMEOVER;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
-    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
+    else if (g_dElapsedWorkTime >= 30) {
+        g_bRestocking = false;
+    }
+    else if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
         g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
+        g_bRestocking = true;
         COORD c;
         c.X = 18;
         c.Y = 1;
@@ -1018,15 +1026,21 @@ void renderHUD()
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
     ss.str("");     // displays the elapsed time
-    int minute;
-    int secs = 120 - g_dElapsedWorkTime;
-    minute = secs / 60;
-    if (minute > 0) {
-        ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
+    if (g_bRestocking == false) {
+        int minute;
+        int secs = 150 - g_dElapsedWorkTime;
+        minute = secs / 60;
+        if (minute > 0) {
+            ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
+        }
+        else
+        {
+            ss << "Time left : " << secs - minute * 60 << " secs";
+        }
     }
-    else
-    {
-        ss << "Time left : " << secs - minute * 60 << " secs";
+    else if (g_bRestocking == true) {
+        int secs = 30 - g_dElapsedWorkTime;
+        ss << "Time left : " << secs << " secs";
     }
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
@@ -1335,136 +1349,138 @@ void moveCustomer()
 
 void renderCustomer() // fix later yes ues
 {   
-    COORD c = g_Console.getConsoleSize();
-    bool created = false;
+    if (g_bRestocking == false) {
+        COORD c = g_Console.getConsoleSize();
+        bool created = false;
 
-    for (int i = 0; i < 6; i++)
-    {
-        if (customerPtr[i] != nullptr)
+        for (int i = 0; i < 6; i++)
         {
-            switch (customerPtr[i]->getItemToBuy())
+            if (customerPtr[i] != nullptr)
             {
-            case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
+                switch (customerPtr[i]->getItemToBuy())
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                    break;
+                case 1:
+                    if (timer[i] >= 10)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+
+                case 2:
+                    if (timer[i] >= 10)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
                 }
 
-            case 2:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
+                if (travelling[i] == true)
+                    customerPtr[i]->moveCustomer(map, framesPassed, 4);
+                else
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                    break;
+                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
+
+                    if (avoiding[i] == 4 || avoiding[i] == 8)
+                        avoiding[i] = 0;
+                    else if (avoiding[i] > 0)
+                        avoiding[i]++;
+                }
+
+                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+
+                if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
+                {
+
+
+                    if (customerPtr[i] != nullptr)
+                    {
+
+                        timer[i] = -1;
+                        bool bComplain = false;
+                        //only did first 2 shelves and its kinda inefficient
+
+                        for (int j = 0; j < 3; j++) {
+
+                            if (sPtr[j] != nullptr) {
+
+                                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+
+                                    if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                    {
+                                        sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+                                        p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+
+                                    }
+
+                                    else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                        p.increaseUnsatisfiedCustomers();
+
+                                    }
+
+                                }
+
+                            }
+                        }
+
+                        for (int j = 3; j < 6; j++) {
+
+                            if (sPtr[j] != nullptr) {
+
+                                if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
+
+                                    if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                    {
+                                        sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+
+                                        p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+
+                                    }
+
+                                    else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                        p.increaseUnsatisfiedCustomers();
+
+                                    }
+
+                                }
+
+                            }
+
+                        }
+
+                        spawned[i] = false;
+                        delete customerPtr[i];
+                        customerPtr[i] = nullptr;
+                        timer[i] = -1;
+                        travelling[i] = false;
+                    }
                 }
             }
-
-            if (travelling[i] == true)
-                customerPtr[i]->moveCustomer(map, framesPassed, 4);
             else
             {
-                customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
-
-                if (avoiding[i] == 4 || avoiding[i] == 8)
-                    avoiding[i] = 0;
-                else if (avoiding[i] > 0)
-                    avoiding[i]++;
-            }
- 
-            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
-
-            if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
-            {
-                
-
-                if (customerPtr[i] != nullptr)
+                if (spawnTimer >= 5)
                 {
-                   
-                    timer[i] = -1;
-                    bool bComplain = false;
-                    //only did first 2 shelves and its kinda inefficient
-
-                    for (int j = 0; j < 3; j++) {
-
-                        if (sPtr[j] != nullptr) {
-
-                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j ) {
-
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                                {
-                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-                                    
-                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-                                    
-                                    
-                                }
-
-                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                                    p.increaseUnsatisfiedCustomers();
-                                    
-                                }
-
-                            }
-
-                        }
+                    if (created != true)
+                    {
+                        customerPtr[i] = new Customer;
+                        customerPtr[i]->setItemToBuy(2);
+                        timer[i] = 0;
+                        customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
+                        spawned[i] = true;
+                        created = true;
                     }
-
-                    for (int j = 3; j < 6;j++) {
-
-                        if (sPtr[j] != nullptr) {
-
-                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
-
-                                if ( sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                                {
-                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                                    
-                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-                                    
-                                    
-                                }
-
-                                else if ( sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                                    p.increaseUnsatisfiedCustomers();
-                                    
-                                }
-
-                            }
-
-                        }
-
-                    }
-    
-                    spawned[i] = false;
-                    delete customerPtr[i];
-                    customerPtr[i] = nullptr;
-                    timer[i] = -1;
-                    travelling[i] = false;
+                    spawnTimer = 0;
                 }
             }
         }
-        else
-        {
-            if (spawnTimer >= 4.95 && spawnTimer <= 5.05)
-            {
-                if (created != true)
-                {
-                    customerPtr[i] = new Customer;
-                    customerPtr[i]->setItemToBuy(2);
-                    timer[i] = 0;
-                    customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
-                    spawned[i] = true;
-                    created = true;
-                }
-                spawnTimer = 0;
-            }
-        }
+        if (spawnTimer >= 5)
+            spawnTimer = 0;
     }
-    if (spawnTimer >= 4.95 && spawnTimer <= 5.05)
-        spawnTimer = 0;
 }
 
 void renderCharacter()
