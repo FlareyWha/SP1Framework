@@ -1291,6 +1291,7 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
     
+    /*
     if (tutorialFlags[0] == false)
     {
         ss.str("");
@@ -1315,8 +1316,9 @@ void renderTutorialLevel()
         c.Y += 1;
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
     }
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && tutorialFlags[0] == false)
+    if ((g_mouseEvent.buttonState == DOUBLE_CLICK) && (tutorialFlags[0] == false) && (g_eGameState == S_TUT))
         tutorialFlags[0] = true;
+        */
 
     renderCustomer();
 }
