@@ -121,5 +121,11 @@
     <Text Include="HomeScreen.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="EndOfWork.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="GameOver.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

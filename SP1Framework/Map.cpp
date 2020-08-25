@@ -66,9 +66,23 @@ void Map::chooseMap(int lvl, Console& console) //this is to choose the map to pr
 		break;
 	}
 	case 6:
+	{
 		std::fstream homescreen("HomeScreen.txt");
 		printMap(homescreen, console);
 		break;
+	}
+	case 7:
+	{
+		std::fstream endofwork("EndOfWork.txt");
+		printMap(endofwork, console);
+		break;
+	}
+	case 8:
+	{
+		std::fstream gameover("GameOver.txt");
+		printMap(gameover, console);
+		break;
+	}
 	}
 }
 
