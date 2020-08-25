@@ -157,7 +157,6 @@ void Customer::moveCustomer(Map& map)
 				pos.setX(pos.getX());
 		}
 	}
-
 	map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 }
 

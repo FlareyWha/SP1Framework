@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Windows.h"
 #include "Position.h"
+
 class Customer :
     public Entity
 {
