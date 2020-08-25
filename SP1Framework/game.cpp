@@ -1428,11 +1428,13 @@ void renderCustomer() // fix later yes ues
                 }
 
                 if (travelling[i] == true)
+                {
                     customerPtr[i]->moveCustomer(map, framesPassed, 4);
+                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
+                }
+                    
                 else
                 {
-                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
-
                     if (avoiding[i] == 4 || avoiding[i] == 8)
                         avoiding[i] = 0;
                     else if (avoiding[i] > 0)
@@ -1452,7 +1454,7 @@ void renderCustomer() // fix later yes ues
                 }
                 
 
-                if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
+                if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
                     //only did first 2 shelves and its kinda inefficient
@@ -1510,7 +1512,7 @@ void renderCustomer() // fix later yes ues
                     }
 
                     customerPtr[i]->setEndPoint(79, 15);
-                    customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
+                    //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
                 }
 
                 if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
