@@ -40,8 +40,8 @@ Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
-Box* boxPtr;
-Position* boxPosPtr;
+Box* boxPtr[6];
+Position* boxPosPtr[6];
 WORD BoxColour;
 Map map;
 int framesPassed;
@@ -84,11 +84,15 @@ void init( void )
     day = 0;
     
     //init box and box pos
-    if (boxPtr == nullptr) {
-        boxPtr = new Box;
-        boxPosPtr = new Position;
-        boxPosPtr->setX(18);
-        boxPosPtr->setY(2);
+    for (int i = 0; i < 6; i++) 
+    {
+        if (boxPtr[i] == nullptr) 
+        {
+            boxPtr[i] = new Box;
+            boxPosPtr[i] = new Position;
+        }
+        boxPosPtr[0]->setX(18);
+        boxPosPtr[0]->setY(2);
     }
 
     //init Son objects
@@ -443,9 +447,9 @@ void actuallyMoving()
     if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0')
     {
         g_sChar.m_cLocation.Y++;
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
         g_sChar.m_cLocation.X++;
-        boxPosPtr->setY(g_sChar.m_cLocation.X);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.X);
     }
 
     switch (g_sChar.moving.UP) 
@@ -456,12 +460,12 @@ void actuallyMoving()
         {
             g_sChar.m_cLocation.Y--;
         }
-        boxPosPtr->setX(g_sChar.m_cLocation.X);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+        boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y++;
-            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
         }
         break;
 
@@ -477,12 +481,12 @@ void actuallyMoving()
         {
             g_sChar.m_cLocation.Y++;
         }
-        boxPosPtr->setX(g_sChar.m_cLocation.X);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+        boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y--;
-            boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
         }
         break;
     case false:
@@ -496,12 +500,12 @@ void actuallyMoving()
         {
             g_sChar.m_cLocation.X--;
         }
-        boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+        boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.X++;
-            boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
         }
         break;
     case false:
@@ -515,12 +519,12 @@ void actuallyMoving()
         {
             g_sChar.m_cLocation.X++;
         }
-        boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+        boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.X--;
-            boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
         }
         break;
     case false:
@@ -534,35 +538,35 @@ void pickUpBoxes()  //todo
         BoxColour = 0x70; //empty box grey
     }
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 3 && map.getGrid(3, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 4 && map.getGrid(4, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 5 && map.getGrid(5, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 6 && map.getGrid(6, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 7 && map.getGrid(7, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 8 && map.getGrid(8, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
 
@@ -575,8 +579,8 @@ void restockShelf(){
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (1 + j) + 1 
-                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (1 + j) + 1 
+                     && boxPosPtr[0]->getX() == i && sPtr[j]->getAmount() != 9) 
                 {          
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -588,7 +592,7 @@ void restockShelf(){
     }
 
     for (int j = 0; j < 3;j++) {
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j + 1) && boxPosPtr->getX() == 38 && sPtr[j]->getAmount() != 9)
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j + 1) && boxPosPtr[0]->getX() == 38 && sPtr[j]->getAmount() != 9)
         {
             sPtr[j]->increaseItem(1);
             p.releaseProduct();
@@ -602,8 +606,8 @@ void restockShelf(){
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2) + 1 
-                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j - 2) + 1 
+                     && boxPosPtr[0]->getX() == i && sPtr[j]->getAmount() != 9) 
                 {
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -616,8 +620,8 @@ void restockShelf(){
 
     for (int j = 3; j < 6;j++) {
 
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2)
-            && boxPosPtr->getX() == 59 && sPtr[j]->getAmount() != 9)
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j - 2)
+            && boxPosPtr[0]->getX() == 59 && sPtr[j]->getAmount() != 9)
         {
             sPtr[j]->increaseItem(1);
             p.releaseProduct();
@@ -659,8 +663,8 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
         c.X = 18;
         c.Y = 1;
         g_sChar.m_cLocation = c;
-        boxPosPtr->setX(18);
-        boxPosPtr->setY(2);
+        boxPosPtr[0]->setX(18);
+        boxPosPtr[0]->setY(2);
         for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
@@ -1263,7 +1267,7 @@ void renderTutorialLevel()
 
 void renderBoxes() 
 {   
-    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), ' ', BoxColour);
+    g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
 }
 
 void moveCustomer()
