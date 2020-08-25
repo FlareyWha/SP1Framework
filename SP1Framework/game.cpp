@@ -711,7 +711,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 
 void processDebugState() //Toggle debug options
 {
-    if (g_skKeyEvent[6].keyDown)
+    if (g_skKeyEvent[K_F3].keyDown)
     {
         if (g_eDebugState == D_OFF)
         {
