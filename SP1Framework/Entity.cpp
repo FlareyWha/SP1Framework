@@ -15,3 +15,9 @@ Position Entity::getPos(void)
 {
 	return pos;
 }
+
+void Entity::setPos(int x, int y)
+{
+	pos.setX(x);
+	pos.setY(y);
+}
