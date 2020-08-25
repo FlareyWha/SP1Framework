@@ -29,6 +29,7 @@ public:
     int getItemToBuy();
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map);
     void moveCustomer(Map& map);
+    void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int avoiding, Map& map);
 
     int getX();
