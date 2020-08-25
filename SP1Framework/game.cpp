@@ -335,7 +335,8 @@ void update(double dt)
         }
     }
 
-    spawnTimer += dt;
+    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
+        spawnTimer += dt;
 
     switch (g_eGameState)
     {
