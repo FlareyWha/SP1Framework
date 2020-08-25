@@ -816,6 +816,8 @@ void deleteCustomer()
         {
             delete customerPtr[i];
             customerPtr[i] = nullptr;
+            travelling[i] = false;
+            timer[i] = -1;
         }
     }
 }
