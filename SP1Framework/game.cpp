@@ -1286,7 +1286,7 @@ void renderCustomer() // fix later yes ues
             }
 
             if (travelling[i] == true)
-                customerPtr[i]->moveCustomer(map);
+                customerPtr[i]->moveCustomer(map, framesPassed, 2);
             else
             {
                 customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);

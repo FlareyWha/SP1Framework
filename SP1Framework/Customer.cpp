@@ -117,47 +117,50 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 	}
 }
 
-void Customer::moveCustomer(Map& map)
+void Customer::moveCustomer(Map& map, int framesPassed, int timer)
 {
-	prevPos.setX(pos.getX());
-	prevPos.setY(pos.getY());
-
-	if ((endPoint.getY() - pos.getY()) != 0)
+	if (framesPassed % timer == 0) 
 	{
-		if (map.isNegative(endPoint.getY(), pos.getY()) == true)
-		{
-			if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
-				pos.setY(pos.getY() - 1);
-			else
-				pos.setY(pos.getY());
-		}
-		else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
-		{
-			if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
-				pos.setY(pos.getY() + 1);
-			else
-				pos.setY(pos.getY());
-		}
-	}
-	if ((endPoint.getX() - pos.getX()) != 0)
-	{
-		if (map.isNegative(endPoint.getX(), pos.getX()) == true)
-		{
-			if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
-				pos.setX(pos.getX() - 1);
-			else
-				pos.setX(pos.getX());
-		}
+		prevPos.setX(pos.getX());
+		prevPos.setY(pos.getY());
 
-		else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
+		if ((endPoint.getY() - pos.getY()) != 0)
 		{
-			if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
-				pos.setX(pos.getX() + 1);
-			else
-				pos.setX(pos.getX());
+			if (map.isNegative(endPoint.getY(), pos.getY()) == true)
+			{
+				if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+					pos.setY(pos.getY() - 1);
+				else
+					pos.setY(pos.getY());
+			}
+			else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
+			{
+				if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
+					pos.setY(pos.getY() + 1);
+				else
+					pos.setY(pos.getY());
+			}
 		}
+		if ((endPoint.getX() - pos.getX()) != 0)
+		{
+			if (map.isNegative(endPoint.getX(), pos.getX()) == true)
+			{
+				if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
+					pos.setX(pos.getX() - 1);
+				else
+					pos.setX(pos.getX());
+			}
+
+			else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
+			{
+				if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
+					pos.setX(pos.getX() + 1);
+				else
+					pos.setX(pos.getX());
+			}
+		}
+		map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 	}
-	map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 }
 
 void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
