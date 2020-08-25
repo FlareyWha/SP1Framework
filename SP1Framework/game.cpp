@@ -640,7 +640,7 @@ void updateSons()
     }
 }
 
-void checkEnd() //Check if day has ended and update variables
+void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
