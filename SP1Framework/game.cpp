@@ -647,6 +647,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
     {
@@ -762,7 +763,7 @@ void processInputEndOfWorkScreen()
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
-            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            
             g_eGameState = S_HOME;
         }
     }
@@ -799,6 +800,7 @@ void processInputHome()
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
             day++;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             g_eGameState = S_GAME;
             updateSons();
         }
