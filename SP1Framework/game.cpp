@@ -832,7 +832,7 @@ void processInputHome()
                 cPtr[1]->isFed();
                 p.payFood();
             }
-            else if (cPtr[0]->getStatusFed() == true) {
+            else if (cPtr[1]->getStatusFed() == true) {
                 cPtr[1]->isFed();
                 p.receivePay(30);
             }
