@@ -1382,7 +1382,7 @@ void renderCustomer() // fix later yes ues
                 switch (customerPtr[i]->getItemToBuy())
                 {
                 case 1:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
@@ -1390,7 +1390,7 @@ void renderCustomer() // fix later yes ues
                     }
 
                 case 2:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
