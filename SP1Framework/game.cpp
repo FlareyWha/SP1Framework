@@ -1340,7 +1340,7 @@ void renderGameOver()
         {
             g_Console.writeToBuffer(c, "     One of your", 0xF0);
             c.Y++;
-            g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0);
+            g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); i++; //stop double print if both sons sick
         }
     }
     if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
