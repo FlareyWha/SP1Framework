@@ -809,6 +809,18 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
+void deleteCustomer()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+        {
+            delete customerPtr[i];
+            customerPtr[i] = nullptr;
+        }
+    }
+}
+
 void processInputHome()
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -826,6 +838,7 @@ void processInputHome()
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            deleteCustomer();
             g_eGameState = S_GAME;
             updateSons();
         }
