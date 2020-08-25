@@ -26,6 +26,7 @@ int level, day;
 bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
+bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
 double timer[6];
 double spawnTimer;
 SGameChar   g_sChar;
@@ -784,7 +785,6 @@ void processInputGameOver()
 
 void processInputHome()
 {
-    
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
         COORD c = g_Console.getConsoleSize();
@@ -1239,12 +1239,26 @@ void renderGameOver()
 
 void renderTutorialLevel()
 {
+    COORD c = g_Console.getConsoleSize();
+    std::ostringstream ss;
     map.chooseMap(1, g_Console);
     renderCharacter();  // renders the character into the buffer
-    renderCustomer();
     renderBoxes();
     renderShelfAmount();
     renderHUD();
+    
+    ss.str("");
+    ss << "Welcome to Jackville Supermarket! As it is your first day on the job,";
+    c.Y = 4;
+    c.X = 60;
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    ss << "I will tell you what you have to do. Click the screen to continue.";
+    c.Y += 1;
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+
+    renderCustomer();
 }
 
 void renderBoxes() 
@@ -1458,7 +1472,7 @@ void renderFramerate()
         if (customerPtr[i] != nullptr)
         {
             ss.str("");
-            ss << customerPtr[i] << "pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY();
+            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY();
             c.X = 30;
             c.Y = 14 + i;
             g_Console.writeToBuffer(c, ss.str(), 0x0F);
