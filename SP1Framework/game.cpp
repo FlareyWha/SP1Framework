@@ -1236,7 +1236,7 @@ void moveCustomer()
     //todo
 }
 
-void renderCustomer() // fix later yes
+void renderCustomer() // fix later yes ues
 {   
     COORD c = g_Console.getConsoleSize();
     bool created = false;
