@@ -651,6 +651,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
     {
@@ -729,7 +730,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_TUT;
+            g_eGameState = S_GAME; //change back to S_TUT later
         }
     }
     else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -766,7 +767,7 @@ void processInputEndOfWorkScreen()
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
-            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            
             g_eGameState = S_HOME;
         }
     }
@@ -803,6 +804,7 @@ void processInputHome()
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
             day++;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             g_eGameState = S_GAME;
             updateSons();
         }
@@ -933,7 +935,7 @@ void renderGame()
 {
    
     if (day < 5) {
-        level = day + 1;
+        level = day; // add the +1 later 
     }
     else { 
         level = 5;
@@ -1251,16 +1253,32 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
     
-    ss.str("");
-    ss << "Welcome to Jackville Supermarket! As it is your first day on the job,";
-    c.Y = 4;
-    c.X = 60;
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
-    ss << "I will tell you what you have to do. Click the screen to continue.";
-    c.Y += 1;
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    if (tutorialFlags[0] == false)
+    {
+        ss.str("");
+        ss << "Welcome to Jackville Supermarket! As it is your first day on the job,";
+        c.Y = 4;
+        c.X = 60;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "I will tell you what you have to do. Click the screen to continue.";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    }
+    else if (tutorialFlags[1] == false)
+    {
+        ss.str("");
+        ss << "Use your WASD keys to move up,";
+        c.Y = 4;
+        c.X = 41;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "left, down and right respectively";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    }
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && tutorialFlags[0] == false)
+        tutorialFlags[0] = true;
 
     renderCustomer();
 }
