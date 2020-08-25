@@ -72,6 +72,22 @@ void Map::chooseMap(int lvl, Console& console) //this is to choose the map to pr
 	}
 }
 
+void Map::initMap(int level, Console& console) //might not be used
+{
+	COORD c = console.getConsoleSize();
+	for (int pGy = 0; pGy < 25; pGy++)
+	{
+		c.Y = pGy;
+		for (int pGx = 0; pGx < 80; pGx++)
+		{
+			c.X = pGx;
+			mapArray[pGy][pGx] = ' ';
+		}
+	}
+}
+
+//put in the level you want to print out, the size of how big it will be and the console obj
+//if unsure follow case 1 example.
 void Map::printMap(std::fstream& level, Console& console)
 {
 	COORD c = console.getConsoleSize();
@@ -122,9 +138,6 @@ void Map::printMap(std::fstream& level, Console& console)
 				break;
 			case '6':
 				console.writeToBuffer(c, ' ', 0x90); //bandages -- light blue
-				break;
-			case '7':
-				console.writeToBuffer(c, ' ', 0x50);
 				break;
 			}
 		}

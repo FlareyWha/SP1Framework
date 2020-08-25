@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Windows.h"
 #include "Position.h"
+
 class Customer :
     public Entity
 {
@@ -26,10 +27,12 @@ public:
     void setItemToBuy(int passcheck);
     int getQuantity();
     int getItemToBuy();
-    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map);
-    void moveCustomer(Map& map);
+    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
+    void moveCustomer(Map& map, int framesPassed, int timer);
+    void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int avoiding, Map& map);
-
+    Position getEndPoint();
+    void setEndPoint(int x, int y);
     int getX();
     int getY();
 

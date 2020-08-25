@@ -1,4 +1,5 @@
 #include "Son.h"
+#include "Player.h"
 
 Son::Son() : bSick{ false }, btoggleFood{ false }, bHospitalised{ false }, NoOfDaysUnfed{ 0 }, NoOfDaysSick { 0 }
 {
@@ -58,11 +59,17 @@ bool Son::getStatusFed()
 
 void Son::isTreated()
 {
+	if (btoggleMedicine == false) {
+		btoggleMedicine = true;
+	}
+	else {
+		btoggleMedicine = false;
+	}
 }
 
 bool Son::getTreatState()
 {
-	return false;
+	return btoggleMedicine;
 }
 
 void Son::increaseNODUnfed()

@@ -26,6 +26,9 @@ int level, day;
 bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
+bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
+bool g_bRestocking;
+
 double timer[6];
 double spawnTimer;
 SGameChar   g_sChar;
@@ -39,8 +42,8 @@ Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
-Box* boxPtr;
-Position* boxPosPtr;
+Box* boxPtr[7];
+Position* boxPosPtr[7];
 WORD BoxColour;
 Map map;
 int framesPassed;
@@ -68,6 +71,8 @@ void init( void )
     g_dElapsedTime = 0.0;
     g_dElapsedWorkTime = 0.0;
 
+    g_bRestocking = true;
+
     // sets the initial state for the game
     g_eGameState = S_SPLASHSCREEN;
     g_ePreviousGameState = S_SPLASHSCREEN;
@@ -83,12 +88,21 @@ void init( void )
     day = 0;
     
     //init box and box pos
-    if (boxPtr == nullptr) {
-        boxPtr = new Box;
-        boxPosPtr = new Position;
-        boxPosPtr->setX(18);
-        boxPosPtr->setY(2);
-    }
+    boxPtr[0] = new Box;
+    boxPosPtr[0] = new Position;
+    boxPosPtr[0]->setX(18);
+    boxPosPtr[0]->setY(2);
+
+    /*for (int i = 0; i <= 7; i++) 
+    {
+        if (boxPtr[i] == nullptr) 
+        {
+            boxPtr[i] = new Box;
+            boxPosPtr[i] = new Position;
+        }
+        boxPosPtr[0]->setX(18);
+        boxPosPtr[0]->setY(2);
+    }*/
 
     //init Son objects
     cPtr[0] = new Son;
@@ -322,16 +336,6 @@ void update(double dt)
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
-    for (int i = 0; i < 6; i++) 
-    {
-        if (timer[i] != -1) 
-        {
-            timer[i] += dt;
-        }
-    }
-
-    spawnTimer += dt;
-
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
@@ -344,10 +348,30 @@ void update(double dt)
             break;
         case S_HOME: updateHome();
             break;
-        case S_TUT: g_dElapsedWorkTime += dt;  updateTutorial();
+        case S_TUT: {
+            spawnTimer += dt;
+            for (int i = 0; i < 6; i++)
+            {
+                if (timer[i] != -1)
+                {
+                    timer[i] += dt;
+                }
+            }
+            g_dElapsedWorkTime += dt;  updateTutorial();
             break;
-        case S_GAME: g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
+        }
+        case S_GAME: {
+            spawnTimer += dt;
+            for (int i = 0; i < 6; i++)
+            {
+                if (timer[i] != -1)
+                {
+                    timer[i] += dt;
+                }
+            }
+            g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
+        }
     }
 }
 
@@ -438,90 +462,94 @@ void moveCharacter()//to check if the player is pressing a key
 
 void actuallyMoving()
 {
-    //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
-    if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0') //quick fix for customer collision with player
-    {
-        g_sChar.m_cLocation.Y++;
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
-    }
-
-    switch (g_sChar.moving.UP) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
-        {
-            g_sChar.m_cLocation.Y--;
-        }
-        boxPosPtr->setX(g_sChar.m_cLocation.X);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+    if (framesPassed % 3 == 0) {
+        //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y++;
-            boxPosPtr->setY(g_sChar.m_cLocation.Y - 1);
-        }
-        break;
-
-    case false:
-        break;
-    }
-
-    switch (g_sChar.moving.DOWN) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
-        {
-            g_sChar.m_cLocation.Y++;
-        }
-        boxPosPtr->setX(g_sChar.m_cLocation.X);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
-        {
-            g_sChar.m_cLocation.Y--;
-            boxPosPtr->setY(g_sChar.m_cLocation.Y + 1);
-        }
-        break;
-    case false:
-        break;
-    }
-    switch (g_sChar.moving.LEFT) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
-        {
-            g_sChar.m_cLocation.X--;
-        }
-        boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
-        {
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
             g_sChar.m_cLocation.X++;
-            boxPosPtr->setX(g_sChar.m_cLocation.X - 1);
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
         }
-        break;
-    case false:
-        break;
-    }
-    switch (g_sChar.moving.RIGHT)
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
+
+        switch (g_sChar.moving.UP)
         {
-            g_sChar.m_cLocation.X++;
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
+            {
+                g_sChar.m_cLocation.Y--;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.Y++;
+                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+            }
+            break;
+
+        case false:
+            break;
         }
-        boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
-        boxPosPtr->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr->getY(), boxPosPtr->getX(), 0, 0, map) != '0')
+
+        switch (g_sChar.moving.DOWN)
         {
-            g_sChar.m_cLocation.X--;
-            boxPosPtr->setX(g_sChar.m_cLocation.X + 1);
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
+            {
+                g_sChar.m_cLocation.Y++;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.Y--;
+                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+            }
+            break;
+        case false:
+            break;
         }
-        break;
-    case false:
-        break;
+        switch (g_sChar.moving.LEFT)
+        {
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
+            {
+                g_sChar.m_cLocation.X--;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.X++;
+                boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+            }
+            break;
+        case false:
+            break;
+        }
+        switch (g_sChar.moving.RIGHT)
+        {
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
+            {
+                g_sChar.m_cLocation.X++;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.X--;
+                boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+            }
+            break;
+        case false:
+            break;
+        }
     }
 }
 
@@ -531,35 +559,35 @@ void pickUpBoxes()  //todo
         BoxColour = 0x70; //empty box grey
     }
 
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 3 && map.getGrid(3, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 4 && map.getGrid(4, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 5 && map.getGrid(5, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 6 && map.getGrid(6, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 7 && map.getGrid(7, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
 
         p.holdsProduct();
     }
-    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr->getX() == 2 && boxPosPtr->getY() == 8 && map.getGrid(8, 1) != 'A')
+    if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
 
@@ -568,12 +596,12 @@ void pickUpBoxes()  //todo
 }
 
 void restockShelf(){
-    for (int i = 28; i < 38; i++) { //3 SHELVES ON THE LEFT
+    for (int i = 29; i < 38; i++) { //3 SHELVES ON THE LEFT
         for (int j = 0; j < 3; j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (1 + j) + 1 
-                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (1 + j) + 1 
+                     && boxPosPtr[0]->getX() == i && sPtr[j]->getAmount() != 9) 
                 {          
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -585,7 +613,7 @@ void restockShelf(){
     }
 
     for (int j = 0; j < 3;j++) {
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j + 1) && boxPosPtr->getX() == 38 && sPtr[j]->getAmount() != 9)
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j + 1) && boxPosPtr[0]->getX() == 38 && sPtr[j]->getAmount() != 9)
         {
             sPtr[j]->increaseItem(1);
             p.releaseProduct();
@@ -593,14 +621,14 @@ void restockShelf(){
     }
    
 
-    for (int i = 49; i < 59; i++) { //3 shelves on the right
+    for (int i = 50; i < 59; i++) { //3 shelves on the right
 
         for (int j = 3; j < 6;j++) {
 
             if (sPtr[j] != nullptr && map.getGrid(j + 3, 1) != 'A') {
 
-                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2) + 1 
-                     && boxPosPtr->getX() == i && sPtr[j]->getAmount() != 9) 
+                if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j - 2) + 1 
+                     && boxPosPtr[0]->getX() == i && sPtr[j]->getAmount() != 9) 
                 {
                     sPtr[j]->increaseItem(1);
                     p.releaseProduct();
@@ -613,8 +641,8 @@ void restockShelf(){
 
     for (int j = 3; j < 6;j++) {
 
-        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr->getY() == 6 * (j - 2)
-            && boxPosPtr->getX() == 59 && sPtr[j]->getAmount() != 9)
+        if (g_skKeyEvent[K_SPACE].keyReleased && BoxColour == sPtr[j]->returnShelfColour() && boxPosPtr[0]->getY() == 6 * (j - 2)
+            && boxPosPtr[0]->getX() == 59 && sPtr[j]->getAmount() != 9)
         {
             sPtr[j]->increaseItem(1);
             p.releaseProduct();
@@ -640,21 +668,29 @@ void updateSons()
     }
 }
 
-void checkEnd() //Check if day has ended and update variables
+void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
-    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
+    if (p.getUnsatisfiedCustomers() == 10) {
+            g_eGameState = S_GAMEOVER;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+        }
+    else if (g_dElapsedWorkTime >= 5) {
+        g_bRestocking = false;
+    }
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
         g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
+        g_bRestocking = true;
         COORD c;
         c.X = 18;
         c.Y = 1;
         g_sChar.m_cLocation = c;
-        boxPosPtr->setX(18);
-        boxPosPtr->setY(2);
+        boxPosPtr[0]->setX(18);
+        boxPosPtr[0]->setY(2);
         for (int i = 0; i < level + 1; i++) {
             sPtr[i]->setAmount(0);
         }
@@ -663,7 +699,9 @@ void checkEnd() //Check if day has ended and update variables
             if (cPtr[i]->getStatus() == true) {
                 cPtr[i]->increaseNODSick();
             }
-            cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            if (day != 0) {
+                cPtr[i]->ChancesOfFallingSick(cPtr[i]->getNODUnfed());
+            }
             if (cPtr[i]->getNODSick() == 4) {
                 g_eGameState = S_GAMEOVER;
                 cPtr[i]->isHosp();
@@ -678,7 +716,7 @@ void checkEnd() //Check if day has ended and update variables
 
 void processDebugState() //Toggle debug options
 {
-    if (g_skKeyEvent[6].keyDown)
+    if (g_skKeyEvent[K_F3].keyDown)
     {
         if (g_eDebugState == D_OFF)
         {
@@ -750,11 +788,11 @@ void processInputEndOfWorkScreen()
         COORD c = g_Console.getConsoleSize();
         if ((g_mouseEvent.mousePosition.X >= c.X / 6 + 15
             && g_mouseEvent.mousePosition.X <= c.X / 6 + 36)
-            && g_mouseEvent.mousePosition.Y == 13) //Change to home state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 12) //Change to home state once mouse clicks on the button
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
-            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            
             g_eGameState = S_HOME;
         }
     }
@@ -775,9 +813,22 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
+void deleteCustomer()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+        {
+            delete customerPtr[i];
+            customerPtr[i] = nullptr;
+            travelling[i] = false;
+            timer[i] = -1;
+        }
+    }
+}
+
 void processInputHome()
 {
-    
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
         COORD c = g_Console.getConsoleSize();
@@ -792,22 +843,62 @@ void processInputHome()
             && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
         {
             day++;
+            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            deleteCustomer();
             g_eGameState = S_GAME;
             updateSons();
         }
 
         // Expenses toggling
-        if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
+        if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
         {
-            cPtr[0]->isFed();
+            if (p.getSavings() >= 30 && cPtr[0]->getStatusFed() == false) {
+                cPtr[0]->isFed();
+                p.payFood();
+            }
+            else if (cPtr[0]->getStatusFed() == true) {
+                cPtr[0]->isFed();
+                p.receivePay(30);
+            }
         }
-        if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
+        if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
         {
-            cPtr[1]->isFed();
+            if (p.getSavings() >= 30 && cPtr[1]->getStatusFed() == false) {
+                cPtr[1]->isFed();
+                p.payFood();
+            }
+            else if (cPtr[1]->getStatusFed() == true) {
+                cPtr[1]->isFed();
+                p.receivePay(30);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 6
+            && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[0]->getTreatState() == false) {
+                cPtr[0]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[0]->getTreatState() == true) {
+                cPtr[0]->isTreated();
+                p.receivePay(100);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 17
+            && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
+                cPtr[1]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[1]->getTreatState() == true) {
+                cPtr[1]->isTreated();
+                p.receivePay(100);
+            }
         }
     }
 }
@@ -946,11 +1037,11 @@ void renderHUD()
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
-    ss.str("");//display strikes
-    ss << "Strikes:" << p.getStrikes();
-    c.X = 4;
-    c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    //ss.str("");//display strikes
+    //ss << "Strikes:" << p.getStrikes();
+    //c.X = 4;
+    //c.Y = 0;
+    //g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str("");// display the current day
     ss << "Day:" << day;
     c.X = 20;
@@ -964,15 +1055,21 @@ void renderHUD()
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
     ss.str("");     // displays the elapsed time
-    int minute;
-    int secs = 120 - g_dElapsedWorkTime;
-    minute = secs / 60;
-    if (minute > 0) {
-        ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
+    if (g_bRestocking == false) {
+        int minute;
+        int secs = 150 - g_dElapsedWorkTime;
+        minute = secs / 60;
+        if (minute > 0) {
+            ss << "Time left : " << minute << " mins " << secs - minute * 60 << " secs";
+        }
+        else
+        {
+            ss << "Time left : " << secs - minute * 60 << " secs";
+        }
     }
-    else
-    {
-        ss << "Time left : " << secs - minute * 60 << " secs";
+    else if (g_bRestocking == true) {
+        int secs = 30 - g_dElapsedWorkTime;
+        ss << "Restocking time : " << secs << " secs";
     }
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
@@ -985,8 +1082,8 @@ void renderHUD()
 
     ss.str(""); //probably can be implemented cleaner
     ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
-    c.X = 54;
-    c.Y = 24;
+    c.X = 1;
+    c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
 }
@@ -1138,28 +1235,32 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
-    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Sick", 0xF0);
+        g_Console.writeToBuffer(c, "( Q//A//Q ) Sick", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "( O - O 6) Healthy", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
+        g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[0]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     } //Make this hidden according to Son 1 state
     c.Y += 2;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[0]->getStatusFed() == true) {
-        c.X += 14;
+        c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
-        c.X -= 14;
+        c.X -= 12;
     }
     c.Y += 3;
     if (day % 6 == 0 && day != 0) {
-        g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+        g_Console.writeToBuffer(c, "Rent ($200) [ ] ", 0xF0);
     }
     c.Y += 4;
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
@@ -1167,22 +1268,27 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Sick", 0xF0);
+        g_Console.writeToBuffer(c, "( T//-//T ) Sick", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "( ^ - ^ 6) Healthy", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
+        g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[1]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     }
     c.Y += 2;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[1]->getStatusFed() == true) {
-        c.X += 14;
+        c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
-        c.X -= 14;
+        c.X -= 12;
     }
 }
 
@@ -1205,11 +1311,11 @@ void renderEndOfWorkScreen()
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;
-    ss.str("");
+    /*c.Y += 1;
+    c.X = g_Console.getConsoleSize().X / 6 + 15;*/
+    /*ss.str("");
     ss << "Total number of Strikes: "<< p.getStrikes();
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
@@ -1235,6 +1341,10 @@ void renderGameOver()
             g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
         }
     }
+    if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    {
+        g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
+    }
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 2 - 20;
     g_Console.writeToBuffer(c, "Press ESC to head back to the main menu!", 0xF0);
@@ -1242,17 +1352,71 @@ void renderGameOver()
 
 void renderTutorialLevel()
 {
+    COORD c = g_Console.getConsoleSize();
+    std::ostringstream ss;
     map.chooseMap(1, g_Console);
     renderCharacter();  // renders the character into the buffer
-    renderCustomer();
     renderBoxes();
     renderShelfAmount();
     renderHUD();
+    
+    /*
+    if (tutorialFlags[0] == false)
+    {
+        ss.str("");
+        ss << "Welcome to Jackville Supermarket! As it is your first day on the job,";
+        c.Y = 4;
+        c.X = 60;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "I will tell you what you have to do. Click the screen to continue.";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    }
+    else if (tutorialFlags[1] == false)
+    {
+        ss.str("");
+        ss << "Use your WASD keys to move up,";
+        c.Y = 4;
+        c.X = 41;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "left, down and right respectively";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    }
+    if ((g_mouseEvent.buttonState == DOUBLE_CLICK) && (tutorialFlags[0] == false) && (g_eGameState == S_TUT))
+        tutorialFlags[0] = true;
+        */
+
+    renderCustomer();
 }
 
-void renderBoxes() 
-{   
-    g_Console.writeToBuffer(boxPosPtr->getX(), boxPosPtr->getY(), ' ', BoxColour);
+void renderBoxes()
+{
+    g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
+    for (int i = 0; i < 6; i++)
+    {
+        if (boxPtr[i + 1] != nullptr) {
+            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', BoxColour);
+        }
+        
+    }
+    //for (int i = 0; i < 6; i++) { //maybe useful
+    //    switch ('1') {
+    //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour); }
+
+    //        case '1': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour); }
+
+    //        case '2': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[0]->getY(), char(221), BoxColour); }
+
+    //        case '3': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour); }
+    //    }
+    //}
 }
 
 void moveCustomer()
@@ -1260,164 +1424,159 @@ void moveCustomer()
     //todo
 }
 
-void renderCustomer() // fix later yes
+void renderCustomer() // fix later yes ues
 {   
-    COORD c = g_Console.getConsoleSize();
-    bool created = false;
+    if (g_bRestocking == false) {
+        COORD c = g_Console.getConsoleSize();
+        bool created = false;
 
-    for (int i = 0; i < 6; i++)
-    {
-        if (customerPtr[i] != nullptr)
+        for (int i = 0; i < 6; i++)
         {
-            switch (customerPtr[i]->getItemToBuy())
+            if (customerPtr[i] != nullptr)
             {
-            case 1:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
+                switch (customerPtr[i]->getItemToBuy())
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                    break;
+                case 1:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+
+                case 2:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
                 }
 
-            case 2:
-                if ((timer[i] >= 10.9) && (timer[i] <= 11.1))
+                if (travelling[i] == true)
                 {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                    break;
+                    customerPtr[i]->moveCustomer(map, framesPassed, 4);
+                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
-            }
+                    
+                else
+                {
+                    if (avoiding[i] == 4 || avoiding[i] == 8)
+                        avoiding[i] = 0;
+                    else if (avoiding[i] > 0)
+                        avoiding[i]++;
+                }
 
-            if (travelling[i] == true)
-                customerPtr[i]->moveCustomer(map);
-
-            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
-
-            if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
-            {
+                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+                
+                if (boxPtr[i + 1] == nullptr) {
+                    boxPtr[i + 1] = new Box;
+                    boxPosPtr[i + 1] = new Position;
+                }
+                
+                if (boxPosPtr[i + 1] != nullptr) {
+                    boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 1);
+                    boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 1);
+                }
                 
 
-                if (customerPtr[i] != nullptr)
+                if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
-                   
-                    timer[i] = -1;
                     bool bComplain = false;
                     //only did first 2 shelves and its kinda inefficient
-                    if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7)
-                    {
-                        if (sPtr[0]->getAmount() > 0) 
-                        {
-                            sPtr[0]->decreaseItem();
-                            p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                        }
-                        
-                        else if (sPtr[0]->getAmount() == 0) {
-                            p.increaseUnsatisfiedCustomers();
-                            bComplain = true;
 
-                            if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                            {
-                                p.receiveStrike();
+                    for (int j = 0; j < 3; j++) {
 
-                                if (p.getStrikes() == 3) {
-                                    g_eGameState = S_GAMEOVER;
+                        if (sPtr[j] != nullptr) {
+
+                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+
                                 }
+
+                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+
+                                }
+
                             }
+
                         }
                     }
 
-                    if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 13)
-                    {
-                        if (sPtr[1]->getAmount() > 0)
-                        {
-                            sPtr[1]->decreaseItem();
-                            p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                        }
-                        
+                    for (int j = 3; j < 6; j++) {
 
-                        else if (sPtr[1]->getAmount() == 0) {
-                            p.increaseUnsatisfiedCustomers();
-                            bComplain = true;
+                        if (sPtr[j] != nullptr) {
 
-                            if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                            {
-                                p.receiveStrike();
+                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (p.getStrikes() == 3) {
-                                    g_eGameState = S_GAMEOVER;
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+
                                 }
+
+                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+
+                                }
+
                             }
+
                         }
+
                     }
 
+                    customerPtr[i]->setEndPoint(79, 15);
+                    //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
+                }
+
+                if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+
+                    timer[i] = -1;
+                    travelling[i] = false;
                 }
-                
-
-                /*if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }
-
-                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getX() == 7)
-                {
-
-                }*/
-
-                //if (sPtr[i]->getAmount() > 0) 
-                //{
-                //    sPtr[i]->decreaseItem();
-                //    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
-                //}
-                //else if (sPtr[i]->getAmount() == 0)
-                //{                 
-                //   
-
-                //    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                //    {
-                //        p.receiveStrike();
-
-                //        if (p.getStrikes() == 3) {
-                //            g_eGameState = S_GAMEOVER;
-                //        }
-                //    }
-                //}
             }
-
-            
-        }
-        else
-        {
-            if (spawnTimer >= 4.95 && spawnTimer <= 5.05)
+            else
             {
-                if (created != true)
+                if (spawnTimer >= 5)
                 {
-                    customerPtr[i] = new Customer;
-                    customerPtr[i]->setItemToBuy(2);
-                    timer[i] = 0;
-                    customerPtr[i]->getPos().setY(customerPtr[i]->getPos().getY() + i);
-                    spawned[i] = true;
-                    created = true;
+                    if (created != true)
+                    {
+                        customerPtr[i] = new Customer;
+                        customerPtr[i]->setItemToBuy(2);
+                        timer[i] = 0;
+                        customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
+                        spawned[i] = true;
+                        created = true;
+                    }
+                    spawnTimer = 0;
                 }
-                spawnTimer = 0;
             }
         }
+        if (spawnTimer >= 5)
+            spawnTimer = 0;
     }
-
-
-    
 }
 
 void renderCharacter()
@@ -1485,7 +1644,7 @@ void renderFramerate()
         if (customerPtr[i] != nullptr)
         {
             ss.str("");
-            ss << customerPtr[i] << "pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY();
+            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY();
             c.X = 30;
             c.Y = 14 + i;
             g_Console.writeToBuffer(c, ss.str(), 0x0F);

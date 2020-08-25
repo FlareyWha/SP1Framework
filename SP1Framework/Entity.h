@@ -9,5 +9,6 @@ public:
 	Entity();
 	virtual ~Entity();
 	Position getPos(void);
+	void setPos(int x, int y);
 };
 
