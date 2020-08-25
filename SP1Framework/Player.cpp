@@ -22,9 +22,9 @@ int Player::getTotalEarned()
 	return dayEarnings;
 }
 
-void Player::AddDayEarnings(int earned)
+void Player::AddDayEarnings(int i)
 {
-	dayEarnings += earned;
+	dayEarnings = i* 30 + dayEarnings;
 }
 
 void Player::resetDayEarnings()

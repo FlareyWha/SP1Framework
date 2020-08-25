@@ -1286,13 +1286,16 @@ void renderCustomer() // fix later yes ues
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j ) {
 
-                                if (sPtr[j]->getAmount() > 0)
+                                if (sPtr[j]->getAmount() > 0 && sPtr[j]->getAmount() > customerPtr[i]->getQuantity())
                                 {
-                                    sPtr[j]->decreaseItem();
-                                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+                                    
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                    
+                                    
                                 }
 
-                                else if (sPtr[j]->getAmount() == 0) {
+                                else if (sPtr[j]->getAmount() == 0 || sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     bComplain = true;
 
@@ -1319,13 +1322,17 @@ void renderCustomer() // fix later yes ues
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (sPtr[j]->getAmount() > 0)
+                                if (sPtr[j]->getAmount() > 0 && sPtr[j]->getAmount() > customerPtr[i]->getQuantity())
                                 {
-                                    sPtr[j]->decreaseItem();
-                                    p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
+                                    sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+                                    
+                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                    
+                                    //p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
                                 }
 
-                                else if (sPtr[j]->getAmount() == 0) {
+                                else if (sPtr[j]->getAmount() == 0 || sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     bComplain = true;
 
