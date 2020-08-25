@@ -335,7 +335,8 @@ void update(double dt)
         }
     }
 
-    spawnTimer += dt;
+    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
+        spawnTimer += dt;
 
     switch (g_eGameState)
     {
@@ -443,92 +444,94 @@ void moveCharacter()//to check if the player is pressing a key
 
 void actuallyMoving()
 {
-    //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
-    if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0')
-    {
-        g_sChar.m_cLocation.Y++;
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
-        g_sChar.m_cLocation.X++;
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.X);
-    }
-
-    switch (g_sChar.moving.UP) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
-        {
-            g_sChar.m_cLocation.Y--;
-        }
-        boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+    if (framesPassed % 3 == 0) {
+        //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
+        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0')
         {
             g_sChar.m_cLocation.Y++;
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+            g_sChar.m_cLocation.X++;
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.X);
+        }
+
+        switch (g_sChar.moving.UP)
+        {
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
+            {
+                g_sChar.m_cLocation.Y--;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-        }
-        break;
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.Y++;
+                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+            }
+            break;
 
-    case false:
-        break;
-    }
-
-    switch (g_sChar.moving.DOWN) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
-        {
-            g_sChar.m_cLocation.Y++;
+        case false:
+            break;
         }
-        boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+
+        switch (g_sChar.moving.DOWN)
         {
-            g_sChar.m_cLocation.Y--;
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
+            {
+                g_sChar.m_cLocation.Y++;
+            }
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.Y--;
+                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+            }
+            break;
+        case false:
+            break;
         }
-        break;
-    case false:
-        break;
-    }
-    switch (g_sChar.moving.LEFT) 
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
+        switch (g_sChar.moving.LEFT)
         {
-            g_sChar.m_cLocation.X--;
-        }
-        boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
-        {
-            g_sChar.m_cLocation.X++;
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
+            {
+                g_sChar.m_cLocation.X--;
+            }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.X++;
+                boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+            }
+            break;
+        case false:
+            break;
         }
-        break;
-    case false:
-        break;
-    }
-    switch (g_sChar.moving.RIGHT)
-    {
-    case true:
-        
-        if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
+        switch (g_sChar.moving.RIGHT)
         {
-            g_sChar.m_cLocation.X++;
-        }
-        boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
-        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
-        if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
-        {
-            g_sChar.m_cLocation.X--;
+        case true:
+
+            if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
+            {
+                g_sChar.m_cLocation.X++;
+            }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+            boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
+            if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
+            {
+                g_sChar.m_cLocation.X--;
+                boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+            }
+            break;
+        case false:
+            break;
         }
-        break;
-    case false:
-        break;
     }
 }
 
@@ -834,6 +837,32 @@ void processInputHome()
                 p.receivePay(30);
             }
         }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 6
+            && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[0]->getTreatState() == false) {
+                cPtr[0]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[0]->getTreatState() == true) {
+                cPtr[0]->isTreated();
+                p.receivePay(100);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 17
+            && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
+                cPtr[1]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[1]->getTreatState() == true) {
+                cPtr[1]->isTreated();
+                p.receivePay(100);
+            }
+        }
     }
 }
 
@@ -1137,7 +1166,6 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
-    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Sick", 0xF0);
     }
@@ -1148,6 +1176,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[0]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     } //Make this hidden according to Son 1 state
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1175,6 +1208,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[1]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1322,7 +1360,7 @@ void renderCustomer() // fix later yes ues
             }
 
             if (travelling[i] == true)
-                customerPtr[i]->moveCustomer(map, framesPassed, 2);
+                customerPtr[i]->moveCustomer(map, framesPassed, 4);
             else
             {
                 customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
