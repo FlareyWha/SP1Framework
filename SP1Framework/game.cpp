@@ -1278,7 +1278,16 @@ void renderCustomer() // fix later yes ues
 
             if (travelling[i] == true)
                 customerPtr[i]->moveCustomer(map);
+            else
+            {
+                customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
 
+                if (avoiding[i] == 4 || avoiding[i] == 8)
+                    avoiding[i] = 0;
+                else if (avoiding[i] > 0)
+                    avoiding[i]++;
+            }
+ 
             customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
 
             if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
