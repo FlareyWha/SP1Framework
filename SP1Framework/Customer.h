@@ -31,7 +31,7 @@ public:
     void moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int avoiding, Map& map);
-
+    Position getEndPoint();
     int getX();
     int getY();
 
