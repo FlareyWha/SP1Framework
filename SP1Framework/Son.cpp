@@ -59,11 +59,17 @@ bool Son::getStatusFed()
 
 void Son::isTreated()
 {
+	if (btoggleMedicine == false) {
+		btoggleMedicine = true;
+	}
+	else {
+		btoggleMedicine = false;
+	}
 }
 
 bool Son::getTreatState()
 {
-	return false;
+	return btoggleMedicine;
 }
 
 void Son::increaseNODUnfed()

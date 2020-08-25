@@ -335,7 +335,8 @@ void update(double dt)
         }
     }
 
-    spawnTimer += dt;
+    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
+        spawnTimer += dt;
 
     switch (g_eGameState)
     {
@@ -732,7 +733,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_GAME; //change back to S_TUT later
+            g_eGameState = S_TUT; //change back to S_TUT later
         }
     }
     else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -834,6 +835,32 @@ void processInputHome()
             else if (cPtr[0]->getStatusFed() == true) {
                 cPtr[1]->isFed();
                 p.receivePay(30);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 6
+            && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[0]->getTreatState() == false) {
+                cPtr[0]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[0]->getTreatState() == true) {
+                cPtr[0]->isTreated();
+                p.receivePay(100);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 17
+            && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
+                cPtr[1]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[1]->getTreatState() == true) {
+                cPtr[1]->isTreated();
+                p.receivePay(100);
             }
         }
     }
@@ -1139,7 +1166,6 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
-    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Sick", 0xF0);
     }
@@ -1150,6 +1176,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[0]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     } //Make this hidden according to Son 1 state
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1177,6 +1208,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[1]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1335,7 +1371,7 @@ void renderCustomer() // fix later yes ues
                     avoiding[i]++;
             }
  
-            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
+            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
 
             if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
             {
@@ -1366,7 +1402,6 @@ void renderCustomer() // fix later yes ues
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }
@@ -1393,7 +1428,6 @@ void renderCustomer() // fix later yes ues
                                 else if ( sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }
