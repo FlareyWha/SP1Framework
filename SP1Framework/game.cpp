@@ -331,14 +331,6 @@ void update(double dt)
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
-    for (int i = 0; i < 6; i++) 
-    {
-        if (timer[i] != -1) 
-        {
-            timer[i] += dt;
-        }
-    }
-
     if (g_eGameState == S_TUT || g_eGameState == S_GAME)
         spawnTimer += dt;
 
@@ -354,10 +346,28 @@ void update(double dt)
             break;
         case S_HOME: updateHome();
             break;
-        case S_TUT: g_dElapsedWorkTime += dt;  updateTutorial();
+        case S_TUT: {
+            for (int i = 0; i < 6; i++)
+            {
+                if (timer[i] != -1)
+                {
+                    timer[i] += dt;
+                }
+            }
+            g_dElapsedWorkTime += dt;  updateTutorial();
             break;
-        case S_GAME: g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
+        }
+        case S_GAME: {
+            for (int i = 0; i < 6; i++)
+            {
+                if (timer[i] != -1)
+                {
+                    timer[i] += dt;
+                }
+            }
+            g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
+        }
     }
 }
 
