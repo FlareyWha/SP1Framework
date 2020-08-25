@@ -1357,6 +1357,7 @@ void renderCustomer() // fix later yes ues
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
                     timer[i] = -1;
+                    travelling[i] = false;
                 }
             }
         }
