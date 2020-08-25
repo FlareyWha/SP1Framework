@@ -726,7 +726,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_GAME; //change back to S_TUT later
+            g_eGameState = S_TUT; //change back to S_TUT later
         }
     }
     else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
