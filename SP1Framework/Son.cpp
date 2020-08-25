@@ -1,4 +1,5 @@
 #include "Son.h"
+#include "Player.h"
 
 Son::Son() : bSick{ false }, btoggleFood{ false }, bHospitalised{ false }, NoOfDaysUnfed{ 0 }, NoOfDaysSick { 0 }
 {
