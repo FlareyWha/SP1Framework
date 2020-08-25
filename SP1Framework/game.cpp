@@ -1349,11 +1349,9 @@ void renderCustomer() // fix later yes ues
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
+                    timer[i] = -1;
                 }
-                
             }
-
-            
         }
         else
         {
@@ -1372,9 +1370,8 @@ void renderCustomer() // fix later yes ues
             }
         }
     }
-
-
-    
+    if (spawnTimer >= 4.95 && spawnTimer <= 5.05)
+        spawnTimer = 0;
 }
 
 void renderCharacter()
