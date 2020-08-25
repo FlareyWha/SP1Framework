@@ -799,17 +799,29 @@ void processInputHome()
         }
 
         // Expenses toggling
-        if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
+        if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
         {
-            cPtr[0]->isFed();
+            if (p.getSavings() >= 30) {
+                cPtr[0]->isFed();
+                p.payFood();
+            }
+            else if (cPtr[0]->getStatusFed() == true) {
+                cPtr[0]->isFed();
+                p.receivePay(30);
+            }
         }
-        if ((g_mouseEvent.mousePosition.X >= 24
-            && g_mouseEvent.mousePosition.X <= 24)
+        if ((g_mouseEvent.mousePosition.X == 22)
             && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
         {
-            cPtr[1]->isFed();
+            if (p.getSavings() >= 30) {
+                cPtr[1]->isFed();
+                p.payFood();
+            }
+            else if (cPtr[0]->getStatusFed() == true) {
+                cPtr[1]->isFed();
+                p.receivePay(30);
+            }
         }
     }
 }
@@ -1124,18 +1136,18 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
+        g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
     } //Make this hidden according to Son 1 state
     c.Y += 2;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[0]->getStatusFed() == true) {
-        c.X += 14;
+        c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
-        c.X -= 14;
+        c.X -= 12;
     }
     c.Y += 3;
     if (day % 6 == 0 && day != 0) {
-        g_Console.writeToBuffer(c, "Rent (Price) [ ] ", 0xF0);
+        g_Console.writeToBuffer(c, "Rent ($200) [ ] ", 0xF0);
     }
     c.Y += 4;
     g_Console.writeToBuffer(c, "Son 2", 0xF0);
@@ -1151,14 +1163,14 @@ void renderHomeExpenses(COORD c)
     c.X -= 8;
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Medicine (Price) [ ]", 0xF0);
+        g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
     }
     c.Y += 2;
-    g_Console.writeToBuffer(c, "Food (Price) [ ] ", 0xF0);
+    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[1]->getStatusFed() == true) {
-        c.X += 14;
+        c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
-        c.X -= 14;
+        c.X -= 12;
     }
 }
 

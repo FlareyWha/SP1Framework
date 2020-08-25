@@ -15,6 +15,7 @@ public:
 	char getGrid(int y, int x);
 	void setGrid(int y, int x, char character);
 	void chooseMap(int lvl, Console& console);
+	void initMap(int lvl, Console& console); //might not be used
 	void printMap(std::fstream& level, Console& console);
 	char collision(int currentY, int currentX, int moveToY, int moveToX, Map& map);
 	bool isNegative(int num1, int num2);
