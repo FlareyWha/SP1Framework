@@ -440,10 +440,12 @@ void moveCharacter()//to check if the player is pressing a key
 void actuallyMoving()
 {
     //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
-    if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0') //quick fix for customer collision with player
+    if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, 0, map) != '0')
     {
         g_sChar.m_cLocation.Y++;
         boxPosPtr->setY(g_sChar.m_cLocation.Y);
+        g_sChar.m_cLocation.X++;
+        boxPosPtr->setY(g_sChar.m_cLocation.X);
     }
 
     switch (g_sChar.moving.UP) 
@@ -641,8 +643,11 @@ void updateSons()
     }
 }
 
-void checkEnd() //Check if day has ended and update variables
+void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
+    if (p.getUnsatisfiedCustomers() == 10) {
+            g_eGameState = S_GAMEOVER;
+        }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 120)
     {
         g_sChar.moving.UP = false;
@@ -753,7 +758,7 @@ void processInputEndOfWorkScreen()
         COORD c = g_Console.getConsoleSize();
         if ((g_mouseEvent.mousePosition.X >= c.X / 6 + 15
             && g_mouseEvent.mousePosition.X <= c.X / 6 + 36)
-            && g_mouseEvent.mousePosition.Y == 13) //Change to home state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 12) //Change to home state once mouse clicks on the button
         {
             p.receivePay(p.getTotalEarned()); //increase total savings
             p.resetDayEarnings(); //reset daily amount earned back to 0
@@ -960,11 +965,11 @@ void renderHUD()
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
-    ss.str("");//display strikes
-    ss << "Strikes:" << p.getStrikes();
-    c.X = 4;
-    c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
+    //ss.str("");//display strikes
+    //ss << "Strikes:" << p.getStrikes();
+    //c.X = 4;
+    //c.Y = 0;
+    //g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str("");// display the current day
     ss << "Day:" << day;
     c.X = 20;
@@ -999,8 +1004,8 @@ void renderHUD()
 
     ss.str(""); //probably can be implemented cleaner
     ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
-    c.X = 54;
-    c.Y = 24;
+    c.X = 1;
+    c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
 }
@@ -1193,11 +1198,11 @@ void renderEndOfWorkScreen()
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;
-    ss.str("");
+    /*c.Y += 1;
+    c.X = g_Console.getConsoleSize().X / 6 + 15;*/
+    /*ss.str("");
     ss << "Total number of Strikes: "<< p.getStrikes();
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
@@ -1222,6 +1227,10 @@ void renderGameOver()
         {
             g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
         }
+    }
+    if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    {
+        g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
     }
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 2 - 20;
@@ -1321,7 +1330,7 @@ void renderCustomer() // fix later yes ues
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j ) {
 
-                                if (sPtr[j]->getAmount() > 0 && sPtr[j]->getAmount() > customerPtr[i]->getQuantity())
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
                                     
@@ -1330,19 +1339,9 @@ void renderCustomer() // fix later yes ues
                                     
                                 }
 
-                                else if (sPtr[j]->getAmount() == 0 || sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
-                                    bComplain = true;
-
-                                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                                    {
-                                        p.receiveStrike();
-
-                                        if (p.getStrikes() == 3) {
-                                            g_eGameState = S_GAMEOVER;
-                                        }
-
-                                    }
+                                    
 
                                 }
 
@@ -1357,28 +1356,19 @@ void renderCustomer() // fix later yes ues
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (sPtr[j]->getAmount() > 0 && sPtr[j]->getAmount() > customerPtr[i]->getQuantity())
+                                if ( sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
                                     
                                      p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
                                     
-                                    //p.AddDayEarnings(30); //for adding amount earned daily// can change it if need be
+                                    
                                 }
 
-                                else if (sPtr[j]->getAmount() == 0 || sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                else if ( sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
-                                    bComplain = true;
-
-                                    if ((p.getUnsatisfiedCustomers() == 3 || p.getUnsatisfiedCustomers() == 6 || p.getUnsatisfiedCustomers() == 9) && bComplain == true)
-                                    {
-                                        p.receiveStrike();
-
-                                        if (p.getStrikes() == 3) {
-                                            g_eGameState = S_GAMEOVER;
-                                        }
-                                    }
+                                    
 
                                 }
 
