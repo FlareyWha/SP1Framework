@@ -670,6 +670,10 @@ void checkEnd() //Check if day has ended and update variables
                 g_eGameState = S_GAMEOVER;
                 cPtr[i]->isHosp();
             }
+            else if (p.getUnsatisfiedCustomers() == 10)
+            {
+                g_eGameState = S_GAMEOVER;
+            }
             else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
             }
@@ -1222,6 +1226,10 @@ void renderGameOver()
         {
             g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
         }
+    }
+    if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    {
+        g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
     }
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 2 - 20;
