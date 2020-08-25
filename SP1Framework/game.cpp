@@ -835,6 +835,32 @@ void processInputHome()
                 p.receivePay(30);
             }
         }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 6
+            && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[0]->getTreatState() == false) {
+                cPtr[0]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[0]->getTreatState() == true) {
+                cPtr[0]->isTreated();
+                p.receivePay(100);
+            }
+        }
+        if ((g_mouseEvent.mousePosition.X == 27)
+            && g_mouseEvent.mousePosition.Y == 17
+            && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
+        {
+            if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
+                cPtr[1]->isTreated();
+                p.payMedicine();
+            }
+            else if (cPtr[1]->getTreatState() == true) {
+                cPtr[1]->isTreated();
+                p.receivePay(100);
+            }
+        }
     }
 }
 
@@ -1138,7 +1164,6 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
-    bool test = cPtr[0]->getStatus();
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Sick", 0xF0);
     }
@@ -1149,6 +1174,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[0]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[0]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     } //Make this hidden according to Son 1 state
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1176,6 +1206,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 1;
     if (cPtr[1]->getStatus() == true) {
         g_Console.writeToBuffer(c, "Medicine ($100) [ ]", 0xF0);
+        if (cPtr[1]->getTreatState() == true) {
+            c.X += 17;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 17;
+        }
     }
     c.Y += 2;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
@@ -1334,7 +1369,7 @@ void renderCustomer() // fix later yes ues
                     avoiding[i]++;
             }
  
-            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
+            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
 
             if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
             {
@@ -1365,7 +1400,6 @@ void renderCustomer() // fix later yes ues
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }
@@ -1392,7 +1426,6 @@ void renderCustomer() // fix later yes ues
                                 else if ( sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }
