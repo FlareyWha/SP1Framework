@@ -331,9 +331,6 @@ void update(double dt)
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
-    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
-        spawnTimer += dt;
-
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
@@ -347,6 +344,7 @@ void update(double dt)
         case S_HOME: updateHome();
             break;
         case S_TUT: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
@@ -358,6 +356,7 @@ void update(double dt)
             break;
         }
         case S_GAME: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
@@ -673,7 +672,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
     else if (g_dElapsedWorkTime >= 30) {
         g_bRestocking = false;
     }
-    else if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
+    if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
@@ -809,6 +808,20 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
+void deleteCustomer()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+        {
+            delete customerPtr[i];
+            customerPtr[i] = nullptr;
+            travelling[i] = false;
+            timer[i] = -1;
+        }
+    }
+}
+
 void processInputHome()
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -826,6 +839,7 @@ void processInputHome()
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
+            deleteCustomer();
             g_eGameState = S_GAME;
             updateSons();
         }
@@ -1050,7 +1064,7 @@ void renderHUD()
     }
     else if (g_bRestocking == true) {
         int secs = 30 - g_dElapsedWorkTime;
-        ss << "Time left : " << secs << " secs";
+        ss << "Restocking time : " << secs << " secs";
     }
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
@@ -1385,7 +1399,7 @@ void renderCustomer() // fix later yes ues
                 switch (customerPtr[i]->getItemToBuy())
                 {
                 case 1:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
@@ -1393,7 +1407,7 @@ void renderCustomer() // fix later yes ues
                     }
 
                 case 2:
-                    if (timer[i] >= 10)
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
                     {
                         customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                         travelling[i] = true;
