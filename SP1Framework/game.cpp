@@ -1347,9 +1347,24 @@ void renderTutorialLevel()
     renderCustomer();
 }
 
-void renderBoxes() 
-{   
+void renderBoxes()
+{
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
+    //for (int i = 0; i < 6; i++) { //maybe useful
+    //    switch ('1') {
+    //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour); }
+
+    //        case '1': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour); }
+
+    //        case '2': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[0]->getY(), char(221), BoxColour); }
+
+    //        case '3': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour);
+    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour); }
+    //    }
+    //}
 }
 
 void moveCustomer()
@@ -1399,6 +1414,8 @@ void renderCustomer() // fix later yes ues
                 }
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+                
+                boxPosPtr[i]->setX((customerPtr[i]->getX())+1); boxPosPtr[i]->setY((customerPtr[i]->getY())+1);
 
                 if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
                 {
