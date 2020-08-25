@@ -23,7 +23,7 @@ public:
 	int getSavings(); // return savings
 
 	int getTotalEarned();
-	void AddDayEarnings(int earned);
+	void AddDayEarnings(int i);
 	void resetDayEarnings();
 
 	int getUnsatisfiedCustomers();
