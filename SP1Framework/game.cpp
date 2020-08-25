@@ -1313,7 +1313,7 @@ void renderCustomer() // fix later yes ues
                     avoiding[i]++;
             }
  
-            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map);
+            customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
 
             if ((timer[i] >= 30.9) && (timer[i] <= 31.1)) 
             {
@@ -1344,7 +1344,6 @@ void renderCustomer() // fix later yes ues
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }
@@ -1371,7 +1370,6 @@ void renderCustomer() // fix later yes ues
                                 else if ( sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
                                     
-
                                 }
 
                             }

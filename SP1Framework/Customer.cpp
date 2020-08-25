@@ -105,14 +105,14 @@ int Customer::getItemToBuy()
 	return itemToBuy;
 }
 
-void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map)
+void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q)
 {
 	COORD c;
 	if (spawned == true)
 	{
 		c.X = pos.getX();
 		c.Y = pos.getY();
-		console.writeToBuffer(c, ' ', 0x20);
+		console.writeToBuffer(c, char(q), 0x20);
 		map.setGrid(c.Y, c.X, 'C');
 	}
 }
