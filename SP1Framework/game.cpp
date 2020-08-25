@@ -331,9 +331,6 @@ void update(double dt)
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
 
-    if (g_eGameState == S_TUT || g_eGameState == S_GAME)
-        spawnTimer += dt;
-
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
@@ -347,6 +344,7 @@ void update(double dt)
         case S_HOME: updateHome();
             break;
         case S_TUT: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
@@ -358,6 +356,7 @@ void update(double dt)
             break;
         }
         case S_GAME: {
+            spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
                 if (timer[i] != -1)
