@@ -42,8 +42,8 @@ Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
-Box* boxPtr[6];
-Position* boxPosPtr[6];
+Box* boxPtr[7];
+Position* boxPosPtr[7];
 WORD BoxColour;
 Map map;
 int framesPassed;
@@ -88,7 +88,12 @@ void init( void )
     day = 0;
     
     //init box and box pos
-    for (int i = 0; i < 6; i++) 
+    boxPtr[0] = new Box;
+    boxPosPtr[0] = new Position;
+    boxPosPtr[0]->setX(18);
+    boxPosPtr[0]->setY(2);
+
+    /*for (int i = 0; i <= 7; i++) 
     {
         if (boxPtr[i] == nullptr) 
         {
@@ -97,7 +102,7 @@ void init( void )
         }
         boxPosPtr[0]->setX(18);
         boxPosPtr[0]->setY(2);
-    }
+    }*/
 
     //init Son objects
     cPtr[0] = new Son;
@@ -669,7 +674,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             g_eGameState = S_GAMEOVER;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
-    else if (g_dElapsedWorkTime >= 30) {
+    else if (g_dElapsedWorkTime >= 5) {
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -1364,6 +1369,13 @@ void renderTutorialLevel()
 void renderBoxes()
 {
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
+    for (int i = 0; i < 6; i++)
+    {
+        if (boxPtr[i + 1] != nullptr) {
+            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', BoxColour);
+        }
+        
+    }
     //for (int i = 0; i < 6; i++) { //maybe useful
     //    switch ('1') {
     //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
@@ -1416,11 +1428,13 @@ void renderCustomer() // fix later yes ues
                 }
 
                 if (travelling[i] == true)
+                {
                     customerPtr[i]->moveCustomer(map, framesPassed, 4);
+                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
+                }
+                    
                 else
                 {
-                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
-
                     if (avoiding[i] == 4 || avoiding[i] == 8)
                         avoiding[i] = 0;
                     else if (avoiding[i] > 0)
@@ -1429,9 +1443,18 @@ void renderCustomer() // fix later yes ues
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
                 
-                boxPosPtr[i]->setX((customerPtr[i]->getX())+1); boxPosPtr[i]->setY((customerPtr[i]->getY())+1);
+                if (boxPtr[i + 1] == nullptr) {
+                    boxPtr[i + 1] = new Box;
+                    boxPosPtr[i + 1] = new Position;
+                }
+                
+                if (boxPosPtr[i + 1] != nullptr) {
+                    boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 1);
+                    boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 1);
+                }
+                
 
-                if ((timer[i] >= 30.9) && (timer[i] <= 31.1))
+                if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
                     //only did first 2 shelves and its kinda inefficient
@@ -1489,7 +1512,7 @@ void renderCustomer() // fix later yes ues
                     }
 
                     customerPtr[i]->setEndPoint(79, 15);
-                    customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
+                    //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
                 }
 
                 if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
@@ -1497,6 +1520,13 @@ void renderCustomer() // fix later yes ues
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+
                     timer[i] = -1;
                     travelling[i] = false;
                 }

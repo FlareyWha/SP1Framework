@@ -182,7 +182,6 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 		travelling = false;
 		avoiding = 5;
 	}
-
 }
 
 void Customer::bumpIntoCustomer(int avoiding, Map& map)
