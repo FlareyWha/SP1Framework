@@ -451,7 +451,7 @@ void actuallyMoving()
             g_sChar.m_cLocation.Y++;
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
             g_sChar.m_cLocation.X++;
-            boxPosPtr[0]->setY(g_sChar.m_cLocation.X);
+            boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
         }
 
         switch (g_sChar.moving.UP)
