@@ -1366,19 +1366,17 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "Game Over!", 0xF0);
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 3 + 2;
-    for (int i = 0; i < 2; i++) {
-        if (cPtr[i]->getHospState() == true)
-        {
-            g_Console.writeToBuffer(c, "     One of your", 0xF0);
-            c.Y++;
-            g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); i++; //stop double print if both sons sick
-        }
+    if (cPtr[1]->getHospState() == true || cPtr[0]->getHospState() == true)
+    {
+        g_Console.writeToBuffer(c, "     One of your", 0xF0);
+        c.Y++;
+        g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); //stop double print if both sons sick
     }
-    if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    else if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
     {
         g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
     }
-    if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
+    else if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
         g_Console.writeToBuffer(c, "Your landlord was not", 0xF0);
         c.Y += 1;
         g_Console.writeToBuffer(c, "as kind as you thought.", 0xF0);
@@ -1386,8 +1384,9 @@ void renderGameOver()
         g_Console.writeToBuffer(c, "You were evicted", 0xF0);
         c.Y += 1;
         g_Console.writeToBuffer(c, "for not paying rent!", 0xF0);
+        c.Y -= 3;
     }
-    c.Y += 6;
+    c.Y = 20;
     c.X = g_Console.getConsoleSize().X / 3 + 2;
     g_Console.writeToBuffer(c, " Press [ESC] to head", 0xF0);
     c.Y++;
