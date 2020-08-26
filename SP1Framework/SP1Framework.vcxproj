@@ -89,6 +89,7 @@
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
+    <ClCompile Include="Powerup.cpp" />
     <ClCompile Include="Shelf.cpp" />
     <ClCompile Include="Son.cpp" />
   </ItemGroup>
@@ -103,6 +104,7 @@
     <ClInclude Include="Map.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
+    <ClInclude Include="Powerup.h" />
     <ClInclude Include="Shelf.h" />
     <ClInclude Include="Son.h" />
   </ItemGroup>
