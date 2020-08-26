@@ -1,15 +1,23 @@
 #pragma once
 class Powerup
 {
+private:
+	int cheaperFood; //Max: 3
+	int cheaperRent; //Max: 3
+	int playerShoes; //Max: 3
+	int slowerCustomers; // Max: 3
+	int richCustomers; // Max: 3
+	int thriftyCustomers; // Max: 3
+
 public:
 	Powerup();
 	~Powerup();
 
-	int cheaperFood(); //cheaper food
-	int cheaperRent(); //cheaper rent
-	int playerShoes(); //faster player
-	int slowerCustomers(); //slower customers
-	int richCustomers(); //more money per customer
-	int thriftyCustomers(); //less chance of buying >1 item
+	int purchasecheaperFood(); //cheaper food
+	int purchasecheaperRent(); //cheaper rent
+	int purchaseplayerShoes(); //faster player
+	int purchaseslowerCustomers(); //slower customers
+	int purchaserichCustomers(); //more money per customer
+	int purchasethriftyCustomers(); //less chance of buying >1 item
 };
 

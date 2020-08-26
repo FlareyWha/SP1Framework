@@ -9,6 +9,11 @@ Player::~Player() {
 
 }
 
+Powerup Player::getPowerups()
+{
+	return Powerup();
+}
+
 int Player::getStrikes() {
 	return strikes;
 }

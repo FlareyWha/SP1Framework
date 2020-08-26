@@ -1,5 +1,6 @@
 #pragma once
 #include "Entity.h"
+#include "Powerup.h"
 #include "Framework/console.h"
 
 class Player :
@@ -8,6 +9,7 @@ class Player :
 private:
 	int strikes;
 	int savings; 
+	Powerup Powerups;
 
 	int unsatisfiedCustomers;
 
@@ -19,6 +21,8 @@ private:
 public:
 	Player();
 	~Player();
+
+	Powerup getPowerups();
 
 	int getStrikes(); // return strikes
 	int getSavings(); // return savings

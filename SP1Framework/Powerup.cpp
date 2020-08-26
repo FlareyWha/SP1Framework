@@ -8,32 +8,32 @@ Powerup::~Powerup()
 {
 }
 
-int Powerup::cheaperFood()
+int Powerup::purchasecheaperFood()
 {
 	return 0;
 }
 
-int Powerup::cheaperRent()
+int Powerup::purchasecheaperRent()
 {
 	return 0;
 }
 
-int Powerup::playerShoes()
+int Powerup::purchaseplayerShoes()
 {
 	return 0;
 }
 
-int Powerup::slowerCustomers()
+int Powerup::purchaseslowerCustomers()
 {
 	return 0;
 }
 
-int Powerup::richCustomers()
+int Powerup::purchaserichCustomers()
 {
 	return 0;
 }
 
-int Powerup::thriftyCustomers()
+int Powerup::purchasethriftyCustomers()
 {
 	return 0;
 }
