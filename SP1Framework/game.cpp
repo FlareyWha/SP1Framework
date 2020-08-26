@@ -1467,7 +1467,10 @@ void renderCustomer() // fix later yes ues
                 }
                     
                 else if (avoiding[i] == 4 || avoiding[i] == 8)
-                   avoiding[i] = 0;
+                {
+                    avoiding[i] = 0;
+                    travelling[i] = true;
+                }
 
                 customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                     
