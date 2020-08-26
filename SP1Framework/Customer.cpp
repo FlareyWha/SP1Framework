@@ -204,14 +204,14 @@ void Customer::bumpIntoCustomer(int& avoiding, Map& map)
 	int tempY, tempX;
 	// avoiding 1-3 is for if the moving customer is on the right of a still customer
 	// avoiding 4-6 is for if the moving customer is on the left of a still customer
-	if ((avoiding == 1) || (avoiding == 7))
+	if (avoiding == 1)
 		pos.setY(pos.getY() + 1);
 	else if (avoiding == 2)
 		pos.setX(pos.getX() - 2);
-	else if (avoiding == 5)
-		pos.setX(pos.getX() + 2);
-	else if ((avoiding == 3) || (avoiding == 6))
+	else if (avoiding == 3)
 		pos.setY(pos.getY() - 1);
+	else if (avoiding == 5)
+		pos.setY(pos.getY() + 2);
 
 	avoiding++;
 }

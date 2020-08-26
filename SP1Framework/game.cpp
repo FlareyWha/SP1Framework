@@ -1559,7 +1559,7 @@ void renderCustomer() // fix later yes ues
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
-                else if (avoiding[i] == 4 || avoiding[i] == 8)
+                else if (avoiding[i] == 4 || avoiding[i] == 6)
                 {
                     avoiding[i] = 0;
                     travelling[i] = true;
