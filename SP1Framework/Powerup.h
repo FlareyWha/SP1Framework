@@ -13,11 +13,18 @@ public:
 	Powerup();
 	~Powerup();
 
-	int purchasecheaperFood(); //cheaper food
-	int purchasecheaperRent(); //cheaper rent
-	int purchaseplayerShoes(); //faster player
-	int purchaseslowerCustomers(); //slower customers
-	int purchaserichCustomers(); //more money per customer
-	int purchasethriftyCustomers(); //less chance of buying >1 item
+	int getFoodlvl(); //get current level of food
+	int getRentlvl(); //get current level of rent
+	int getShoeslvl(); //get current level of shoes
+	int getSCustomerslvl(); //get current level of slowerCustomers
+	int getRCustomerslvl(); //get current level of richCustomers
+	int getTCustomerslvl(); //get current level of thriftyCustomers
+
+	void purchasecheaperFood(); //cheaper food
+	void purchasecheaperRent(); //cheaper rent
+	void purchaseplayerShoes(); //faster player
+	void purchaseslowerCustomers(); //slower customers
+	void purchaserichCustomers(); //more money per customer
+	void purchasethriftyCustomers(); //less chance of buying >1 item
 };
 

@@ -8,32 +8,66 @@ Powerup::~Powerup()
 {
 }
 
-int Powerup::purchasecheaperFood()
+int Powerup::getFoodlvl()
 {
-	return 0;
+	return cheaperFood;
 }
 
-int Powerup::purchasecheaperRent()
+int Powerup::getRentlvl()
 {
-	return 0;
+	return cheaperRent;
 }
 
-int Powerup::purchaseplayerShoes()
+int Powerup::getShoeslvl()
 {
-	return 0;
+	return getShoeslvl();
 }
 
-int Powerup::purchaseslowerCustomers()
+int Powerup::getSCustomerslvl()
 {
-	return 0;
+	return getSCustomerslvl;
 }
 
-int Powerup::purchaserichCustomers()
+int Powerup::getRCustomerslvl()
 {
-	return 0;
+	return getRCustomerslvl();
 }
 
-int Powerup::purchasethriftyCustomers()
+int Powerup::getTCustomerslvl()
 {
-	return 0;
+	return getTCustomerslvl();
+}
+
+void Powerup::purchasecheaperFood()
+{
+	if (cheaperFood < 3) {
+		cheaperFood++;
+	}
+}
+
+void Powerup::purchasecheaperRent()
+{
+	if (cheaperRent < 3) {
+		cheaperRent++;
+	}
+}
+
+void Powerup::purchaseplayerShoes()
+{
+
+}
+
+void Powerup::purchaseslowerCustomers()
+{
+	
+}
+
+void Powerup::purchaserichCustomers()
+{
+	
+}
+
+void Powerup::purchasethriftyCustomers()
+{
+	
 }
