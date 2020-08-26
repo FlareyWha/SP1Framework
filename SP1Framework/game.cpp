@@ -1667,7 +1667,7 @@ void renderCustomer() // fix later yes ues
 
                 if (travelling[i] == true)
                 {
-                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 6);
+                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups().getSCustomerslvl()));
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
