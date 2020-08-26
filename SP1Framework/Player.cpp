@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : strikes{ 0 }, savings{0}, dayEarnings{0}, unsatisfiedCustomers{0}
+Player::Player() : strikes{ 0 }, savings{0}, dayEarnings{0}, unsatisfiedCustomers{0}, p_bRentPaid(false)
 {
 	holdingProduct = false;
 }
@@ -65,6 +65,21 @@ void Player::payFood() {
 
 void Player::payMedicine() {
 	savings = savings - 100;
+}
+
+void Player::isRentPaid()
+{
+	if (!p_bRentPaid) {
+		p_bRentPaid = true;
+	}
+	else if (p_bRentPaid == true) {
+		p_bRentPaid = false;
+	}
+}
+
+bool Player::getRentStatus()
+{
+	return p_bRentPaid;
 }
 
 void Player::holdsProduct() {

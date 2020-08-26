@@ -1,7 +1,7 @@
 #include "Son.h"
 #include "Player.h"
 
-Son::Son() : bSick{ false }, btoggleFood{ false }, bHospitalised{ false }, NoOfDaysUnfed{ 0 }, NoOfDaysSick { 0 }
+Son::Son() : bSick{ false }, btoggleFood{ false }, btoggleMedicine{ false }, bHospitalised{ false }, NoOfDaysUnfed{ 0 }, NoOfDaysSick{ 0 }
 {
 }
 

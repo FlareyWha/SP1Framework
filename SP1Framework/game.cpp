@@ -668,6 +668,10 @@ void updateSons()
             cPtr[i]->increaseNODUnfed();
         }
         cPtr[i]->resetFed();
+        if (cPtr[i]->getTreatState() == true) {
+            cPtr[i]->Recovers();
+            cPtr[i]->isTreated();
+        }
     }
 }
 
@@ -712,6 +716,13 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
             }
+        if (p.getRentStatus() == true && day % 7 == 0 && day != 0) {
+            p.isRentPaid();
+            g_eGameState = S_ENDOFWORKSCREEN;
+        }
+        else if (p.getRentStatus() == false && day % 7 == 0 && day != 0) {
+            g_eGameState = S_GAMEOVER;
+        }
         }
     }
     
@@ -853,8 +864,8 @@ void processInputHome() //note
         }
 
         // Expenses toggling
-        if ((g_mouseEvent.mousePosition.X == 22)
-            && g_mouseEvent.mousePosition.Y == 8) //Toggle recognition of son 1 being fed
+        if ((g_mouseEvent.mousePosition.X == 39)
+            && g_mouseEvent.mousePosition.Y == 7) //Toggle recognition of son 1 being fed
         {
             if (p.getSavings() >= 30 && cPtr[0]->getStatusFed() == false) {
                 cPtr[0]->isFed();
@@ -865,8 +876,8 @@ void processInputHome() //note
                 p.receivePay(30);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 22)
-            && g_mouseEvent.mousePosition.Y == 19) //Toggle recognition of son 1 being fed
+        if ((g_mouseEvent.mousePosition.X == 39)
+            && g_mouseEvent.mousePosition.Y == 12) //Toggle recognition of son 1 being fed
         {
             if (p.getSavings() >= 30 && cPtr[1]->getStatusFed() == false) {
                 cPtr[1]->isFed();
@@ -877,7 +888,7 @@ void processInputHome() //note
                 p.receivePay(30);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 27)
+        if ((g_mouseEvent.mousePosition.X == 44)
             && g_mouseEvent.mousePosition.Y == 6
             && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
         {
@@ -890,8 +901,8 @@ void processInputHome() //note
                 p.receivePay(100);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 27)
-            && g_mouseEvent.mousePosition.Y == 17
+        if ((g_mouseEvent.mousePosition.X == 44)
+            && g_mouseEvent.mousePosition.Y == 11
             && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
         {
             if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
@@ -903,6 +914,18 @@ void processInputHome() //note
                 p.receivePay(100);
             }
         }
+        if ((g_mouseEvent.mousePosition.X == 45)
+            && g_mouseEvent.mousePosition.Y == 14
+            && day % 6 == 0 && day != 0) {
+            if (p.getSavings() >= 200 && p.getRentStatus() == false) {
+                p.isRentPaid();
+                p.payRent();
+            }
+            else if (p.getRentStatus() == true) {
+                p.isRentPaid();
+                p.receivePay(200);
+            }
+        }
     }
 }
 
@@ -912,7 +935,7 @@ void processUserInput()
     {
     case S_SPLASHSCREEN: processInputSplash(); 
         break;
-    case S_MENU: processInputMenu(); 
+    case S_MENU: processInputMenu();
         break;
     case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
         break;
@@ -1292,6 +1315,11 @@ void renderHomeExpenses(COORD c)
     c.Y += 2;
     if (day % 6 == 0 && day != 0) {
         g_Console.writeToBuffer(c, "!====Rent ($200) [ ]====!", 0xF0);
+        if (p.getRentStatus() == true) {
+            c.X += 18;
+            g_Console.writeToBuffer(c, " ", 0x00);
+            c.X -= 18;
+        }
     }
 }
 
@@ -1349,6 +1377,15 @@ void renderGameOver()
     if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
     {
         g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
+    }
+    if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
+        g_Console.writeToBuffer(c, "Your landlord was not", 0xF0);
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "as kind as you thought.", 0xF0);
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "You were evicted", 0xF0);
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "for not paying rent!", 0xF0);
     }
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 3 + 2;
