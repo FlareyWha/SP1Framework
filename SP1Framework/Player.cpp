@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : strikes{ 0 }, savings{0}, dayEarnings{0}, unsatisfiedCustomers{0}, p_bRentPaid(false), rent{200}, food{20}, medicine {100}
+Player::Player() : strikes{ 0 }, savings{0}, dayEarnings{0}, unsatisfiedCustomers{0}, p_bRentPaid(false)
 {
 	holdingProduct = false;
 }
@@ -61,15 +61,15 @@ void Player::receivePay(int pay) {
 }
 
 void Player::payRent() {
-	savings = savings - rent;
+	savings = savings - 200;
 }
 
 void Player::payFood() {
-	savings = savings - food;
+	savings = savings - 30;
 }
 
 void Player::payMedicine() {
-	savings = savings - medicine;
+	savings = savings - 100;
 }
 
 void Player::isRentPaid()
@@ -98,19 +98,3 @@ bool Player::isHoldingProduct() {
 void Player::releaseProduct() {
 	holdingProduct = false;
 }
-
-void Player::setRent(int r)
-{
-	rent = r;
-}
-
-void Player::setFood(int f)
-{
-	food = f;
-}
-
-void Player::setMedicine(int m)
-{
-	medicine = m;
-}
-

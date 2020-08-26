@@ -529,7 +529,7 @@ void actuallyMoving()
     }
     else 
     { 
-        playerSpeed = 5 - p.getPowerups().getShoeslvl();
+        playerSpeed = 5 - (p.getPowerups().getShoeslvl());
     }
     if ( framesPassed % playerSpeed == 0) {
         //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
