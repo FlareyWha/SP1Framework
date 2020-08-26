@@ -18,7 +18,7 @@ Tutorial::~Tutorial()
 {
 }
 
-void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime)
+void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p)
 {
     if (tutorialFlags[0] == false)
         flagOne(console);
@@ -26,13 +26,15 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagTwo(console, g_sChar, g_skKeyEvent);
     else if (tutorialFlags[2] == false)
         flagThree(console, g_sChar, g_skKeyEvent);
+    else if (tutorialFlags[3] == false)
+        console.writeToBuffer(4, 5, " ", 0xAA);
 
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (g_dElaspedWorkTime > 1))
         tutorialFlags[0] = true;
     else if (allTrue == true && tutorialFlags[0] == true && tutorialFlags[1] == false)
         tutorialFlags[1] = true;
-    else if (g_sChar.m_cLocation.X == 3 && g_sChar.m_cLocation.Y == 3 && moved[4] == true && tutorialFlags[1] == true && tutorialFlags[2] == false)
-        tutorialFlags[2] = false;
+    else if (p.getPos().getX() == 3 && p.getPos().getX() == 3 && moved[4] == true && tutorialFlags[1] == true && tutorialFlags[2] == false)
+        tutorialFlags[2] = true;
 
 }
 
@@ -66,6 +68,27 @@ void Tutorial::flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEv
     c.Y += 1;
     console.writeToBuffer(c, "left, down and right respectively", 0xF0);
 
+    if (g_skKeyEvent[K_UP].keyDown)
+    {
+        moved[0] = true;
+        allTrue = true;
+    }
+    if (g_skKeyEvent[K_LEFT].keyDown)
+    {
+        moved[1] = true;
+        allTrue = true;
+    }
+    if (g_skKeyEvent[K_DOWN].keyDown)
+    {
+        moved[2] = true;
+        allTrue = true;
+    }
+    if (g_skKeyEvent[K_RIGHT].keyDown)
+    {
+        moved[3] = true;
+        allTrue = true;
+    }
+
     for (int i = 0; i < 4; i++)
     {
         c.Y += 1;
@@ -76,28 +99,12 @@ void Tutorial::flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEv
             c.X += 3;
             console.writeToBuffer(c, ' ', 0xAA);
             c.X -= 3;
-            allTrue = true;
         }
         else
             allTrue = false;
     }
 
-    if (g_skKeyEvent[K_UP].keyDown)
-    {
-        moved[0] = true;
-    }
-    if (g_skKeyEvent[K_LEFT].keyDown)
-    {
-        moved[1] = true;
-    }
-    if (g_skKeyEvent[K_DOWN].keyDown)
-    {
-        moved[2] = true;
-    }
-    if (g_skKeyEvent[K_RIGHT].keyDown)
-    {
-        moved[3] = true;
-    }
+    
 }
 
 void Tutorial::flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT])
