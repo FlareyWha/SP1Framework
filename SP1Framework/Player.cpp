@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : strikes{ 0 }, savings{ 0 }, dayEarnings{ 0 }, unsatisfiedCustomers{ 0 }, p_bRentPaid(false), rent{ 200 }, medicine{ 100 }, food{ 20 }
+Player::Player() : strikes{ 0 }, savings{ 0 }, dayEarnings{ 0 }, unsatisfiedCustomers{ 0 }, p_bRentPaid(false), rent{ 200 }, medicine{ 100 }, food{ 20 }, PowerupsPtr{ new Powerup }
 {
 	holdingProduct = false;
 }
@@ -9,9 +9,9 @@ Player::~Player() {
 
 }
 
-Powerup Player::getPowerups()
+Powerup* Player::getPowerups()
 {
-	return Powerup();
+	return PowerupsPtr;
 }
 
 int Player::getStrikes() {
