@@ -1,6 +1,6 @@
 #include "Powerup.h"
 
-Powerup::Powerup()
+Powerup::Powerup() : cheaperFood(0), cheaperRent(0), playerShoes(0), slowerCustomers(0), richCustomers(0), thriftyCustomers(0)
 {
 }
 
@@ -8,32 +8,84 @@ Powerup::~Powerup()
 {
 }
 
-int Powerup::purchasecheaperFood()
+void Powerup::resetall()
 {
-	return 0;
+	cheaperFood = 0;
+	cheaperRent = 0;
+	playerShoes = 0;
+	slowerCustomers = 0;
+	richCustomers = 0;
+	thriftyCustomers = 0;
 }
 
-int Powerup::purchasecheaperRent()
+int Powerup::getFoodlvl()
 {
-	return 0;
+	return cheaperFood;
 }
 
-int Powerup::purchaseplayerShoes()
+int Powerup::getRentlvl()
 {
-	return 0;
+	return cheaperRent;
 }
 
-int Powerup::purchaseslowerCustomers()
+int Powerup::getShoeslvl()
 {
-	return 0;
+	return playerShoes;
 }
 
-int Powerup::purchaserichCustomers()
+int Powerup::getSCustomerslvl()
 {
-	return 0;
+	return slowerCustomers;
 }
 
-int Powerup::purchasethriftyCustomers()
+int Powerup::getRCustomerslvl()
 {
-	return 0;
+	return richCustomers;
+}
+
+int Powerup::getTCustomerslvl()
+{
+	return thriftyCustomers;
+}
+
+void Powerup::purchasecheaperFood()
+{
+	if (cheaperFood < 3) {
+		cheaperFood++;
+	}
+}
+
+void Powerup::purchasecheaperRent()
+{
+	if (cheaperRent < 3) {
+		cheaperRent++;
+	}
+}
+
+void Powerup::purchaseplayerShoes()
+{
+	if (playerShoes < 3) {
+		playerShoes++;
+	}
+}
+
+void Powerup::purchaseslowerCustomers()
+{
+	if (slowerCustomers < 3) {
+		slowerCustomers++;
+	}
+}
+
+void Powerup::purchaserichCustomers()
+{
+	if (richCustomers < 3) {
+		richCustomers++;
+	}
+}
+
+void Powerup::purchasethriftyCustomers()
+{
+	if (thriftyCustomers < 3) {
+		thriftyCustomers++;
+	}
 }

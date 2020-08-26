@@ -43,6 +43,7 @@ Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 bool playerSpeedToggle;
+int playerWalkSpeed;
 int playerSpeed;
 
 Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
@@ -527,7 +528,7 @@ void actuallyMoving()
     }
     else 
     { 
-        playerSpeed = 4; 
+        playerSpeed = 5 - (p.getPowerups().getShoeslvl());
     }
     if ( framesPassed % playerSpeed == 0) {
         //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
@@ -1585,7 +1586,7 @@ void renderCustomer() // fix later yes ues
 
                 if (travelling[i] == true)
                 {
-                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 6);
+                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups().getSCustomerslvl()));
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
