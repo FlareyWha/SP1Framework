@@ -1,6 +1,6 @@
 #include "Powerup.h"
 
-Powerup::Powerup() : cheaperFood(0), cheaperRent(0), playerShoes(0), slowerCustomers(0), richCustomers(0), thriftyCustomers(0)
+Powerup::Powerup()
 {
 }
 
@@ -20,22 +20,22 @@ int Powerup::getRentlvl()
 
 int Powerup::getShoeslvl()
 {
-	return getShoeslvl();
+	return playerShoes;
 }
 
 int Powerup::getSCustomerslvl()
 {
-	return getSCustomerslvl();
+	return slowerCustomers;
 }
 
 int Powerup::getRCustomerslvl()
 {
-	return getRCustomerslvl();
+	return richCustomers;
 }
 
 int Powerup::getTCustomerslvl()
 {
-	return getTCustomerslvl();
+	return thriftyCustomers;
 }
 
 void Powerup::purchasecheaperFood()
@@ -54,16 +54,12 @@ void Powerup::purchasecheaperRent()
 
 void Powerup::purchaseplayerShoes()
 {
-	if (playerShoes < 3) {
-		playerShoes++;
-	}
+
 }
 
 void Powerup::purchaseslowerCustomers()
 {
-	if (slowerCustomers) {
-
-	}
+	
 }
 
 void Powerup::purchaserichCustomers()
