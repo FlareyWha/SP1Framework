@@ -15,6 +15,7 @@
 #include "Player.h"
 #include "Shelf.h"
 #include "Son.h"
+#include "Tutorial.h"
 
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
@@ -56,9 +57,7 @@ int customerDirection[6];
 WORD CustomerBoxColour[6];
 
 //tutorial stuff;
-bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
-std::string movementKeys[4] = { "W { }", "A { }", "S { }", "D { }" };
-bool moved[4] = { false, false, false, false };
+Tutorial tutorial;
 
 // Console object
 int g_ConsoleX = 80;
@@ -365,6 +364,8 @@ void update(double dt)
             break;
         case S_HOME: updateHome();
             break;
+        case S_STORE: updateStore();
+            break;
         case S_TUT: {
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
@@ -442,6 +443,7 @@ void updateGame()       // game logic
 
 void updateStore()
 {
+    processUserInput();
 }
 
 void moveCharacter()//to check if the player is pressing a key
@@ -1043,9 +1045,12 @@ void processUserInput()
     case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
         break;
     case S_GAMEOVER: processInputGameOver();
+        break;
     case S_HOME: processInputHome();
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU; 
+        break;
+    case S_STORE: processStoreinput();
         break;
     case S_TUT:
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
@@ -1506,102 +1511,69 @@ void renderGameOver()
 
 void renderTutorialLevel()
 {
-    COORD c = g_Console.getConsoleSize();
-    std::ostringstream ss;
     map.chooseMap(1, g_Console);
     checkCustomerPlayerCollision();
     renderCharacter();  // renders the character into the buffer
     renderShelfAmount();
     renderHUD();
-    
-    
-    if (tutorialFlags[0] == false)
-    {
-        ss.str("");
-        ss << "Welcome to Jackville Supermarket! ";
-        c.Y = 4;
-        c.X = 40;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "As it is your first day on the job,";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "I, the manager, will tell you what";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "you have to do. Click the screen";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "to continue.";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    }
-    else if (tutorialFlags[1] == false)
-    {
-        ss.str("");
-        ss << "Use your WASD keys to move up,";
-        c.Y = 4;
-        c.X = 40;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "left, down and right respectively";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "Press each key once to proceed.";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        ss << "left, down and right respectively";
-        c.Y += 1;
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
 
-        for (int i = 0; i < 4; i++)
-        {
-            ss.str("");
-            ss << movementKeys[i];
-            c.Y += 1;
-            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    if (tutorial.getTutorialFlag(6) == true)
+        renderCustomer();
 
-            if (moved[i] == true)
-            {
-                c.X += 3;
-                g_Console.writeToBuffer(c, ' ', 0xAA);
-                c.X -= 3;
-            }
-        }
-
-        if (g_skKeyEvent[K_UP].keyDown)
-        {
-            moved[0] = true;
-        }
-        if (g_skKeyEvent[K_LEFT].keyDown)
-        {
-            moved[1] = true;
-        }
-        if (g_skKeyEvent[K_DOWN].keyDown)
-        {
-            moved[2] = true;
-        }
-        if (g_skKeyEvent[K_RIGHT].keyDown)
-        {
-            moved[3] = true;
-        }
-    }
-    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (g_dElapsedWorkTime > 1))
-        tutorialFlags[0] = true;
-        
-
-    renderCustomer();
     renderBoxes();
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime);
 }
 
 void renderStore()
 {
     map.chooseMap(9, g_Console);
+    COORD c = g_Console.getConsoleSize();
+    c.X /= 2;
+    c.X -= 6;
+    c.Y = 2;
+    std::ostringstream ss;
+    ss.str("");
+    g_Console.writeToBuffer(c, "Store", 0xF0);
+    c.X = 80 / 4 + 7;
+    c.Y += 3;
+    ss << "Savings : $" << p.getSavings();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Speed perks cost $100.", 0xF0);
+    ss.str("");
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Other perks cost $50.", 0xF0);
+    ss.str("");
+    c.Y += 3;
+    ss << "Cheaper Food (Lvl " << p.getPowerups().getFoodlvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Cheaper Rent (Lvl " << p.getPowerups().getRentlvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Player Shoes (Lvl " << p.getPowerups().getShoeslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Slower Customers (Lvl " << p.getPowerups().getSCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Rich Customers (Lvl " << p.getPowerups().getRCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Thrifty Customers (Lvl " << p.getPowerups().getTCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c = g_Console.getConsoleSize();
+    c.X /= 2;
+    c.X -= 5;
+    c.Y = 22;
+    g_Console.writeToBuffer(c, "Home", 0xF0);
 }
 
 void renderBoxes()
