@@ -575,6 +575,10 @@ void actuallyMoving()
         case false:
             break;
         }
+
+        
+
+        
     }
 }
 
@@ -701,7 +705,6 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
-            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
     else if (g_dElapsedWorkTime >= 5) {
         g_bRestocking = false;
@@ -843,6 +846,7 @@ void processInputGameOver()
             cPtr[i]->Recovers();
             cPtr[i]->resetHospState();
         }
+        p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
@@ -859,6 +863,25 @@ void deleteCustomer()
             customerPtr[i] = nullptr;
             travelling[i] = false;
             timer[i] = -1;
+        }
+    }
+}
+
+void deleteBoxes()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPtr[i] != nullptr)
+        {
+            delete boxPtr[i];
+            boxPtr[i] = nullptr;
+            
+        }
+
+        if (boxPosPtr[i] != nullptr)
+        {
+            delete boxPosPtr[i];
+            boxPosPtr[i] = nullptr;
         }
     }
 }
@@ -881,6 +904,7 @@ void processInputHome() //note
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             deleteCustomer();
+            deleteBoxes();
             g_eGameState = S_GAME;
             updateSons();
         }
@@ -1388,19 +1412,19 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "Game Over!", 0xF0);
     c.Y += 6;
     c.X = g_Console.getConsoleSize().X / 3 + 2;
-    for (int i = 0; i < 2; i++) {
-        if (cPtr[i]->getHospState() == true)
-        {
-            g_Console.writeToBuffer(c, "     One of your", 0xF0);
-            c.Y++;
-            g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); i++; //stop double print if both sons sick
-        }
-    }
-    if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    if (cPtr[1]->getHospState() == true || cPtr[0]->getHospState() == true)
     {
-        g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
+        g_Console.writeToBuffer(c, "     One of your", 0xF0);
+        c.Y++;
+        g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); //stop double print if both sons sick
     }
-    if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
+    else if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() >= 10)
+    {
+        g_Console.writeToBuffer(c, "You got too", 0xF0);
+        c.Y++;
+        g_Console.writeToBuffer(c, "many complaints (10)!", 0xF0);
+    }
+    else if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
         g_Console.writeToBuffer(c, "Your landlord was not", 0xF0);
         c.Y += 1;
         g_Console.writeToBuffer(c, "as kind as you thought.", 0xF0);
@@ -1408,12 +1432,42 @@ void renderGameOver()
         g_Console.writeToBuffer(c, "You were evicted", 0xF0);
         c.Y += 1;
         g_Console.writeToBuffer(c, "for not paying rent!", 0xF0);
+        c.Y -= 3;
     }
-    c.Y += 6;
+    c.Y = 20;
     c.X = g_Console.getConsoleSize().X / 3 + 2;
     g_Console.writeToBuffer(c, " Press [ESC] to head", 0xF0);
     c.Y++;
     g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
+}
+
+void checkCustomerPlayerCollision()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+        {
+            if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else
+                {
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                    g_sChar.m_cLocation.Y++;
+                }
+
+            }
+
+        }
+
+    }
 }
 
 void renderTutorialLevel()
@@ -1421,6 +1475,7 @@ void renderTutorialLevel()
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
     map.chooseMap(1, g_Console);
+    checkCustomerPlayerCollision();
     renderCharacter();  // renders the character into the buffer
     renderShelfAmount();
     renderHUD();
@@ -1460,6 +1515,7 @@ void renderTutorialLevel()
 
 void renderBoxes()
 {
+   
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
     for (int i = 0; i < 6; i++)
     {
@@ -1640,11 +1696,29 @@ void renderCustomer() // fix later yes ues
 
                     }
 
+
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
+
+                   /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                    {*/
+                        spawned[i] = false;
+                        delete customerPtr[i];
+                        customerPtr[i] = nullptr;
+
+                        delete boxPtr[i + 1];
+                        boxPtr[i + 1] = nullptr;
+                        delete boxPosPtr[i + 1];
+                        boxPosPtr[i + 1] = nullptr;
+
+                        CustomerBoxColour[i] = 0x77;
+
+                        timer[i] = -1;
+                        travelling[i] = false;
+                    /*}*/
                 }
 
-                if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+               /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
                     spawned[i] = false;
                     delete customerPtr[i];
@@ -1659,7 +1733,7 @@ void renderCustomer() // fix later yes ues
 
                     timer[i] = -1;
                     travelling[i] = false;
-                }
+                }*/
             }
             else
             {
@@ -1683,8 +1757,31 @@ void renderCustomer() // fix later yes ues
     }
 }
 
+
+
 void renderCharacter()
 {
+    //for (int i = 0; i < 6; i++)
+    //{
+    //    if (customerPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+    //    {
+    //        if (g_sChar.m_cLocation.X == customerPtr[i]->getX() && g_sChar.m_cLocation.Y == customerPtr[i]->getY() )
+    //        {
+    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX()) {
+    //                g_sChar.m_cLocation.Y++;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //            }
+    //            else
+    //            {
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //                g_sChar.m_cLocation.Y++;
+    //            }
+    //            
+    //        }
+    //        
+    //    }
+
+    //}
     // Draw the location of the character
     WORD charColor = 0x99;
     if (g_sChar.m_bActive)
