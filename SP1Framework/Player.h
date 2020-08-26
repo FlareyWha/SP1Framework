@@ -9,7 +9,7 @@ class Player :
 private:
 	int strikes;
 	int savings; 
-	Powerup Powerups;
+	Powerup* PowerupsPtr;
 
 	int unsatisfiedCustomers;
 
@@ -24,7 +24,7 @@ public:
 	Player();
 	~Player();
 
-	Powerup getPowerups();
+	Powerup* getPowerups();
 
 	int getStrikes(); // return strikes
 	int getSavings(); // return savings
