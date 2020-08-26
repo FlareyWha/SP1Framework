@@ -46,6 +46,7 @@ enum EGAMESTATES
     S_ENDOFWORKSCREEN,
     S_GAMEOVER,
     S_HOME,
+    S_STORE,
     S_TUT,
     S_GAME,
     S_COUNT
