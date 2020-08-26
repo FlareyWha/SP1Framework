@@ -761,6 +761,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 10) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasecheaperFood();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -768,6 +769,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 12) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasecheaperRent();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -775,6 +777,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 14) {
             if (p.getSavings() >= 100) {
                 p.getPowerups()->purchaseplayerShoes();
+                p.takePay(100);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -782,6 +785,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 16) {
             if (p.getSavings() >= 100) {
                 p.getPowerups()->purchaseslowerCustomers();
+                p.takePay(100);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -789,6 +793,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 18) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchaserichCustomers();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -796,6 +801,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 20) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasethriftyCustomers();
+                p.takePay(50);
             }
         }
     }

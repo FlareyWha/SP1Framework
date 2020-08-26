@@ -60,6 +60,11 @@ void Player::receivePay(int pay) {
 	savings = savings + pay;
 }
 
+void Player::takePay(int pay)
+{
+	savings -= pay;
+}
+
 void Player::payRent() {
 	savings = savings - rent;
 }
