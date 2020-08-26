@@ -8,7 +8,7 @@ Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
 	{
 		tutorialFlags[i] = false;
 		
-		if (i < 6)
+		if (i < 7)
             pressed[i] = false;
 	}
     allTrue = true;
@@ -28,6 +28,8 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagThree(console, g_sChar, g_skKeyEvent);
     else if (tutorialFlags[3] == false)
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
+    else if (tutorialFlags[4] == false)
+        flagFive(console, g_sChar, g_skKeyEvent, boxColour);
 
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (g_dElaspedWorkTime > 1))
         tutorialFlags[0] = true;
@@ -37,6 +39,8 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[2] = true;
     else if (boxColour == 0x50 && pressed[5] == true && tutorialFlags[2] == true && tutorialFlags[3] == false)
         tutorialFlags[3] = true;
+    else if (boxColour == 0x70 && pressed[5] == true && tutorialFlags[3] == true && tutorialFlags[4] == false)
+        tutorialFlags[4] = true;
 
 }
 
@@ -105,8 +109,6 @@ void Tutorial::flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEv
         else
             allTrue = false;
     }
-
-    
 }
 
 void Tutorial::flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT])
@@ -158,6 +160,40 @@ void Tutorial::flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
     if (g_skKeyEvent[K_SPACE].keyDown)
     {
         pressed[5] = true;
+    }
+}
+
+void Tutorial::flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour)
+{
+    COORD c;
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "Now that you are holding", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "some toilet paper, its time", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "to put it on the shelf. Go", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "to the shelf marked with the", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "same colour as the item you are", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "holding to restock it. Press space", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "on the grey area of the shelf", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Restocked shelf { }", 0xF0);
+
+    if (pressed[5] == true && boxColour == 0x70)
+    {
+        c.X += 18;
+        console.writeToBuffer(c, ' ', 0xAA);
+        c.X -= 18;
+    }
+
+    if (g_skKeyEvent[K_SPACE].keyDown)
+    {
+        pressed[6] = true;
     }
 }
 
