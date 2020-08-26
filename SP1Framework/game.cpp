@@ -829,7 +829,7 @@ void deleteCustomer()
     }
 }
 
-void processInputHome()
+void processInputHome() //note
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
@@ -1153,6 +1153,7 @@ void renderMap()
 void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
+    renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
     c.Y /= 25;
     c.X = c.X / 2 - 5;
@@ -1179,6 +1180,7 @@ void renderMainMenu()
 void renderHome() 
 {
     map.chooseMap(6, g_Console);
+    renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
     // Game Mechanic stuff
     c.Y /= 25;
@@ -1195,27 +1197,51 @@ void renderHome()
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
 
+void renderMenuAnimation() //tbd
+{
+    framesPassed++;
+    if (framesPassed % 50 == 0)
+    {
+        for (int pGy = 0; pGy < 25; pGy++)
+        {
+            for (int pGx = 0; pGx < 25; pGx++)
+            {
+                switch (map.getGrid(pGy, pGx))
+                {
+                case '6': map.setGrid(pGy, pGx, '7'); break;
+                case '5': map.setGrid(pGy, pGx, '6'); break;
+                case '4': map.setGrid(pGy, pGx, '5'); break;
+                case '3': map.setGrid(pGy, pGx, '4'); break;
+                case '2': map.setGrid(pGy, pGx, '3'); break;
+                case '1': map.setGrid(pGy, pGx, '2'); break;
+                case '7': map.setGrid(pGy, pGx, '1'); break;
+                }
+            }
+        }
+    }
+}
+
 void renderHomeExpenses(COORD c)
 {
     std::ostringstream ss;
     ss.str("");
-    g_Console.writeToBuffer(c, "Home", 0xF0);
+    //g_Console.writeToBuffer(c, "Home", 0xF0);
     c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 8;
+    c.X = g_Console.getConsoleSize().X / 2.5 + 1;
     ss << "Savings : $" << p.getSavings();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    c.X = g_Console.getConsoleSize().X / 8;
-    g_Console.writeToBuffer(c, "Son 1", 0xF0);
+    c.X = g_Console.getConsoleSize().X / 3 + 1;
+    g_Console.writeToBuffer(c, "!=========Son 1=========!", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Sick", 0xF0);
+        g_Console.writeToBuffer(c, "(Q//A//Q )", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "(O w O 6)", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
@@ -1227,27 +1253,23 @@ void renderHomeExpenses(COORD c)
             c.X -= 17;
         }
     } //Make this hidden according to Son 1 state
-    c.Y += 2;
+    c.Y += 1;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[0]->getStatusFed() == true) {
         c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
         c.X -= 12;
     }
-    c.Y += 3;
-    if (day % 6 == 0 && day != 0) {
-        g_Console.writeToBuffer(c, "Rent ($200) [ ] ", 0xF0);
-    }
-    c.Y += 4;
-    g_Console.writeToBuffer(c, "Son 2", 0xF0);
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "!=========Son 2=========!", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "Sick", 0xF0);
+        g_Console.writeToBuffer(c, "(T//-//T )", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "(^ - ^ 6)", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
@@ -1259,18 +1281,22 @@ void renderHomeExpenses(COORD c)
             c.X -= 17;
         }
     }
-    c.Y += 2;
+    c.Y += 1;
     g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
     if (cPtr[1]->getStatusFed() == true) {
         c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
         c.X -= 12;
     }
+    c.Y += 2;
+    if (day % 6 == 0 && day != 0) {
+        g_Console.writeToBuffer(c, "!====Rent ($200) [ ]====!", 0xF0);
+    }
 }
 
 void renderEndOfWorkScreen()
 {
-    map.chooseMap(0, g_Console);
+    map.chooseMap(7, g_Console);
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
     
@@ -1305,16 +1331,18 @@ void renderEndOfWorkScreen()
 void renderGameOver()
 {
     COORD c = g_Console.getConsoleSize();
-    map.chooseMap(0, g_Console);
+    map.chooseMap(8, g_Console);
     c.Y /= 25;
-    c.X = c.X / 2 - 5;
+    c.X = g_Console.getConsoleSize().X / 3 + 8;
     g_Console.writeToBuffer(c, "Game Over!", 0xF0);
     c.Y += 6;
-    c.X = g_Console.getConsoleSize().X / 2 - 16;
+    c.X = g_Console.getConsoleSize().X / 3 + 2;
     for (int i = 0; i < 2; i++) {
         if (cPtr[i]->getHospState() == true)
         {
-            g_Console.writeToBuffer(c, "One of your sons was hospitalised!", 0xF0);
+            g_Console.writeToBuffer(c, "     One of your", 0xF0);
+            c.Y++;
+            g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); i++; //stop double print if both sons sick
         }
     }
     if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
@@ -1322,8 +1350,10 @@ void renderGameOver()
         g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
     }
     c.Y += 6;
-    c.X = g_Console.getConsoleSize().X / 2 - 20;
-    g_Console.writeToBuffer(c, "Press ESC to head back to the main menu!", 0xF0);
+    c.X = g_Console.getConsoleSize().X / 3 + 2;
+    g_Console.writeToBuffer(c, " Press [ESC] to head", 0xF0);
+    c.Y++;
+    g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
 }
 
 void renderTutorialLevel()
@@ -1715,6 +1745,3 @@ void renderInputEvents()
     }
     
 }
-
-
-
