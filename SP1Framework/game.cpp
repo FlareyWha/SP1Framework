@@ -1236,10 +1236,10 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "(Q//A//Q ) Sick!!", 0xF0);
+        g_Console.writeToBuffer(c, "(Q//A//Q )", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "(O w O 6) Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "(O w O 6)", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
@@ -1264,10 +1264,10 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "(T//-//T ) Sick!!", 0xF0);
+        g_Console.writeToBuffer(c, "(T//-//T )", 0xF0);
     }
     else {
-        g_Console.writeToBuffer(c, "(^ - ^ 6) Healthy", 0xF0);
+        g_Console.writeToBuffer(c, "(^ - ^ 6)", 0xF0);
     }
     c.X -= 8;
     c.Y += 1;
