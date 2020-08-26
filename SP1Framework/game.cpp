@@ -997,7 +997,7 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
-void processInputHome() //note
+void processInputHome() //note lol
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
