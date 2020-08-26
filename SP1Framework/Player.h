@@ -18,6 +18,8 @@ private:
 	bool holdingProduct;
 	bool p_bRentPaid;
 
+	int rent, food, medicine;
+
 public:
 	Player();
 	~Player();
@@ -47,6 +49,11 @@ public:
 	void holdsProduct(); //set holdingProduct = true
 	bool isHoldingProduct(); //get holdingProduct
 	void releaseProduct(); //set holdingProduct = false
+
+	void setRent(int r);
+	void setFood(int f);
+	void setMedicine(int m);
+
 
 };
 
