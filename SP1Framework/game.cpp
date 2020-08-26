@@ -679,7 +679,6 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
-            p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         }
     else if (g_dElapsedWorkTime >= 5) {
         g_bRestocking = false;
@@ -821,6 +820,7 @@ void processInputGameOver()
             cPtr[i]->Recovers();
             cPtr[i]->resetHospState();
         }
+        p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
@@ -1372,9 +1372,11 @@ void renderGameOver()
         c.Y++;
         g_Console.writeToBuffer(c, "sons was hospitalised!", 0xF0); //stop double print if both sons sick
     }
-    else if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() == 10)
+    else if (g_eGameState == S_GAMEOVER && p.getUnsatisfiedCustomers() >= 10)
     {
-        g_Console.writeToBuffer(c, "You got too many complaints (10)!", 0xF0);
+        g_Console.writeToBuffer(c, "You got too", 0xF0);
+        c.Y++;
+        g_Console.writeToBuffer(c, "many complaints (10)!", 0xF0);
     }
     else if (g_eGameState == S_GAMEOVER && p.getRentStatus() == false) {
         g_Console.writeToBuffer(c, "Your landlord was not", 0xF0);
