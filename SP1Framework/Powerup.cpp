@@ -1,6 +1,6 @@
 #include "Powerup.h"
 
-Powerup::Powerup()
+Powerup::Powerup() : cheaperFood(0), cheaperRent(0), playerShoes(0), slowerCustomers(0), richCustomers(0), thriftyCustomers(0)
 {
 }
 
