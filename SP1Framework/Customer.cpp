@@ -17,6 +17,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	pos.setY(9); // ^
 	itemToBuy = 0;
 	passcheck = 0;
+	CustomerDirection = 0;
 }
 
 //Customer::Customer(Map map)
@@ -124,7 +125,7 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 	}
 }
 
-void Customer::moveCustomer(Map& map, int framesPassed, int timer)
+int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 {
 	if (framesPassed % timer == 0) 
 	{
@@ -136,14 +137,20 @@ void Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			if (map.isNegative(endPoint.getY(), pos.getY()) == true)
 			{
 				if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				{
 					pos.setY(pos.getY() - 1);
+					return 1;
+				}
 				else
 					pos.setY(pos.getY());
 			}
 			else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
 			{
 				if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
+				{
 					pos.setY(pos.getY() + 1);
+					return 3;
+				}
 				else
 					pos.setY(pos.getY());
 			}
@@ -153,7 +160,10 @@ void Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			if (map.isNegative(endPoint.getX(), pos.getX()) == true)
 			{
 				if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
+				{
 					pos.setX(pos.getX() - 1);
+					return 2;
+				}
 				else
 					pos.setX(pos.getX());
 			}
@@ -161,7 +171,10 @@ void Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
 			{
 				if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
+				{
 					pos.setX(pos.getX() + 1);
+					return 0;
+				}
 				else
 					pos.setX(pos.getX());
 			}

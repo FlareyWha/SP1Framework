@@ -14,6 +14,7 @@ private:
     bool bSatisfied;
     Position endPoint;
     Position prevPos;
+    int CustomerDirection;
 
 public:
     Customer();
@@ -28,7 +29,7 @@ public:
     int getQuantity();
     int getItemToBuy();
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
-    void moveCustomer(Map& map, int framesPassed, int timer);
+    int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int& avoiding, Map& map);
     Position getEndPoint();

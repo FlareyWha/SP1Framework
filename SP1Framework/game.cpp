@@ -48,6 +48,7 @@ WORD BoxColour;
 Map map;
 int framesPassed;
 
+int customerDirection[6];
 WORD CustomerBoxColour[6];
 
 // Console object
@@ -1403,11 +1404,10 @@ void renderBoxes()
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
     for (int i = 0; i < 6; i++)
     {
-        if (boxPtr[i + 1] != nullptr) {
-            
+        if (boxPtr[i + 1] != nullptr)
+        {
             g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', CustomerBoxColour[i]);
         }
-        
     }
     //for (int i = 0; i < 6; i++) { //maybe useful
     //    switch ('1') {
@@ -1426,10 +1426,10 @@ void renderBoxes()
     //}
 }
 
-void moveCustomer()
-{
-    //todo
-}
+//void moveCustomer()
+//{
+//    //todo
+//}
 
 void renderCustomer() // fix later yes ues
 {   
@@ -1462,7 +1462,7 @@ void renderCustomer() // fix later yes ues
 
                 if (travelling[i] == true)
                 {
-                    customerPtr[i]->moveCustomer(map, framesPassed, 4);
+                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4);
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
@@ -1481,8 +1481,20 @@ void renderCustomer() // fix later yes ues
                 CustomerBoxColour[i] = 0x77;
                 
                 if (boxPosPtr[i + 1] != nullptr) {
-                    boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 1);
-                    boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 1);
+                    switch (customerDirection[i])
+                    {
+                    case 0: boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 1);
+                        boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 0); break;
+                    
+                    case 1: boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 0);
+                        boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) - 1); break;
+
+                    case 2:boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) - 1);
+                        boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 0); break;
+
+                    case 3:boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 0);
+                        boxPosPtr[i + 1]->setY((customerPtr[i]->getY()) + 1); break;
+                    }
                 }
                 
 
