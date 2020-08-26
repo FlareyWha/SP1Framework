@@ -12,13 +12,14 @@ Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
             pressed[i] = false;
 	}
     allTrue = true;
+    proceed = true;
 }
 
 Tutorial::~Tutorial()
 {
 }
 
-void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour)
+void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour, double& tutorialTimer)
 {
     if (tutorialFlags[0] == false)
         flagOne(console);
@@ -30,8 +31,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
     else if (tutorialFlags[4] == false)
         flagFive(console, g_sChar, g_skKeyEvent, boxColour);
+    else if (tutorialFlags[5] == false)
+        flagSix(console, g_mouseEvent, tutorialTimer);
 
-    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (g_dElaspedWorkTime > 1))
+    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
         tutorialFlags[0] = true;
     else if (allTrue == true && tutorialFlags[0] == true && tutorialFlags[1] == false)
         tutorialFlags[1] = true;
@@ -42,7 +45,11 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (boxColour == 0x70 && pressed[5] == true && tutorialFlags[3] == true && tutorialFlags[4] == false)
         tutorialFlags[4] = true;
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[4] == true && tutorialFlags[5] == false)
+    {
         tutorialFlags[5] = true;
+        proceed = false;
+        tutorialTimer = 0;
+    }
 }
 
 void Tutorial::flagOne(Console& console)
@@ -198,9 +205,10 @@ void Tutorial::flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
     }
 }
 
-void Tutorial::flagSix(Console& console)
+void Tutorial::flagSix(Console& console, SMouseEvent& g_mouseEvent, double& tutorialTimer)
 {
     COORD c;
+
     c.Y = 4;
     c.X = 40;
     console.writeToBuffer(c, "Good job! You're one of the best", 0xF0);
@@ -224,13 +232,23 @@ void Tutorial::flagSix(Console& console)
     console.writeToBuffer(c, "coloured box to take it. Space on grey area on", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "shelf to restock the shelf.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Click to proceed.", 0xF0);
 
-    //add something so that it freezes the game until u click so u have 30 seconds to restock.
-    //also think of a way for phase 1 without havign to use g_dElaspedWorkTime.
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && tutorialTimer > 5)
+    {
+        proceed = true;
+    }
 
+    //fix the tutorialTimer and 3rd 
 }
 
 bool Tutorial::getTutorialFlag(int number)
 {
     return tutorialFlags[number];
+}
+
+bool Tutorial::getProceed(void)
+{
+    return proceed;
 }

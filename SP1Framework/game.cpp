@@ -58,6 +58,7 @@ WORD CustomerBoxColour[6];
 
 //tutorial stuff;
 Tutorial tutorial;
+double tutorialTimer;
 
 // Console object
 int g_ConsoleX = 80;
@@ -376,7 +377,10 @@ void update(double dt)
                     timer[i] += dt;
                 }
             }
-            g_dElapsedWorkTime += dt;  updateTutorial();
+            if (tutorial.getTutorialFlag(4) == true)
+                g_dElapsedWorkTime += dt;  
+            tutorialTimer += dt;
+            updateTutorial();
             break;
         }
         case S_GAME: {
@@ -425,11 +429,15 @@ void updateHome() // Home logic
 void updateTutorial() //Tutorial level logic
 {
     g_ePreviousGameState = g_eGameState;
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    moveCharacter();    // moves the character, collision detection, physics, etc
-    actuallyMoving();
-    pickUpBoxes();
-    restockShelf();
+
+    if (tutorial.getProceed() == true)
+    {
+        processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+        moveCharacter();    // moves the character, collision detection, physics, etc
+        actuallyMoving();
+        pickUpBoxes();
+        restockShelf();
+    }
 }
 
 void updateGame()       // game logic
@@ -1585,7 +1593,7 @@ void renderTutorialLevel()
         renderCustomer();
 
     renderBoxes();
-    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour);
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
 }
 
 void renderStore()
