@@ -224,6 +224,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_HOME: gameplayKBHandler(keyboardEvent); // handle home menu keyboard menu
         break;
+    case S_STORE: gameplayKBHandler(keyboardEvent);
+        break;
     case S_TUT: gameplayKBHandler(keyboardEvent);
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
@@ -260,6 +262,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_GAMEOVER: gameplayMouseHandler(mouseEvent);
         break;
     case S_HOME: gameplayMouseHandler(mouseEvent); // handle mouse input for home menu
+        break;
+    case S_STORE: gameplayMouseHandler(mouseEvent);
         break;
     case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
