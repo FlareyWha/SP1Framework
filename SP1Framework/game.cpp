@@ -365,6 +365,8 @@ void update(double dt)
             break;
         case S_HOME: updateHome();
             break;
+        case S_STORE: updateStore();
+            break;
         case S_TUT: {
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
@@ -442,6 +444,7 @@ void updateGame()       // game logic
 
 void updateStore()
 {
+    processUserInput();
 }
 
 void moveCharacter()//to check if the player is pressing a key
@@ -1042,9 +1045,12 @@ void processUserInput()
     case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
         break;
     case S_GAMEOVER: processInputGameOver();
+        break;
     case S_HOME: processInputHome();
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
             g_eGameState = S_MENU; 
+        break;
+    case S_STORE: processStoreinput();
         break;
     case S_TUT:
         if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
@@ -1601,6 +1607,53 @@ void renderTutorialLevel()
 void renderStore()
 {
     map.chooseMap(9, g_Console);
+    COORD c = g_Console.getConsoleSize();
+    c.X /= 2;
+    c.X -= 6;
+    c.Y = 2;
+    std::ostringstream ss;
+    ss.str("");
+    g_Console.writeToBuffer(c, "Store", 0xF0);
+    c.X = 80 / 4 + 7;
+    c.Y += 3;
+    ss << "Savings : $" << p.getSavings();
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Speed perks cost $100.", 0xF0);
+    ss.str("");
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Other perks cost $50.", 0xF0);
+    ss.str("");
+    c.Y += 3;
+    ss << "Cheaper Food (Lvl " << p.getPowerups().getFoodlvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Cheaper Rent (Lvl " << p.getPowerups().getRentlvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Player Shoes (Lvl " << p.getPowerups().getShoeslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Slower Customers (Lvl " << p.getPowerups().getSCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Rich Customers (Lvl " << p.getPowerups().getRCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    ss << "Thrifty Customers (Lvl " << p.getPowerups().getTCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c = g_Console.getConsoleSize();
+    c.X /= 2;
+    c.X -= 5;
+    c.Y = 22;
+    g_Console.writeToBuffer(c, "Home", 0xF0);
 }
 
 void renderBoxes()
