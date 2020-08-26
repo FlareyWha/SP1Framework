@@ -20,22 +20,22 @@ int Powerup::getRentlvl()
 
 int Powerup::getShoeslvl()
 {
-	return getShoeslvl();
+	return playerShoes;
 }
 
 int Powerup::getSCustomerslvl()
 {
-	return getSCustomerslvl;
+	return slowerCustomers;
 }
 
 int Powerup::getRCustomerslvl()
 {
-	return getRCustomerslvl();
+	return richCustomers;
 }
 
 int Powerup::getTCustomerslvl()
 {
-	return getTCustomerslvl();
+	return thriftyCustomers;
 }
 
 void Powerup::purchasecheaperFood()
