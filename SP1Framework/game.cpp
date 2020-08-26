@@ -463,6 +463,36 @@ void moveCharacter()//to check if the player is pressing a key
     } 
 }
 
+void checkCustomerPlayerCollision()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+        {
+            if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else
+                {
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                    g_sChar.m_cLocation.Y++;
+                }
+
+            }
+
+        }
+
+    }
+}
+
+
 void actuallyMoving()
 {
     if (framesPassed % 3 == 0) {
@@ -679,10 +709,45 @@ void updateSons()
     }
 }
 
+void deleteCustomer()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr)
+        {
+            delete customerPtr[i];
+            customerPtr[i] = nullptr;
+            travelling[i] = false;
+            timer[i] = -1;
+        }
+    }
+}
+
+void deleteBoxes()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPtr[i] != nullptr)
+        {
+            delete boxPtr[i];
+            boxPtr[i] = nullptr;
+
+        }
+
+        if (boxPosPtr[i] != nullptr)
+        {
+            delete boxPosPtr[i];
+            boxPosPtr[i] = nullptr;
+        }
+    }
+}
+
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
     if (p.getUnsatisfiedCustomers() == 10) {
             g_eGameState = S_GAMEOVER;
+            deleteCustomer();
+            deleteBoxes();
         }
     else if (g_dElapsedWorkTime >= 5) {
         g_bRestocking = false;
@@ -831,38 +896,9 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
-void deleteCustomer()
-{
-    for (int i = 0; i < 6; i++)
-    {
-        if (customerPtr[i] != nullptr)
-        {
-            delete customerPtr[i];
-            customerPtr[i] = nullptr;
-            travelling[i] = false;
-            timer[i] = -1;
-        }
-    }
-}
 
-void deleteBoxes()
-{
-    for (int i = 1; i < 7; i++)
-    {
-        if (boxPtr[i] != nullptr)
-        {
-            delete boxPtr[i];
-            boxPtr[i] = nullptr;
-            
-        }
 
-        if (boxPosPtr[i] != nullptr)
-        {
-            delete boxPosPtr[i];
-            boxPosPtr[i] = nullptr;
-        }
-    }
-}
+
 
 void processInputHome() //note
 {
@@ -1057,6 +1093,7 @@ void renderGame()
         level = 5;
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
+    checkCustomerPlayerCollision();
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -1419,34 +1456,6 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
 }
 
-void checkCustomerPlayerCollision()
-{
-    for (int i = 1; i < 7; i++)
-    {
-        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-        {
-            if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-            {
-                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-                    g_sChar.m_cLocation.Y++;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-                }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-                    g_sChar.m_cLocation.Y--;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-                }
-                else
-                {
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-                    g_sChar.m_cLocation.Y++;
-                }
-
-            }
-
-        }
-
-    }
-}
 
 void renderTutorialLevel()
 {
