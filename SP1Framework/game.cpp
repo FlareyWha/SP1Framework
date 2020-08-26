@@ -355,6 +355,7 @@ void update(double dt)
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
+            p.receivePay(1000);
             break;
         case S_MENU: updateMenu();
             break;
@@ -531,7 +532,7 @@ void actuallyMoving()
     }
     else 
     { 
-        playerSpeed = 5 - (p.getPowerups().getShoeslvl());
+        playerSpeed = 5 - (p.getPowerups()->getShoeslvl());
     }
     if ( framesPassed % playerSpeed == 0) {
         //PLAYER / BOX COLLISION WITH ENVIRONMENT IS SOLVED HERE
@@ -757,6 +758,55 @@ void updateSons()
 
 void processStoreinput()
 {
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+        if (g_mouseEvent.mousePosition.X >= 35
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 22) {
+            g_eGameState = S_HOME;
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 10) {
+            if (p.getSavings() >= 50) {
+                p.getPowerups()->purchasecheaperFood();
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 12) {
+            if (p.getSavings() >= 50) {
+                p.getPowerups()->purchasecheaperRent();
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 14) {
+            if (p.getSavings() >= 100) {
+                p.getPowerups()->purchaseplayerShoes();
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 42
+            && g_mouseEvent.mousePosition.Y == 16) {
+            if (p.getSavings() >= 100) {
+                p.getPowerups()->purchaseslowerCustomers();
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 40
+            && g_mouseEvent.mousePosition.Y == 18) {
+            if (p.getSavings() >= 50) {
+                p.getPowerups()->purchaserichCustomers();
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 43
+            && g_mouseEvent.mousePosition.Y == 20) {
+            if (p.getSavings() >= 50) {
+                p.getPowerups()->purchasethriftyCustomers();
+            }
+        }
+    }
 }
 
 void deleteCustomer()
@@ -1554,27 +1604,27 @@ void renderStore()
     g_Console.writeToBuffer(c, "Other perks cost $50.", 0xF0);
     ss.str("");
     c.Y += 3;
-    ss << "Cheaper Food (Lvl " << p.getPowerups().getFoodlvl() << ")";
+    ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Cheaper Rent (Lvl " << p.getPowerups().getRentlvl() << ")";
+    ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Player Shoes (Lvl " << p.getPowerups().getShoeslvl() << ")";
+    ss << "Player Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Slower Customers (Lvl " << p.getPowerups().getSCustomerslvl() << ")";
+    ss << "Slower Customers (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Rich Customers (Lvl " << p.getPowerups().getRCustomerslvl() << ")";
+    ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Thrifty Customers (Lvl " << p.getPowerups().getTCustomerslvl() << ")";
+    ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c = g_Console.getConsoleSize();
@@ -1648,7 +1698,7 @@ void renderCustomer() // fix later yes ues
 
                 if (travelling[i] == true)
                 {
-                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups().getSCustomerslvl()));
+                    customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups()->getSCustomerslvl()));
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
