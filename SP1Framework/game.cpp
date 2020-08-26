@@ -841,6 +841,25 @@ void deleteCustomer()
     }
 }
 
+void deleteBoxes()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPtr[i] != nullptr)
+        {
+            delete boxPtr[i];
+            boxPtr[i] = nullptr;
+            
+        }
+
+        if (boxPosPtr[i] != nullptr)
+        {
+            delete boxPosPtr[i];
+            boxPosPtr[i] = nullptr;
+        }
+    }
+}
+
 void processInputHome() //note
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -859,6 +878,7 @@ void processInputHome() //note
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             deleteCustomer();
+            deleteBoxes();
             g_eGameState = S_GAME;
             updateSons();
         }
