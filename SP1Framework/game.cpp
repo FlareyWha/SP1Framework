@@ -1466,14 +1466,11 @@ void renderCustomer() // fix later yes ues
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
-                else
-                {
-                    if (avoiding[i] == 4 || avoiding[i] == 8)
-                        avoiding[i] = 0;
-                    else if (avoiding[i] > 0)
-                        avoiding[i]++;
-                }
+                else if (avoiding[i] == 4 || avoiding[i] == 8)
+                   avoiding[i] = 0;
 
+                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                    
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
                 
                 if (boxPtr[i + 1] == nullptr) {
