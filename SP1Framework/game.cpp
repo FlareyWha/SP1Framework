@@ -4,6 +4,7 @@
 #include "game.h"
 #include "Map.h"
 #include "Framework\console.h"
+#include <string>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -26,7 +27,6 @@ int level, day;
 bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
-bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
 bool g_bRestocking;
 
 double timer[6];
@@ -53,6 +53,11 @@ int frameMarker;
 
 int customerDirection[6];
 WORD CustomerBoxColour[6];
+
+//tutorial stuff;
+bool tutorialFlags[10] = { false, false, false, false, false, false, false, false, false, false };
+std::string movementKeys[4] = { "W { }", "A { }", "S { }", "D { }" };
+bool moved[4] = { false, false, false, false };
 
 // Console object
 int g_ConsoleX = 80;
@@ -1507,16 +1512,28 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
     
-    /*
+    
     if (tutorialFlags[0] == false)
     {
         ss.str("");
-        ss << "Welcome to Jackville Supermarket! As it is your first day on the job,";
+        ss << "Welcome to Jackville Supermarket! ";
         c.Y = 4;
-        c.X = 60;
+        c.X = 40;
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
         ss.str("");
-        ss << "I will tell you what you have to do. Click the screen to continue.";
+        ss << "As it is your first day on the job,";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "I, the manager, will tell you what";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "you have to do. Click the screen";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "to continue.";
         c.Y += 1;
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
     }
@@ -1525,16 +1542,56 @@ void renderTutorialLevel()
         ss.str("");
         ss << "Use your WASD keys to move up,";
         c.Y = 4;
-        c.X = 41;
+        c.X = 40;
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
         ss.str("");
         ss << "left, down and right respectively";
         c.Y += 1;
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "Press each key once to proceed.";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        ss << "left, down and right respectively";
+        c.Y += 1;
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+
+        for (int i = 0; i < 4; i++)
+        {
+            ss.str("");
+            ss << movementKeys[i];
+            c.Y += 1;
+            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+
+            if (moved[i] == true)
+            {
+                c.X += 3;
+                g_Console.writeToBuffer(c, ' ', 0xAA);
+                c.X -= 3;
+            }
+        }
+
+        if (g_skKeyEvent[K_UP].keyDown)
+        {
+            moved[0] = true;
+        }
+        if (g_skKeyEvent[K_LEFT].keyDown)
+        {
+            moved[1] = true;
+        }
+        if (g_skKeyEvent[K_DOWN].keyDown)
+        {
+            moved[2] = true;
+        }
+        if (g_skKeyEvent[K_RIGHT].keyDown)
+        {
+            moved[3] = true;
+        }
     }
-    if ((g_mouseEvent.buttonState == DOUBLE_CLICK) && (tutorialFlags[0] == false) && (g_eGameState == S_TUT))
+    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (g_dElapsedWorkTime > 1))
         tutorialFlags[0] = true;
-        */
+        
 
     renderCustomer();
     renderBoxes();
