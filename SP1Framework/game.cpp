@@ -1575,11 +1575,11 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
 
-    if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
+    //if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
         renderCustomer();
 
     renderBoxes();
-    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p);
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour);
 }
 
 void renderStore()
