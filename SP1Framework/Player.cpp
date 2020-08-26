@@ -3,6 +3,8 @@
 Player::Player() : strikes{ 0 }, savings{ 0 }, dayEarnings{ 0 }, unsatisfiedCustomers{ 0 }, p_bRentPaid(false), rent{ 200 }, medicine{ 100 }, food{ 20 }, PowerupsPtr{ new Powerup }
 {
 	holdingProduct = false;
+	pos.setX(18);
+	pos.setY(1);
 }
 
 Player::~Player() {

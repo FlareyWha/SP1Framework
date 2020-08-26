@@ -1,6 +1,7 @@
 #pragma once
 #include "Framework/console.h"
 #include "game.h"
+#include "Player.h"
 class Tutorial
 {
 private:
@@ -11,11 +12,11 @@ private:
 public:
 	Tutorial();
 	~Tutorial();
-	void tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime);
+	void tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p);
 	void flagOne(Console& console);
 	void flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
 	void flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
-	void flagFour(Console& console);
+	void flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
 
 	bool getTutorialFlag(int number);
 };
