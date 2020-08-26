@@ -14,6 +14,7 @@ private:
 	int dayEarnings;
 
 	bool holdingProduct;
+	bool p_bRentPaid;
 
 public:
 	Player();
@@ -36,6 +37,8 @@ public:
 	void payRent(); // rent cost = 200 
 	void payFood(); // food cost = 30
 	void payMedicine(); // medicine cost = 100
+	void isRentPaid();
+	bool getRentStatus();
 
 	void holdsProduct(); //set holdingProduct = true
 	bool isHoldingProduct(); //get holdingProduct
