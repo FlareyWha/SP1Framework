@@ -918,24 +918,20 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
-
-
-
-
 void processInputHome() //note
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
         COORD c = g_Console.getConsoleSize();
-        if ((g_mouseEvent.mousePosition.X >= c.X - 20
-            && g_mouseEvent.mousePosition.X <= c.X - 17)
-            && g_mouseEvent.mousePosition.Y == 9) //Change to main menu state once mouse clicks on the button
+        if ((g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 30)
+            && g_mouseEvent.mousePosition.Y == 22) //Change to main menu state once mouse clicks on the button
         {
             g_eGameState = S_MENU;
         }
-        if ((g_mouseEvent.mousePosition.X >= c.X - 20
-            && g_mouseEvent.mousePosition.X <= c.X - 13)
-            && g_mouseEvent.mousePosition.Y == c.Y / 5 + 3) //Change to main game state once mouse clicks on the button
+        if ((g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 34)
+            && g_mouseEvent.mousePosition.Y == 21) //Change to main game state once mouse clicks on the button
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
@@ -1295,8 +1291,8 @@ void renderHome()
     renderHomeExpenses(c);
     // Menu stuff
     c = g_Console.getConsoleSize();
-    c.Y /= 5;
-    c.X = c.X - 20;
+    c.Y = 18;
+    c.X = 27;
     g_Console.writeToBuffer(c, "Options", 0xF0);
     c.Y += 3;
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
