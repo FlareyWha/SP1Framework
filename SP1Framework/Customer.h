@@ -30,7 +30,7 @@ public:
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
     void moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
-    void bumpIntoCustomer(int avoiding, Map& map);
+    void bumpIntoCustomer(int& avoiding, Map& map);
     Position getEndPoint();
     void setEndPoint(int x, int y);
     int getX();

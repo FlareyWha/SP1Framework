@@ -1463,13 +1463,13 @@ void renderCustomer() // fix later yes ues
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
-                else
+                else if (avoiding[i] == 4 || avoiding[i] == 8)
                 {
-                    if (avoiding[i] == 4 || avoiding[i] == 8)
-                        avoiding[i] = 0;
-                    else if (avoiding[i] > 0)
-                        avoiding[i]++;
+                    avoiding[i] = 0;
+                    travelling[i] = true;
                 }
+
+                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
                 
@@ -1524,9 +1524,7 @@ void renderCustomer() // fix later yes ues
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
-
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
 
                                 }
 
@@ -1540,7 +1538,6 @@ void renderCustomer() // fix later yes ues
                         }
 
                     }
-
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
                 }
