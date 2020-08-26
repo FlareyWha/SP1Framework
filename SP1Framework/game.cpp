@@ -982,7 +982,7 @@ void processInputGameOver()
             cPtr[i]->resetHospState();
         }
         p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
-        p.getPowerups().resetall();
+        p.getPowerups()->resetall();
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;

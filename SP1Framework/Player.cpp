@@ -29,7 +29,7 @@ int Player::getTotalEarned()
 
 void Player::AddDayEarnings(int i)
 {
-	dayEarnings = (i * (5 + 2 * (getPowerups().getRCustomerslvl()))) + dayEarnings;
+	dayEarnings = (i * (5 + 2 * (getPowerups()->getRCustomerslvl()))) + dayEarnings;
 }
 
 void Player::resetDayEarnings()
