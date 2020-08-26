@@ -60,6 +60,9 @@
     <ClCompile Include="Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Powerup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Framework\console.h">
@@ -98,6 +101,9 @@
     <ClInclude Include="Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Powerup.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Tutorial level.txt">
@@ -125,6 +131,9 @@
       <Filter>Resource Files</Filter>
     </Text>
     <Text Include="GameOver.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="Store.txt">
       <Filter>Resource Files</Filter>
     </Text>
   </ItemGroup>

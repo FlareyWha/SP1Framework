@@ -46,6 +46,7 @@ enum EGAMESTATES
     S_ENDOFWORKSCREEN,
     S_GAMEOVER,
     S_HOME,
+    S_STORE,
     S_TUT,
     S_GAME,
     S_COUNT
@@ -100,6 +101,7 @@ void updateGameOver(); // Game Over logic
 void updateHome();            // Home logic
 void updateTutorial();        // Tutorial logic
 void updateGame();          // Game logic
+void updateStore();
 
 void moveCharacter(); // moves the character, collision detection, physics, etc
 void actuallyMoving();
@@ -109,6 +111,7 @@ void restockShelf();
 void updateCustomer();
 
 void updateSons(); // update son status and run logic
+void processStoreinput();
 
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
@@ -125,6 +128,7 @@ void renderHomeExpenses(COORD c); // renders info about sons and stuff
 void renderEndOfWorkScreen();
 void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
+void renderStore();
 
 void renderBoxes();
 void renderCustomer();
