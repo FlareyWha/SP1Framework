@@ -430,6 +430,10 @@ void updateGame()       // game logic
     restockShelf();
 }
 
+void updateStore()
+{
+}
+
 void moveCharacter()//to check if the player is pressing a key
 {
     if (g_skKeyEvent[K_UP].keyDown)
@@ -729,6 +733,10 @@ void updateSons()
             cPtr[i]->isTreated();
         }
     }
+}
+
+void processStoreinput()
+{
 }
 
 void deleteCustomer()
