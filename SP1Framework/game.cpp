@@ -553,6 +553,10 @@ void actuallyMoving()
         case false:
             break;
         }
+
+        
+
+        
     }
 }
 
@@ -1415,11 +1419,41 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
 }
 
+void checkCustomerPlayerCollision()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+        {
+            if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else
+                {
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                    g_sChar.m_cLocation.Y++;
+                }
+
+            }
+
+        }
+
+    }
+}
+
 void renderTutorialLevel()
 {
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
     map.chooseMap(1, g_Console);
+    checkCustomerPlayerCollision();
     renderCharacter();  // renders the character into the buffer
     renderBoxes();
     renderShelfAmount();
@@ -1459,6 +1493,7 @@ void renderTutorialLevel()
 
 void renderBoxes()
 {
+   
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
     for (int i = 0; i < 6; i++)
     {
@@ -1701,8 +1736,31 @@ void renderCustomer() // fix later yes ues
     }
 }
 
+
+
 void renderCharacter()
 {
+    //for (int i = 0; i < 6; i++)
+    //{
+    //    if (customerPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+    //    {
+    //        if (g_sChar.m_cLocation.X == customerPtr[i]->getX() && g_sChar.m_cLocation.Y == customerPtr[i]->getY() )
+    //        {
+    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX()) {
+    //                g_sChar.m_cLocation.Y++;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //            }
+    //            else
+    //            {
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //                g_sChar.m_cLocation.Y++;
+    //            }
+    //            
+    //        }
+    //        
+    //    }
+
+    //}
     // Draw the location of the character
     WORD charColor = 0x99;
     if (g_sChar.m_bActive)
