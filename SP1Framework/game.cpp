@@ -42,11 +42,13 @@ Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
 
-Box* boxPtr[7];
-Position* boxPosPtr[7];
+Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
+Position* boxPosPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
 WORD BoxColour;
 Map map;
 int framesPassed;
+
+WORD CustomerBoxColour[6];
 
 // Console object
 int g_ConsoleX = 80;
@@ -1439,7 +1441,8 @@ void renderBoxes()
     for (int i = 0; i < 6; i++)
     {
         if (boxPtr[i + 1] != nullptr) {
-            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', BoxColour);
+            
+            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', CustomerBoxColour[i]);
         }
         
     }
@@ -1500,20 +1503,19 @@ void renderCustomer() // fix later yes ues
                     customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
                     
-                else
-                {
-                    if (avoiding[i] == 4 || avoiding[i] == 8)
-                        avoiding[i] = 0;
-                    else if (avoiding[i] > 0)
-                        avoiding[i]++;
-                }
+                else if (avoiding[i] == 4 || avoiding[i] == 8)
+                   avoiding[i] = 0;
 
+                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                    
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
                     boxPosPtr[i + 1] = new Position;
                 }
+
+                CustomerBoxColour[i] = 0x77;
                 
                 if (boxPosPtr[i + 1] != nullptr) {
                     boxPosPtr[i + 1]->setX((customerPtr[i]->getX()) + 1);
@@ -1524,7 +1526,7 @@ void renderCustomer() // fix later yes ues
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
-                    //only did first 2 shelves and its kinda inefficient
+                    
 
                     for (int j = 0; j < 3; j++) {
 
@@ -1538,7 +1540,18 @@ void renderCustomer() // fix later yes ues
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
-
+                                    switch (j) 
+                                    {
+                                        case 0:
+                                            CustomerBoxColour[i] = 0x50;
+                                            break;
+                                        case 1:
+                                            CustomerBoxColour[i] = 0x10;
+                                            break;
+                                        case 3:
+                                            CustomerBoxColour[i] = 0xB0;
+                                            break;
+                                    }
                                 }
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
@@ -1563,6 +1576,19 @@ void renderCustomer() // fix later yes ues
 
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
+                                    switch (j)
+                                    {
+                                    case 3:
+                                        CustomerBoxColour[i] = 0xE0;
+                                        break;
+                                    case 4:
+                                        CustomerBoxColour[i] = 0xA0;
+                                        break;
+                                    case 5:
+                                        CustomerBoxColour[i] = 0x90;
+                                        break;
+                                    }
 
 
                                 }
@@ -1593,6 +1619,7 @@ void renderCustomer() // fix later yes ues
                     delete boxPosPtr[i + 1];
                     boxPosPtr[i + 1] = nullptr;
 
+                    CustomerBoxColour[i] = 0x77;
 
                     timer[i] = -1;
                     travelling[i] = false;
