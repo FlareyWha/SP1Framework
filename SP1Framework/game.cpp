@@ -224,6 +224,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_HOME: gameplayKBHandler(keyboardEvent); // handle home menu keyboard menu
         break;
+    case S_STORE: gameplayKBHandler(keyboardEvent);
+        break;
     case S_TUT: gameplayKBHandler(keyboardEvent);
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
@@ -260,6 +262,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_GAMEOVER: gameplayMouseHandler(mouseEvent);
         break;
     case S_HOME: gameplayMouseHandler(mouseEvent); // handle mouse input for home menu
+        break;
+    case S_STORE: gameplayMouseHandler(mouseEvent);
         break;
     case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
@@ -937,9 +941,9 @@ void processInputHome() //note
         {
             g_eGameState = S_MENU;
         }
-        if ((g_mouseEvent.mousePosition.X >= 27
+        else if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 34)
-            && g_mouseEvent.mousePosition.Y == 21) //Change to main game state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 20) //Change to main game state once mouse clicks on the button
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
@@ -947,6 +951,12 @@ void processInputHome() //note
             deleteBoxes();
             g_eGameState = S_GAME;
             updateSons();
+        }
+        else if ((g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 31)
+            && g_mouseEvent.mousePosition.Y == 21) //Change to store state once mouse clicks on the button
+        {
+            g_eGameState = S_STORE;
         }
 
         // Expenses toggling
@@ -962,7 +972,7 @@ void processInputHome() //note
                 p.receivePay(30);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 39)
+        else if ((g_mouseEvent.mousePosition.X == 39)
             && g_mouseEvent.mousePosition.Y == 12) //Toggle recognition of son 1 being fed
         {
             if (p.getSavings() >= 30 && cPtr[1]->getStatusFed() == false) {
@@ -974,7 +984,7 @@ void processInputHome() //note
                 p.receivePay(30);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 44)
+        else if ((g_mouseEvent.mousePosition.X == 44)
             && g_mouseEvent.mousePosition.Y == 6
             && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
         {
@@ -987,7 +997,7 @@ void processInputHome() //note
                 p.receivePay(100);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 44)
+        else if ((g_mouseEvent.mousePosition.X == 44)
             && g_mouseEvent.mousePosition.Y == 11
             && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
         {
@@ -1000,7 +1010,7 @@ void processInputHome() //note
                 p.receivePay(100);
             }
         }
-        if ((g_mouseEvent.mousePosition.X == 45)
+        else if ((g_mouseEvent.mousePosition.X == 45)
             && g_mouseEvent.mousePosition.Y == 14
             && day % 6 == 0 && day != 0) {
             if (p.getSavings() >= 200 && p.getRentStatus() == false) {
@@ -1066,6 +1076,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_GAMEOVER: renderGameOver();
         break;
     case S_HOME: renderHome();
+        break;
+    case S_STORE: renderStore();
         break;
     case S_TUT: renderTutorialLevel();
         break;
@@ -1302,8 +1314,10 @@ void renderHome()
     c.Y = 18;
     c.X = 27;
     g_Console.writeToBuffer(c, "Options", 0xF0);
-    c.Y += 3;
+    c.Y += 2;
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Store", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
@@ -1524,6 +1538,11 @@ void renderTutorialLevel()
 
     renderCustomer();
     renderBoxes();
+}
+
+void renderStore()
+{
+    map.chooseMap(9, g_Console);
 }
 
 void renderBoxes()

@@ -128,6 +128,7 @@ void renderHomeExpenses(COORD c); // renders info about sons and stuff
 void renderEndOfWorkScreen();
 void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
+void renderStore();
 
 void renderBoxes();
 void renderCustomer();
