@@ -39,6 +39,7 @@ public:
 
 	void receiveStrike(); //set strikes, strikes++
 	void receivePay(int pay); //set savings, increase savings
+	void takePay(int pay);
 
 	void payRent(); // rent cost = 200 
 	void payFood(); // food cost = 30

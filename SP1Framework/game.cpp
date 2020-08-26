@@ -769,6 +769,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 10) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasecheaperFood();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -776,6 +777,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 12) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasecheaperRent();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -783,6 +785,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 14) {
             if (p.getSavings() >= 100) {
                 p.getPowerups()->purchaseplayerShoes();
+                p.takePay(100);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -790,6 +793,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 16) {
             if (p.getSavings() >= 100) {
                 p.getPowerups()->purchaseslowerCustomers();
+                p.takePay(100);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -797,6 +801,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 18) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchaserichCustomers();
+                p.takePay(50);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
@@ -804,6 +809,7 @@ void processStoreinput()
             && g_mouseEvent.mousePosition.Y == 20) {
             if (p.getSavings() >= 50) {
                 p.getPowerups()->purchasethriftyCustomers();
+                p.takePay(50);
             }
         }
     }
@@ -997,7 +1003,7 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
-void processInputHome() //note
+void processInputHome() //note lol
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
@@ -1593,30 +1599,30 @@ void renderStore()
     ss.str("");
     g_Console.writeToBuffer(c, "Store", 0xF0);
     c.X = 80 / 4 + 7;
-    c.Y += 3;
+    c.Y += 2;
     ss << "Savings : $" << p.getSavings();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
-    c.Y += 1;
-    g_Console.writeToBuffer(c, "Speed perks cost $100.", 0xF0);
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "[$100]", 0xF0);
     ss.str("");
-    c.Y += 1;
-    g_Console.writeToBuffer(c, "Other perks cost $50.", 0xF0);
+    c.Y += 2;
+    ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
-    c.Y += 3;
+    c.Y += 2;
+    ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "[$50]", 0xF0);
+    ss.str("");
+    c.Y += 2;
     ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
     ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
-    c.Y += 2;
-    ss << "Player Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
-    c.Y += 2;
-    ss << "Slower Customers (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;

@@ -109,9 +109,21 @@ void pickUpBoxes();
 
 void restockShelf();
 void updateCustomer();
+void checkCustomerPlayerCollision();
+void checkEnd();
+void deleteBoxes();
+void deleteCustomer();
 
 void updateSons(); // update son status and run logic
 void processStoreinput();
+void processDebugState();
+void processInputEndOfWorkScreen();
+void processInputGameOver();
+void processInputHome();
+void processInputMenu();
+void processInputSplash();
+void processStoreinput();
+
 
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
 void clearScreen();         // clears the current screen and draw from scratch 
