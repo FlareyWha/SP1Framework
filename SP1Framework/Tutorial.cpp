@@ -41,7 +41,8 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[3] = true;
     else if (boxColour == 0x70 && pressed[5] == true && tutorialFlags[3] == true && tutorialFlags[4] == false)
         tutorialFlags[4] = true;
-
+    else if (g_dElaspedWorkTime >= 30 && tutorialFlags[4] == true && tutorialFlags[5] == false)
+        tutorialFlags[5] = true;
 }
 
 void Tutorial::flagOne(Console& console)
@@ -195,6 +196,38 @@ void Tutorial::flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
     {
         pressed[6] = true;
     }
+}
+
+void Tutorial::flagSix(Console& console)
+{
+    COORD c;
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "Good job! You're one of the best", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "workers we have seen to date! Now,", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "the customers will start coming soon.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Use the 30 seconds left before the", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "supermarket opens to restock the shelves", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "to the best of your ability. A recap of", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "the controls are here for you to look at.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Move: W (up), A (left), S (down), D (right)", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Shift to walk, Space when grey box is touching", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "coloured box to take it. Space on grey area on", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "shelf to restock the shelf.", 0xF0);
+
+    //add something so that it freezes the game until u click so u have 30 seconds to restock.
+    //also think of a way for phase 1 without havign to use g_dElaspedWorkTime.
+
 }
 
 bool Tutorial::getTutorialFlag(int number)

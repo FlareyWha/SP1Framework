@@ -19,6 +19,7 @@ public:
 	void flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
 	void flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
 	void flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
+	void flagSix(Console& console);
 
 	bool getTutorialFlag(int number);
 };
