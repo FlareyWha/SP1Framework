@@ -13,6 +13,8 @@ public:
 	Powerup();
 	~Powerup();
 
+	void resetall(); //reset levels
+
 	int getFoodlvl(); //get current level of food
 	int getRentlvl(); //get current level of rent
 	int getShoeslvl(); //get current level of shoes

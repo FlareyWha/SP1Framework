@@ -8,6 +8,16 @@ Powerup::~Powerup()
 {
 }
 
+void Powerup::resetall()
+{
+	cheaperFood = 0;
+	cheaperRent = 0;
+	playerShoes = 0;
+	slowerCustomers = 0;
+	richCustomers = 0;
+	thriftyCustomers = 0;
+}
+
 int Powerup::getFoodlvl()
 {
 	return cheaperFood;
@@ -54,20 +64,28 @@ void Powerup::purchasecheaperRent()
 
 void Powerup::purchaseplayerShoes()
 {
-
+	if (playerShoes < 3) {
+		playerShoes++;
+	}
 }
 
 void Powerup::purchaseslowerCustomers()
 {
-	
+	if (slowerCustomers < 3) {
+		slowerCustomers++;
+	}
 }
 
 void Powerup::purchaserichCustomers()
 {
-	
+	if (richCustomers < 3) {
+		richCustomers++;
+	}
 }
 
 void Powerup::purchasethriftyCustomers()
 {
-	
+	if (thriftyCustomers < 3) {
+		thriftyCustomers++;
+	}
 }
