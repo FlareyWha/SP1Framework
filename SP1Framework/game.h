@@ -32,6 +32,7 @@ enum EKEYS
     K_RIGHT,
     K_ESCAPE,
     K_SPACE, //to pick up boxes
+    K_SHIFT,
     K_F3,
     K_F4,
     K_COUNT,
