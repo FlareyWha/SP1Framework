@@ -64,14 +64,14 @@ void Powerup::purchasecheaperRent()
 
 void Powerup::purchaseplayerShoes()
 {
-	if (playerShoes < 3) {
+	if (playerShoes < 2) {
 		playerShoes++;
 	}
 }
 
 void Powerup::purchaseslowerCustomers()
 {
-	if (slowerCustomers < 3) {
+	if (slowerCustomers < 2) {
 		slowerCustomers++;
 	}
 }

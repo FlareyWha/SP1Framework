@@ -13,7 +13,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	/*quantity = rand() % 2 + 1;*/
 	Player p;
 	int i = rand() % 100 + 1;
-	if (i <= (50 + 7 * (p.getPowerups().getTCustomerslvl())))
+	if (i <= (50 + 7 * (p.getPowerups()->getTCustomerslvl())))
 	{
 		quantity = 1;
 	}

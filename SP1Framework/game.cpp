@@ -551,12 +551,14 @@ void actuallyMoving()
             if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, -1, 0, map) == '0')
             {
                 g_sChar.m_cLocation.Y--;
+                p.setPos(p.getPos().getX(), p.getPos().getY() - 1);
             }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
             if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
             {
                 g_sChar.m_cLocation.Y++;
+                p.setPos(p.getPos().getX(), p.getPos().getY() + 1);
                 boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
             }
             break;
@@ -572,12 +574,14 @@ void actuallyMoving()
             if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, +1, 0, map) == '0')
             {
                 g_sChar.m_cLocation.Y++;
+                p.setPos(p.getPos().getX(), p.getPos().getY() + 1);
             }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
             if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
             {
                 g_sChar.m_cLocation.Y--;
+                p.setPos(p.getPos().getX(), p.getPos().getY() - 1);
                 boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
             }
             break;
@@ -591,12 +595,14 @@ void actuallyMoving()
             if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, -1, map) == '0')
             {
                 g_sChar.m_cLocation.X--;
+                p.setPos(p.getPos().getX() - 1, p.getPos().getY());
             }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
             if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
             {
                 g_sChar.m_cLocation.X++;
+                p.setPos(p.getPos().getX() + 1, p.getPos().getY());
                 boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
             }
             break;
@@ -610,12 +616,14 @@ void actuallyMoving()
             if (map.collision(g_sChar.m_cLocation.Y, g_sChar.m_cLocation.X, 0, +1, map) == '0')
             {
                 g_sChar.m_cLocation.X++;
+                p.setPos(p.getPos().getX() + 1, p.getPos().getY());
             }
             boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
             boxPosPtr[0]->setY(g_sChar.m_cLocation.Y);
             if (map.collision(boxPosPtr[0]->getY(), boxPosPtr[0]->getX(), 0, 0, map) != '0')
             {
                 g_sChar.m_cLocation.X--;
+                p.setPos(p.getPos().getX() - 1, p.getPos().getY());
                 boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
             }
             break;
@@ -988,14 +996,14 @@ void processInputGameOver()
             cPtr[i]->resetHospState();
         }
         p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
-        p.getPowerups().resetall();
+        p.getPowerups()->resetall();
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
     g_ePreviousGameState = S_GAMEOVER;
 }
 
-void processInputHome() //note
+void processInputHome() //note lol
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
@@ -1573,11 +1581,11 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
 
-    if (tutorial.getTutorialFlag(6) == true)
+    if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
         renderCustomer();
 
     renderBoxes();
-    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime);
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p);
 }
 
 void renderStore()
@@ -1928,23 +1936,20 @@ void renderFramerate()
     c.Y = 24;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x59);
 
-    // temporary: displays test customer position
-    /*
     ss.str("");
-    ss << "Customer Coords";
-    c.X = 0; //change to shift location of timer
-    c.Y = 14;  //we might use this or we might need to make a new timer to show when the game starts
+    ss << "Player Coords";
+    c.X = 45; //change to shift location of timer
+    c.Y = 20;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
     c.Y += 1;
+    ss.str("");
+    ss << "Player X: " << p.getPos().getX();
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
+    c.Y += 1;
+    ss.str("");
+    ss << "Player Y: " << p.getPos().getY();
+    g_Console.writeToBuffer(c, ss.str(), 0x0F);
     
-    ss.str("");
-    ss << "X: "<< testCustomer.getPos().getX();
-    g_Console.writeToBuffer(c, ss.str(), 0x0F);
-    c.Y += 1;
-    ss.str("");
-    ss << "Y: " << testCustomer.getPos().getY();
-    g_Console.writeToBuffer(c, ss.str(), 0x0F);
-    */
     ss.str("");
     ss << spawnTimer;
     c.X = 0;
