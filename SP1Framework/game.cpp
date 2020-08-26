@@ -934,7 +934,7 @@ void processUserInput()
     {
     case S_SPLASHSCREEN: processInputSplash(); 
         break;
-    case S_MENU: processInputMenu(); p.receivePay(1000);
+    case S_MENU: processInputMenu();
         break;
     case S_ENDOFWORKSCREEN: processInputEndOfWorkScreen(); 
         break;
