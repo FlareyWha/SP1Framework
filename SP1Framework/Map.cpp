@@ -83,6 +83,10 @@ void Map::chooseMap(int lvl, Console& console) //this is to choose the map to pr
 		printMap(gameover, console);
 		break;
 	}
+	case 9:
+		std::fstream store("Store.txt");
+		printMap(store, console);
+		break;
 	}
 }
 

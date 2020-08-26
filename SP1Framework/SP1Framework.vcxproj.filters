@@ -133,5 +133,8 @@
     <Text Include="GameOver.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Store.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>
