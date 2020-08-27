@@ -2064,10 +2064,7 @@ void renderCustomer()
 
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
-                }
 
-                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
-                {
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
@@ -2082,6 +2079,23 @@ void renderCustomer()
                     timer[i] = -1;
                     travelling[i] = false;
                 }
+
+                /*else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
+                    spawned[i] = false;
+                    delete customerPtr[i];
+                    customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+                    CustomerBoxColour[i] = 0x77;
+
+                    timer[i] = -1;
+                    travelling[i] = false;
+                }*/
 
 
                /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
