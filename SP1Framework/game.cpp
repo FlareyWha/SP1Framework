@@ -1965,7 +1965,9 @@ void renderCustomer()
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
-
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
                                 }
 
                             }
