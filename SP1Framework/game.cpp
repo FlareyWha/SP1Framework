@@ -814,16 +814,16 @@ void processStoreinput()
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 8
-            && day >= 4) {
+            && g_mouseEvent.mousePosition.Y == 10
+            && day >= 5) {
             if (p.getSavings() >= 100) {
                 p.purchaseplayerShoes(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 42
-            && g_mouseEvent.mousePosition.Y == 10
-            && day >= 5) {
+            && g_mouseEvent.mousePosition.Y == 8
+            && day >= 4) {
             if (p.getSavings() >= 100) {
                 p.purchaseslowerCustomers(pPtr);
             }
@@ -1625,12 +1625,12 @@ void renderStore()
         g_Console.writeToBuffer(c, "[$100]", 0xF0);
         ss.str("");
         c.Y += 2;
-        ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+        ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
         ss.str("");
         if (day >= 5) {
             c.Y += 2;
-            ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
+            ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
             g_Console.writeToBuffer(c, ss.str(), 0xF0);
             ss.str("");
         }
