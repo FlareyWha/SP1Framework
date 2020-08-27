@@ -57,8 +57,6 @@ enum EGAMESTATES
 enum EDEBUGSTATES
 {
     D_OFF,
-    D_FRAMES,
-    D_INPUT,
     D_BOTH
 };
 
@@ -114,6 +112,8 @@ void checkCustomerPlayerCollision();
 void checkEnd();
 void deleteBoxes();
 void deleteCustomer();
+
+void checkBoxCollision();
 
 void updateSons(); // update son status and run logic
 void processStoreinput();

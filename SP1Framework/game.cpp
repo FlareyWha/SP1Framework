@@ -358,17 +358,17 @@ void update(double dt)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
             break;
-        case S_MENU: updateMenu();
+        case S_MENU: updateMenu(); // game logic for menu screen
             break;
-        case S_ENDOFWORKSCREEN: updateEndofWorkScreen();
+        case S_ENDOFWORKSCREEN: updateEndofWorkScreen(); // game logic for end of work screen
             break;
-        case S_GAMEOVER: updateGameOver();
+        case S_GAMEOVER: updateGameOver(); // game logic for Game over screen
             break;
-        case S_HOME: updateHome();
+        case S_HOME: updateHome(); // game logic for home screen
             break;
-        case S_STORE: updateStore();
+        case S_STORE: updateStore(); // game logic for store screen
             break;
-        case S_TUT: {
+        case S_TUT: { // game logic for tutorial phase of game
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
@@ -384,7 +384,7 @@ void update(double dt)
             updateTutorial();
             break;
         }
-        case S_GAME: {
+        case S_GAME: { // game logic for the main game
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
@@ -410,13 +410,13 @@ void updateMenu() // Menu logic
     processUserInput();
 }
 
-void updateEndofWorkScreen()
+void updateEndofWorkScreen() // End of work screen logic
 {
     processUserInput();
     
 }
 
-void updateGameOver()
+void updateGameOver() // Game over screen logic
 {
     processUserInput();
 }
@@ -429,15 +429,15 @@ void updateHome() // Home logic
 
 void updateTutorial() //Tutorial level logic
 {
-    g_ePreviousGameState = g_eGameState;
+    g_ePreviousGameState = g_eGameState; // save previous game state
 
     if (tutorial.getProceed() == true)
     {
         processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-        moveCharacter();    // moves the character, collision detection, physics, etc
-        actuallyMoving();
-        pickUpBoxes();
-        restockShelf();
+        moveCharacter();    // moves the character
+        actuallyMoving(); // collision detection and player speed variables
+        pickUpBoxes(); // Picking up of boxes
+        restockShelf(); // All logic related to restocking shelves
     }
 }
 
@@ -445,18 +445,20 @@ void updateGame()       // game logic
 {
     g_ePreviousGameState = g_eGameState;
     processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    moveCharacter(); 
-    actuallyMoving();
-    pickUpBoxes();
-    restockShelf();
+    moveCharacter(); // move the character
+    actuallyMoving(); // used for collision detection;
+    pickUpBoxes(); // Picking up of boxes
+    restockShelf(); // All logic related to restocking shelves
 }
 
+// Store screen logic
 void updateStore()
 {
     processUserInput();
 }
 
-void moveCharacter()//to check if the player is pressing a key
+//to check if the player is pressing a key
+void moveCharacter()
 {
     if (g_skKeyEvent[K_UP].keyDown)
     {
@@ -503,6 +505,7 @@ void moveCharacter()//to check if the player is pressing a key
     }
 }
 
+// Check if customer and player have collided with each other
 void checkCustomerPlayerCollision()
 {
     for (int i = 1; i < 7; i++)
@@ -532,7 +535,7 @@ void checkCustomerPlayerCollision()
     }
 }
 
-
+// Change player speed according to Cooler shoes perk level and player-box collision detection
 void actuallyMoving()
 {
     if (playerSpeedToggle == true) 
@@ -646,7 +649,8 @@ void actuallyMoving()
     }
 }
 
-void pickUpBoxes()  //todo
+//register item picked up and update box player is carrying accordingly
+void pickUpBoxes()
 {
     if (p.isHoldingProduct() == false) {
         BoxColour = 0x70; //empty box grey
@@ -708,6 +712,7 @@ void pickUpBoxes()  //todo
 //    }
 //}
 
+// Register restock inputs from player and updates
 void restockShelf(){
     for (int i = 29; i < 38; i++) { //3 SHELVES ON THE LEFT
         for (int j = 0; j < 3; j++) {
@@ -768,6 +773,7 @@ void restockShelf(){
 //    if
 //}
 
+// Update son object variables and keep track of well-being state
 void updateSons()
 {
     for (int i = 0; i < 2; i++) {
@@ -785,6 +791,7 @@ void updateSons()
     }
 }
 
+// Process mouse inputs in Store screen
 void processStoreinput()
 {
     framesPassed++;
@@ -847,6 +854,7 @@ void processStoreinput()
     }
 }
 
+// Delete customers and reset their variables
 void deleteCustomer()
 {
     for (int i = 0; i < 6; i++)
@@ -861,6 +869,66 @@ void deleteCustomer()
     }
 }
 
+// Check for collision with box
+void checkBoxCollision()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPosPtr[i] != nullptr)
+        {
+            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
+                {
+                    g_sChar.m_cLocation.X++;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+                    
+                }
+                else
+                {
+                    g_sChar.m_cLocation.X--;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
+                }
+            }
+        }
+    }
+
+    //for (int i = 1; i < 7; i++)
+    //{
+    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+    //    {
+    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+    //        {
+    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+    //                g_sChar.m_cLocation.Y++;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //            }
+    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+    //                g_sChar.m_cLocation.Y--;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+    //            }
+    //            else
+    //            {
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //                g_sChar.m_cLocation.Y++;
+    //            }
+
+    //        }
+
+    //    }
+
+    //}
+}
+
+// Delete customer boxes
 void deleteBoxes()
 {
     for (int i = 1; i < 7; i++)
@@ -880,6 +948,7 @@ void deleteBoxes()
     }
 }
 
+// Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
     if (p.getUnsatisfiedCustomers() == 10) {
@@ -898,6 +967,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
         g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
         g_bRestocking = true;
+        p.setPos(18, 1);
         COORD c;
         c.X = 18;
         c.Y = 1;
@@ -934,6 +1004,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
     
 }
 
+// Process debug inputs
 void processDebugState() //Toggle debug options
 {
     if (g_skKeyEvent[K_F3].keyReleased)
@@ -952,6 +1023,7 @@ void processDebugState() //Toggle debug options
     }
 }
 
+// Process inputs on splash screen
 void processInputSplash() // All input processing related to Splashscreen
 {
     COORD c = g_Console.getConsoleSize();
@@ -967,6 +1039,7 @@ void processInputSplash() // All input processing related to Splashscreen
     }
 }
 
+// Process inputs on menu screen
 void processInputMenu() //All input processing related to Main Menu
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
@@ -1004,6 +1077,7 @@ void processInputMenu() //All input processing related to Main Menu
     }
 }
 
+// Process inputs on End of work screen
 void processInputEndOfWorkScreen()
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -1021,6 +1095,7 @@ void processInputEndOfWorkScreen()
     }
 }
 
+// Process inputs on Game over screen; reset variables for new session
 void processInputGameOver()
 {
     if (g_skKeyEvent[K_ESCAPE].keyReleased) {// opens main menu if player hits the escape key
@@ -1038,6 +1113,7 @@ void processInputGameOver()
     g_ePreviousGameState = S_GAMEOVER;
 }
 
+// Process inputs on Home screen
 void processInputHome() //note lol
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
@@ -1110,6 +1186,7 @@ void processInputHome() //note lol
     }
 }
 
+// Switch case for input processing for different game states; also includes debug processing
 void processUserInput()
 {
     switch (g_eGameState)
@@ -1155,30 +1232,28 @@ void render()// make render functions for our level and put it in the switch cas
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {
-    case S_SPLASHSCREEN: renderSplashScreen();
+    case S_SPLASHSCREEN: renderSplashScreen(); // render splashscreen ui
         break;
-    case S_MENU: renderMainMenu();
+    case S_MENU: renderMainMenu(); // render menu ui
         break;
-    case S_ENDOFWORKSCREEN: renderEndOfWorkScreen();
+    case S_ENDOFWORKSCREEN: renderEndOfWorkScreen(); // render endofwork screen ui
         break;
-    case S_GAMEOVER: renderGameOver();
+    case S_GAMEOVER: renderGameOver(); // render game over screen ui
         break;
-    case S_HOME: renderHome();
+    case S_HOME: renderHome(); // render home screen ui
         break;
-    case S_STORE: renderStore();
+    case S_STORE: renderStore(); // render store screen ui
         break;
-    case S_TUT: renderTutorialLevel();
+    case S_TUT: renderTutorialLevel(); // render tutorial level ui
         break;
-    case S_GAME: renderGame();
+    case S_GAME: renderGame(); // render game screen ui
         break;
     }
 
     switch (g_eDebugState)
     {
     case D_OFF: break;
-    case D_FRAMES: renderFramerate(); break;
-    case D_INPUT: renderInputEvents(); break;
-    case D_BOTH: renderFramerate(); renderInputEvents(); break;
+    case D_BOTH: renderFramerate(); renderInputEvents(); break; // render framerate and input events; also includes other debug info
     }
 
     //renderFramerate();      // renders debug information, frame rate, elapsed time, etc
@@ -1186,6 +1261,7 @@ void render()// make render functions for our level and put it in the switch cas
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
 
+// Clear the screen
 void clearScreen()
 {
     // Clears the buffer with this colour attribute
@@ -1209,6 +1285,7 @@ void renderSplashScreen()  // renders the splash screen
     g_Console.writeToBuffer(c, "Left click here to start the game!", 0x09);
 }
 
+// Render game levels and entities
 void renderGame()
 {
    
@@ -1220,6 +1297,7 @@ void renderGame()
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
+    checkBoxCollision();
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -1227,6 +1305,7 @@ void renderGame()
     renderHUD();
 }
 
+// Render amount of items on the shelf
 void renderShelfAmount()
 {
     if (g_eGameState == S_GAME) {
@@ -1245,6 +1324,7 @@ void renderShelfAmount()
     }
 }
 
+// Render HUD info
 void renderHUD()
 {
     framesPassed++; // counts frames
@@ -1301,6 +1381,7 @@ void renderHUD()
 
 }
 
+// Render items for renderShelfAmount
 void renderItem(int shelf)
 {
     const WORD colors[] = {
@@ -1343,6 +1424,7 @@ void renderItem(int shelf)
     }
 }
 
+//Render the map in its latest state
 void renderMap()
 {
     // Set up sample colours, and output shadings
@@ -1361,6 +1443,7 @@ void renderMap()
     }
 }
 
+// Render Main menu UI
 void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
@@ -1388,6 +1471,7 @@ void renderMainMenu()
     g_Console.writeToBuffer(c, "Exit Game", 0xF0);
 }
 
+// Render home menu
 void renderHome() 
 {
     map.chooseMap(6, g_Console);
@@ -1410,6 +1494,7 @@ void renderHome()
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
 
+// Render animation for menu screens
 void renderMenuAnimation() //tbd
 {
     framesPassed++;
@@ -1434,6 +1519,7 @@ void renderMenuAnimation() //tbd
     }
 }
 
+// Render expenses options for home menu
 void renderHomeExpenses(COORD c)
 {
     std::ostringstream ss;
@@ -1451,7 +1537,7 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[0]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "(Q//A//Q )", 0xF0);
+        g_Console.writeToBuffer(c, "(Q//A//Q )", 0xFC);
     }
     else {
         g_Console.writeToBuffer(c, "(O w O 6)", 0xF0);
@@ -1481,7 +1567,7 @@ void renderHomeExpenses(COORD c)
     g_Console.writeToBuffer(c, "State : ", 0xF0);
     c.X += 8;
     if (cPtr[1]->getStatus() == true) {
-        g_Console.writeToBuffer(c, "(T//-//T )", 0xF0);
+        g_Console.writeToBuffer(c, "(T//-//T )", 0xFC);
     }
     else {
         g_Console.writeToBuffer(c, "(^ - ^ 6)", 0xF0);
@@ -1518,6 +1604,7 @@ void renderHomeExpenses(COORD c)
     }
 }
 
+// Render end of work screen information
 void renderEndOfWorkScreen()
 {
     map.chooseMap(7, g_Console);
@@ -1552,6 +1639,7 @@ void renderEndOfWorkScreen()
     g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
 }
 
+// Render cause of game over and game over screen
 void renderGameOver()
 {
     COORD c = g_Console.getConsoleSize();
@@ -1590,6 +1678,7 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
 }
 
+// Render tutorial level ui
 void renderTutorialLevel()
 {
     map.chooseMap(1, g_Console);
@@ -1605,6 +1694,7 @@ void renderTutorialLevel()
     tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
 }
 
+// Render store perks available for purchase; one unlocked per day
 void renderStore()
 {
     map.chooseMap(9, g_Console);
@@ -1672,6 +1762,7 @@ void renderStore()
     g_Console.writeToBuffer(c, "Home", 0xF0);
 }
 
+// Render boxes
 void renderBoxes()
 {
    
@@ -1705,7 +1796,8 @@ void renderBoxes()
 //    //todo
 //}
 
-void renderCustomer() // fix later yes ues
+// Render customer current position
+void renderCustomer()
 {   
     if (g_bRestocking == false) {
         COORD c = g_Console.getConsoleSize();
@@ -1746,7 +1838,7 @@ void renderCustomer() // fix later yes ues
                     travelling[i] = true;
                 }
 
-                //customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
 
 
@@ -1781,7 +1873,6 @@ void renderCustomer() // fix later yes ues
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
-                    
 
                     for (int j = 0; j < 3; j++) {
 
@@ -1795,17 +1886,17 @@ void renderCustomer() // fix later yes ues
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
-                                    switch (j) 
+                                    switch (j)
                                     {
-                                        case 0:
-                                            CustomerBoxColour[i] = 0x50;
-                                            break;
-                                        case 1:
-                                            CustomerBoxColour[i] = 0x10;
-                                            break;
-                                        case 3:
-                                            CustomerBoxColour[i] = 0xB0;
-                                            break;
+                                    case 0:
+                                        CustomerBoxColour[i] = 0x50;
+                                        break;
+                                    case 1:
+                                        CustomerBoxColour[i] = 0x10;
+                                        break;
+                                    case 3:
+                                        CustomerBoxColour[i] = 0xB0;
+                                        break;
                                     }
                                 }
 
@@ -1860,24 +1951,25 @@ void renderCustomer() // fix later yes ues
 
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
-
-                   /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
-                    {*/
-                        spawned[i] = false;
-                        delete customerPtr[i];
-                        customerPtr[i] = nullptr;
-
-                        delete boxPtr[i + 1];
-                        boxPtr[i + 1] = nullptr;
-                        delete boxPosPtr[i + 1];
-                        boxPosPtr[i + 1] = nullptr;
-
-                        CustomerBoxColour[i] = 0x77;
-
-                        timer[i] = -1;
-                        travelling[i] = false;
-                    /*}*/
                 }
+
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
+                    spawned[i] = false;
+                    delete customerPtr[i];
+                    customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+                    CustomerBoxColour[i] = 0x77;
+
+                    timer[i] = -1;
+                    travelling[i] = false;
+                }
+
 
                /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
@@ -1918,8 +2010,7 @@ void renderCustomer() // fix later yes ues
     }
 }
 
-
-
+// Render player current position
 void renderCharacter()
 {
     //for (int i = 0; i < 6; i++)
@@ -1952,6 +2043,7 @@ void renderCharacter()
     g_Console.writeToBuffer(g_sChar.m_cLocation, ' ', charColor);
 }
 
+// DEBUG: render framerate and other information needed
 void renderFramerate()
 {
     COORD c;
