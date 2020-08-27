@@ -1417,7 +1417,7 @@ void renderHUD()
 
 }
 
-void renderCustomerTimer(int shelf)
+void renderCustomerTimer(int shelf) //works ?
 {
     const WORD colors[] = {
         0x50, 0x10, 0xB0, 0xE0, 0xA0, 0x90, 0x60
@@ -1425,43 +1425,21 @@ void renderCustomerTimer(int shelf)
 
     COORD c;
     std::ostringstream ss;
-    c.X = 37;
-    c.Y = -1;
+    c.X;
+    c.Y;
     int cTimer;
     for (int i = 0; i < 6; i++)
     {
         if (customerPtr[i] != nullptr && 
             customerPtr[i]->getEndPointX() == customerPtr[i]->getX() && customerPtr[i]->getEndPointY() == customerPtr[i]->getY())
         {
-            cTimer = 7;
-            for (int x = 0; x <= shelf; x++) {
-                c.Y += 6;
-            }
-            if (shelf >= 3)
-            {
-                c.X += 21;
-            }
-            for (int x = 3; x <= shelf; x++) {
-                switch (x)
-                {
-                case 3: c.Y = 6;
-                    break;
-                case 4: c.Y = 12;
-                    break;
-                case 5: c.Y = 18;
-                    break;
-                }
-            }
+            shelf = ((customerPtr[i]->getEndPointY() - 1 ) / 6) -1;
+            c.Y = ((shelf + 1) * 6) - 1; 
+            c.X = 37;
+            cTimer = 30 - timer[i];
             for (int i = 0; i != cTimer; i++) {
                 g_Console.writeToBuffer(c, ' ', colors[shelf]);
                 c.X--;
-            }
-            if (shelf >= 3)
-            {
-                c.X = 48;
-            }
-            else {
-                c.X = 27;
             }
         }
     }
@@ -1984,7 +1962,7 @@ void renderCustomer()
         COORD c = g_Console.getConsoleSize();
         bool created = false;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) 
         {
             if (customerPtr[i] != nullptr)
             {
@@ -2158,10 +2136,7 @@ void renderCustomer()
 
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
-                }
 
-                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
-                {
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
@@ -2176,6 +2151,23 @@ void renderCustomer()
                     timer[i] = -1;
                     travelling[i] = false;
                 }
+
+                /*else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
+                    spawned[i] = false;
+                    delete customerPtr[i];
+                    customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+                    CustomerBoxColour[i] = 0x77;
+
+                    timer[i] = -1;
+                    travelling[i] = false;
+                }*/
 
 
                /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
