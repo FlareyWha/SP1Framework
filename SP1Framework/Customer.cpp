@@ -138,59 +138,69 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 
 int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 {
-	if (framesPassed % timer == 0) 
+	if (framesPassed % timer == 0)
 	{
 		prevPos.setX(pos.getX());
 		prevPos.setY(pos.getY());
 
 		if ((endPoint.getY() - pos.getY()) != 0)
 		{
-			if (map.isNegative(endPoint.getY(), pos.getY()) == true)
+			if (map.isNegative(endPoint.getY(), pos.getY()) == true) //changed in attempt to fix collision
 			{
-				if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				if (map.getGrid(pos.getY() - 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (NORTH
 				{
 					pos.setY(pos.getY() - 1);
 					return 1;
 				}
-				else
-					pos.setY(pos.getY());
+				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				{
+					pos.setY(pos.getY() - 1);
+					return 1;
+				}
 			}
 			else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
 			{
-				if (map.getGrid(pos.getY() + 1, pos.getX()) == '0')
+				if (map.getGrid(pos.getY() + 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (SOUTH
 				{
 					pos.setY(pos.getY() + 1);
-					return 3;
+					return 1;
 				}
-				else
-					pos.setY(pos.getY());
+				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				{
+					pos.setY(pos.getY() - 1);
+					return 1;
+				}
 			}
 		}
 		if ((endPoint.getX() - pos.getX()) != 0)
 		{
 			if (map.isNegative(endPoint.getX(), pos.getX()) == true)
 			{
-				if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
+				if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
+				{
+					pos.setX(pos.getX());
+				}
+				else if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
 				{
 					pos.setX(pos.getX() - 1);
 					return 2;
 				}
-				else
-					pos.setX(pos.getX());
 			}
 
 			else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
 			{
-				if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
+				if (map.getGrid(pos.getY(), pos.getX() + 3) == 'C')
+				{
+					pos.setX(pos.getX());
+				}
+				else if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				{
 					pos.setX(pos.getX() + 1);
-					return 0;
+					return 2;
 				}
-				else
-					pos.setX(pos.getX());
 			}
+			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
-		map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 	}
 }
 

@@ -688,25 +688,25 @@ void pickUpBoxes()  //todo
     }
 }
 
-void checkCustomerCollision()
-{
-    for (int i = 0; i < 6; i++)
-    {
-        for (int j = 1; j < 7;j++)
-        {
-            if (customerPtr[i] != nullptr && boxPosPtr[j] != nullptr && j != i)
-            {
-                if (customerPtr[i]->getX() == boxPosPtr[j]->getX() && customerPtr[i]->getY() == boxPosPtr[j]->getY())
-                {
-                    //customerPtr[i]->setPos(customerPtr[i]->getX(), customerPtr[i]->getY());
-                    boxPosPtr[j]->setX(customerPtr[i]->getX() - 1);
-                    //customerPtr[i]->setPos(boxPosPtr[i]->getX() + 1, customerPtr[i]->getY());
-                }
-
-            }
-        }
-    }
-}
+//void checkCustomerCollision()
+//{
+//    for (int i = 0; i < 6; i++)
+//    {
+//        for (int j = 1; j < 7;j++)
+//        {
+//            if (customerPtr[i] != nullptr && boxPosPtr[j] != nullptr && j != i)
+//            {
+//                if (customerPtr[i]->getX() == boxPosPtr[j]->getX() && customerPtr[i]->getY() == boxPosPtr[j]->getY())
+//                {
+//                    //customerPtr[i]->setPos(customerPtr[i]->getX(), customerPtr[i]->getY());
+//                    boxPosPtr[j]->setX(customerPtr[i]->getX() - 1);
+//                    //customerPtr[i]->setPos(boxPosPtr[i]->getX() + 1, customerPtr[i]->getY());
+//                }
+//
+//            }
+//        }
+//    }
+//}
 
 void restockShelf(){
     for (int i = 29; i < 38; i++) { //3 SHELVES ON THE LEFT
@@ -1744,7 +1744,7 @@ void renderCustomer() // fix later yes ues
                 }
 
                 //customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
-                checkCustomerCollision();
+                //checkCustomerCollision();
 
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
