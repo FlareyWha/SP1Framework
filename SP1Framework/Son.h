@@ -8,7 +8,7 @@ private:
     bool bSick;
     bool btoggleFood; //Used to check if player has decided to feed his son
     bool btoggleMedicine; //Used to check if player has decided to give medicine to his sick son
-    bool bHospitalised;
+    bool bHospitalised; // Used to check if son is hospitalised
     int NoOfDaysUnfed;
     int NoOfDaysSick;
 
