@@ -72,6 +72,11 @@ bool Son::getTreatState()
 	return btoggleMedicine;
 }
 
+void Son::resetTreatState()
+{
+	btoggleMedicine = false;
+}
+
 void Son::increaseNODUnfed()
 {
 	NoOfDaysUnfed++;

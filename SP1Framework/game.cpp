@@ -751,14 +751,17 @@ void updateSons()
         cPtr[i]->resetFed();
         if (cPtr[i]->getTreatState() == true) {
             cPtr[i]->Recovers();
-            cPtr[i]->isTreated();
+            cPtr[i]->resetTreatState();
         }
     }
 }
 
 void processStoreinput()
 {
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) {
+    framesPassed++;
+    Player* pPtr = &p;
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
+        && framesPassed % 5 == 0) {
         if (g_mouseEvent.mousePosition.X >= 35
             && g_mouseEvent.mousePosition.X <= 38
             && g_mouseEvent.mousePosition.Y == 22) {
@@ -766,50 +769,44 @@ void processStoreinput()
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 10) {
-            if (p.getSavings() >= 50) {
-                p.getPowerups()->purchasecheaperFood();
-                p.takePay(50);
-            }
-        }
-        else if (g_mouseEvent.mousePosition.X >= 27
-            && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 12) {
-            if (p.getSavings() >= 50) {
-                p.getPowerups()->purchasecheaperRent();
-                p.takePay(50);
-            }
-        }
-        else if (g_mouseEvent.mousePosition.X >= 27
-            && g_mouseEvent.mousePosition.X <= 38
             && g_mouseEvent.mousePosition.Y == 14) {
+            if (p.getSavings() >= 50) {
+                p.purchasecheaperFood(pPtr);
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 16) {
+            if (p.getSavings() >= 50) {
+                p.purchasecheaperRent(pPtr);
+            }
+        }
+        else if (g_mouseEvent.mousePosition.X >= 27
+            && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 8) {
             if (p.getSavings() >= 100) {
-                p.getPowerups()->purchaseplayerShoes();
-                p.takePay(100);
+                p.purchaseplayerShoes(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 42
-            && g_mouseEvent.mousePosition.Y == 16) {
+            && g_mouseEvent.mousePosition.Y == 10) {
             if (p.getSavings() >= 100) {
-                p.getPowerups()->purchaseslowerCustomers();
-                p.takePay(100);
+                p.purchaseslowerCustomers(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 40
             && g_mouseEvent.mousePosition.Y == 18) {
             if (p.getSavings() >= 50) {
-                p.getPowerups()->purchaserichCustomers();
-                p.takePay(50);
+                p.purchaserichCustomers(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 43
             && g_mouseEvent.mousePosition.Y == 20) {
             if (p.getSavings() >= 50) {
-                p.getPowerups()->purchasethriftyCustomers();
-                p.takePay(50);
+                p.purchasethriftyCustomers(pPtr);
             }
         }
     }
@@ -890,13 +887,13 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             else if (g_eGameState != S_GAMEOVER) {
                 g_eGameState = S_ENDOFWORKSCREEN;
             }
+        }
         if (p.getRentStatus() == true && day % 7 == 0 && day != 0) {
-            p.isRentPaid();
             g_eGameState = S_ENDOFWORKSCREEN;
+            p.isRentPaid();
         }
         else if (p.getRentStatus() == false && day % 7 == 0 && day != 0) {
             g_eGameState = S_GAMEOVER;
-        }
         }
     }
     
@@ -1005,9 +1002,11 @@ void processInputGameOver()
 
 void processInputHome() //note lol
 {
-    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
+        && framesPassed % 5 == 0)
     {
         COORD c = g_Console.getConsoleSize();
+        Player* pPtr = &p;
         if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 30)
             && g_mouseEvent.mousePosition.Y == 22) //Change to main menu state once mouse clicks on the button
@@ -1027,7 +1026,8 @@ void processInputHome() //note lol
         }
         else if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 31)
-            && g_mouseEvent.mousePosition.Y == 21) //Change to store state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 21
+            && day != 0 && day >= 6) //Change to store state once mouse clicks on the button
         {
             g_eGameState = S_STORE;
         }
@@ -1036,25 +1036,15 @@ void processInputHome() //note lol
         if ((g_mouseEvent.mousePosition.X == 39)
             && g_mouseEvent.mousePosition.Y == 7) //Toggle recognition of son 1 being fed
         {
-            if (p.getSavings() >= 30 && cPtr[0]->getStatusFed() == false) {
-                cPtr[0]->isFed();
-                p.payFood();
-            }
-            else if (cPtr[0]->getStatusFed() == true) {
-                cPtr[0]->isFed();
-                p.receivePay(30);
+            if (p.getSavings() >= p.getRent()) {
+                p.payFood(cPtr[0]);
             }
         }
         else if ((g_mouseEvent.mousePosition.X == 39)
             && g_mouseEvent.mousePosition.Y == 12) //Toggle recognition of son 1 being fed
         {
-            if (p.getSavings() >= 30 && cPtr[1]->getStatusFed() == false) {
-                cPtr[1]->isFed();
-                p.payFood();
-            }
-            else if (cPtr[1]->getStatusFed() == true) {
-                cPtr[1]->isFed();
-                p.receivePay(30);
+            if (p.getSavings() >= p.getRent()) {
+                p.payFood(cPtr[1]);
             }
         }
         else if ((g_mouseEvent.mousePosition.X == 44)
@@ -1062,12 +1052,7 @@ void processInputHome() //note lol
             && cPtr[0]->getStatus() == true) //Toggle recognition of son 1 being treated
         {
             if (p.getSavings() >= 100 && cPtr[0]->getTreatState() == false) {
-                cPtr[0]->isTreated();
-                p.payMedicine();
-            }
-            else if (cPtr[0]->getTreatState() == true) {
-                cPtr[0]->isTreated();
-                p.receivePay(100);
+                p.payMedicine(cPtr[0]);
             }
         }
         else if ((g_mouseEvent.mousePosition.X == 44)
@@ -1075,24 +1060,14 @@ void processInputHome() //note lol
             && cPtr[1]->getStatus() == true) //Toggle recognition of son 2 being treated
         {
             if (p.getSavings() >= 100 && cPtr[1]->getTreatState() == false) {
-                cPtr[1]->isTreated();
-                p.payMedicine();
-            }
-            else if (cPtr[1]->getTreatState() == true) {
-                cPtr[1]->isTreated();
-                p.receivePay(100);
+                p.payMedicine(cPtr[1]);
             }
         }
         else if ((g_mouseEvent.mousePosition.X == 45)
             && g_mouseEvent.mousePosition.Y == 14
             && day % 6 == 0 && day != 0) {
-            if (p.getSavings() >= 200 && p.getRentStatus() == false) {
-                p.isRentPaid();
+            if (p.getSavings() >= 200) {
                 p.payRent();
-            }
-            else if (p.getRentStatus() == true) {
-                p.isRentPaid();
-                p.receivePay(200);
             }
         }
     }
@@ -1392,8 +1367,10 @@ void renderHome()
     g_Console.writeToBuffer(c, "Options", 0xF0);
     c.Y += 2;
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
-    c.Y += 1;
-    g_Console.writeToBuffer(c, "Store", 0xF0);
+    if (day != 0 && day >= 6) {
+        c.Y += 1;
+        g_Console.writeToBuffer(c, "Store", 0xF0);
+    }
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
@@ -1455,12 +1432,14 @@ void renderHomeExpenses(COORD c)
         }
     } //Make this hidden according to Son 1 state
     c.Y += 1;
-    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
+    ss << "Food ($" << p.getFood() << ") [ ]";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
     if (cPtr[0]->getStatusFed() == true) {
         c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
         c.X -= 12;
     }
+    ss.str("");
     c.Y += 2;
     g_Console.writeToBuffer(c, "!=========Son 2=========!", 0xF0);
     c.Y += 1;
@@ -1483,7 +1462,9 @@ void renderHomeExpenses(COORD c)
         }
     }
     c.Y += 1;
-    g_Console.writeToBuffer(c, "Food ($30) [ ] ", 0xF0);
+    ss << "Food ($" << p.getFood() << ") [ ]";
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);
+    ss.str("");
     if (cPtr[1]->getStatusFed() == true) {
         c.X += 12;
         g_Console.writeToBuffer(c, " ", 0x00);
@@ -1491,7 +1472,9 @@ void renderHomeExpenses(COORD c)
     }
     c.Y += 2;
     if (day % 6 == 0 && day != 0) {
-        g_Console.writeToBuffer(c, "!====Rent ($200) [ ]====!", 0xF0);
+        ss << "!====Rent ($" << p.getRent() << ") [ ]====!";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
         if (p.getRentStatus() == true) {
             c.X += 18;
             g_Console.writeToBuffer(c, " ", 0x00);

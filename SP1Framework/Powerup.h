@@ -1,4 +1,5 @@
 #pragma once
+
 class Powerup
 {
 private:
@@ -22,11 +23,11 @@ public:
 	int getRCustomerslvl(); //get current level of richCustomers
 	int getTCustomerslvl(); //get current level of thriftyCustomers
 
-	void purchasecheaperFood(); //cheaper food
-	void purchasecheaperRent(); //cheaper rent
-	void purchaseplayerShoes(); //faster player
-	void purchaseslowerCustomers(); //slower customers
-	void purchaserichCustomers(); //more money per customer
-	void purchasethriftyCustomers(); //less chance of buying >1 item
+	void incFoodlvl();
+	void incRentlvl();
+	void incShoeslvl();
+	void incSCustomerslvl();
+	void incRCustomerslvl();
+	void incTCustomerslvl();
 };
 

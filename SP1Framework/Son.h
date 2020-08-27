@@ -1,6 +1,6 @@
 #pragma once
 #include "Entity.h"
-#include "Player.h"
+
 class Son :
     public Entity
 {
@@ -27,6 +27,7 @@ public:
     bool getStatusFed(); // return btoggleFood
     void isTreated(); // Home menu medicine option toggled true or false
     bool getTreatState();
+    void resetTreatState();
 
     void increaseNODUnfed();
     void decreaseNODUnfed();
