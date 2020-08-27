@@ -111,6 +111,7 @@
     <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="CannedFood.txt" />
     <Text Include="EndOfWork.txt" />
     <Text Include="GameOver.txt" />
     <Text Include="HomeScreen.txt" />
@@ -119,7 +120,9 @@
     <Text Include="MainMenu.txt" />
     <Text Include="Lvl3.txt" />
     <Text Include="Lvl5.txt" />
+    <Text Include="Rice.txt" />
     <Text Include="Store.txt" />
+    <Text Include="ToiletPaper.txt" />
     <Text Include="Tutorial level.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
