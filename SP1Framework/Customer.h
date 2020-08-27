@@ -24,18 +24,20 @@ public:
     bool shelfWaiting(void);
     void isSatisfied();
     void unSatisfied();
+
+
     bool getState();
-    void setItemToBuy(int passcheck);
     int getQuantity();
     int getItemToBuy();
+    int getX();
+    int getY();
+    Position getEndPoint();
+    void setEndPoint(int x, int y);
+
+    void setItemToBuy(int passcheck);
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
     void bumpIntoCustomer(int& avoiding, Map& map);
-    Position getEndPoint();
-    void setEndPoint(int x, int y);
-    int getX();
-    int getY();
-
 };
 
