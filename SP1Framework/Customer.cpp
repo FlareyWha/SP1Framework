@@ -143,7 +143,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 		prevPos.setX(pos.getX());
 		prevPos.setY(pos.getY());
 
-		if ((endPoint.getY() - pos.getY()) != 0)
+		if ((endPoint.getY() - pos.getY()) != 0 && yLock == false)
 		{
 			if (map.isNegative(endPoint.getY(), pos.getY()) == true) //changed in attempt to fix collision
 			{
@@ -213,11 +213,6 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 		travelling = false;
 		avoiding = 1;
 	}
-	else if (map.getGrid(pos.getY(), pos.getX() + 3) == 'C' && endPoint.getX() == 79 && endPoint.getY() == 15)
-	{
-		travelling = false;
-		avoiding = 5;
-	}
 }
 
 void Customer::bumpIntoCustomer(int& avoiding, Map& map)
@@ -232,14 +227,24 @@ void Customer::bumpIntoCustomer(int& avoiding, Map& map)
 	else if (avoiding == 3)
 		pos.setY(pos.getY() - 1);
 	else if (avoiding == 5)
+	{
 		pos.setY(pos.getY() + 2);
+		yLock = true;
+	}
 
-	avoiding++;
+	if (avoiding != 0)
+		avoiding++;
 }
+
 
 Position Customer::getEndPoint()
 {
 	return endPoint;
+}
+
+void Customer::setYLock(bool set)
+{
+	yLock = set;
 }
 
 void Customer::setEndPoint(int x, int y)
@@ -248,14 +253,9 @@ void Customer::setEndPoint(int x, int y)
 	endPoint.setY(y);
 }
 
-int Customer::getEndPointX()
+void Customer::setQuantity(int quantity)
 {
-	return endPoint.getX();
-}
-
-int Customer::getEndPointY()
-{
-	return endPoint.getY();
+	this->quantity = quantity;
 }
 
 int Customer::getX() {
