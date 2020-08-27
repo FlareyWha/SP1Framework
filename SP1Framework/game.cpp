@@ -1508,11 +1508,29 @@ void renderMainMenu()
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     if (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER)
-        g_Console.writeToBuffer(c, "Start New", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Start New", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Start New", 0xF0);
+        }
     else if (g_ePreviousGameState == S_HOME)
-        g_Console.writeToBuffer(c, "Back Home", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Back Home", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Back Home", 0xF0);
+        }
     else
-        g_Console.writeToBuffer(c, "Resume Work", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 43
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Resume Work", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Resume Work", 0xF0);
+        }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     g_Console.writeToBuffer(c, "Save", 0xF0);
@@ -1521,7 +1539,13 @@ void renderMainMenu()
     g_Console.writeToBuffer(c, "Load", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+        && g_mouseEvent.mousePosition.Y == 12) {
+        g_Console.writeToBuffer(c, "Exit Game", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    }
 }
 
 // Render home menu
