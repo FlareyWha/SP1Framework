@@ -1966,52 +1966,11 @@ void renderCustomer()
         {
             if (customerPtr[i] != nullptr)
             {
-                switch (customerPtr[i]->getItemToBuy())
+              
+                if (timer[i] >= 10.9 || timer[i] <= 11.1)
                 {
-                case 1:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-
-                case 2:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-                case 3:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-                case 4:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-                case 5:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-                case 6:
-                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                    {
-                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                        travelling[i] = true;
-                        break;
-                    }
-                
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                    travelling[i] = true;
                 }
 
                 if (travelling[i] == true)
