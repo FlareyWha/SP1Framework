@@ -15,7 +15,6 @@ private:
     Position endPoint;
     Position prevPos;
     int CustomerDirection;
-    bool yLock;
 
 public:
     Customer();
@@ -35,10 +34,8 @@ public:
     int getEndPointX();
     int getEndPointY();
     Position getEndPoint();
-    bool getYLock();
-    void setYLock(bool set);
     void setEndPoint(int x, int y);
-    void setQuantity(int quantity);
+
     void setItemToBuy(int passcheck);
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
     int moveCustomer(Map& map, int framesPassed, int timer);
