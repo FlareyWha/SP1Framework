@@ -7,7 +7,7 @@ class Tutorial
 {
 private:
 	bool tutorialFlags[10];
-	bool pressed[7];
+	bool pressed[6];
 	bool allTrue;
 	bool proceed;
 
@@ -20,7 +20,8 @@ public:
 	void flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
 	void flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
 	void flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
-	void flagSix(Console& console, SMouseEvent& g_mouseEvent, double& tutorialTimer);
+	void flagSix(Console& console);
+	void flagSeven(Console& console);
 
 	bool getTutorialFlag(int number);
 	bool getProceed(void);

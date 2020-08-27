@@ -377,8 +377,9 @@ void update(double dt)
                     timer[i] += dt;
                 }
             }
-            if (tutorial.getTutorialFlag(4) == true)
-                g_dElapsedWorkTime += dt;  
+            if (tutorial.getTutorialFlag(5) == true)
+                g_dElapsedWorkTime += dt; 
+
             tutorialTimer += dt;
             updateTutorial();
             break;
@@ -1589,7 +1590,7 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
 
-    //if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
+    if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
         renderCustomer();
 
     renderBoxes();
@@ -1816,8 +1817,6 @@ void renderCustomer() // fix later yes ues
                                         CustomerBoxColour[i] = 0x90;
                                         break;
                                     }
-
-
                                 }
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
