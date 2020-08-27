@@ -58,6 +58,7 @@ WORD CustomerBoxColour[6];
 
 //tutorial stuff;
 Tutorial tutorial;
+double tutorialTimer;
 
 // Console object
 int g_ConsoleX = 80;
@@ -376,7 +377,11 @@ void update(double dt)
                     timer[i] += dt;
                 }
             }
-            g_dElapsedWorkTime += dt;  updateTutorial();
+            if (tutorial.getTutorialFlag(5) == true)
+                g_dElapsedWorkTime += dt; 
+
+            tutorialTimer += dt;
+            updateTutorial();
             break;
         }
         case S_GAME: {
@@ -425,11 +430,15 @@ void updateHome() // Home logic
 void updateTutorial() //Tutorial level logic
 {
     g_ePreviousGameState = g_eGameState;
-    processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
-    moveCharacter();    // moves the character, collision detection, physics, etc
-    actuallyMoving();
-    pickUpBoxes();
-    restockShelf();
+
+    if (tutorial.getProceed() == true)
+    {
+        processUserInput(); // checks if you should change states or do something else with the game, e.g. pause, exit
+        moveCharacter();    // moves the character, collision detection, physics, etc
+        actuallyMoving();
+        pickUpBoxes();
+        restockShelf();
+    }
 }
 
 void updateGame()       // game logic
@@ -676,6 +685,26 @@ void pickUpBoxes()  //todo
         BoxColour = 0x90;//bandages blue
 
         p.holdsProduct();
+    }
+}
+
+void checkCustomerCollision()
+{
+    for (int i = 0; i < 6; i++)
+    {
+        for (int j = 1; j < 7;j++)
+        {
+            if (customerPtr[i] != nullptr && boxPosPtr[j] != nullptr && j != i)
+            {
+                if (customerPtr[i]->getX() == boxPosPtr[j]->getX() && customerPtr[i]->getY() == boxPosPtr[j]->getY())
+                {
+                    //customerPtr[i]->setPos(customerPtr[i]->getX(), customerPtr[i]->getY());
+                    boxPosPtr[j]->setX(customerPtr[i]->getX() - 1);
+                    //customerPtr[i]->setPos(boxPosPtr[i]->getX() + 1, customerPtr[i]->getY());
+                }
+
+            }
+        }
     }
 }
 
@@ -1564,11 +1593,11 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
 
-    //if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
+    if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
         renderCustomer();
 
     renderBoxes();
-    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour);
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
 }
 
 void renderStore()
@@ -1697,9 +1726,13 @@ void renderCustomer() // fix later yes ues
                     travelling[i] = true;
                 }
 
-                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
-                    
+                //customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                checkCustomerCollision();
+
+
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+
+                //checkCustomerCollision();
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -1791,8 +1824,6 @@ void renderCustomer() // fix later yes ues
                                         CustomerBoxColour[i] = 0x90;
                                         break;
                                     }
-
-
                                 }
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {

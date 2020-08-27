@@ -142,6 +142,8 @@ void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 void renderStore();
 
+void checkCustomerCollision();
+
 void renderBoxes();
 void renderCustomer();
 void renderCharacter();     // renders the character into the buffer
