@@ -942,7 +942,7 @@ void processDebugState() //Toggle debug options
         }
     }
     if (g_skKeyEvent[K_F5].keyReleased) {
-        p.receivePay(1000);
+        p.receivePay(5000);
     }
 }
 
