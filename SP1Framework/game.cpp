@@ -353,6 +353,7 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
+    framesPassed++;
 
     switch (g_eGameState)
     {
@@ -515,11 +516,11 @@ void checkCustomerPlayerCollision()
             if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
             {
                 if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-                    g_sChar.m_cLocation.Y++;
+                    g_sChar.m_cLocation.Y--;
                     boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
                 }
                 else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-                    g_sChar.m_cLocation.Y--;
+                    g_sChar.m_cLocation.Y++;
                     boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
                 }
                 else
@@ -528,6 +529,40 @@ void checkCustomerPlayerCollision()
                     g_sChar.m_cLocation.Y++;
                 }
 
+            }
+
+            else if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1)
+                {
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//west
+                {
+                    g_sChar.m_cLocation.X++;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+
+
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//weird pushing problem is here //east
+                {
+
+                    if (boxPosPtr[i]->getX() == 36 || boxPosPtr[i]->getX() == 57)
+                    {
+                        g_sChar.m_cLocation.X--;
+                        boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+                    }
+                    else
+                    {
+                        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                        g_sChar.m_cLocation.Y++;
+                    }
+                }
             }
 
         }
@@ -794,7 +829,6 @@ void updateSons()
 // Process mouse inputs in Store screen
 void processStoreinput()
 {
-    framesPassed++;
     Player* pPtr = &p;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
         && framesPassed % 5 == 0) {
@@ -870,63 +904,63 @@ void deleteCustomer()
 }
 
 // Check for collision with box
-void checkBoxCollision()
-{
-    for (int i = 1; i < 7; i++)
-    {
-        if (boxPosPtr[i] != nullptr)
-        {
-            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
-            {
-                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
-                    g_sChar.m_cLocation.Y--;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-                }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
-                    g_sChar.m_cLocation.Y++;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-                }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
-                {
-                    g_sChar.m_cLocation.X++;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
-                    
-                }
-                else
-                {
-                    g_sChar.m_cLocation.X--;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
-                }
-            }
-        }
-    }
-
-    //for (int i = 1; i < 7; i++)
-    //{
-    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-    //    {
-    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-    //        {
-    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-    //                g_sChar.m_cLocation.Y++;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //            }
-    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-    //                g_sChar.m_cLocation.Y--;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-    //            }
-    //            else
-    //            {
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //                g_sChar.m_cLocation.Y++;
-    //            }
-
-    //        }
-
-    //    }
-
-    //}
-}
+//void checkBoxCollision()
+//{
+//    for (int i = 1; i < 7; i++)
+//    {
+//        if (boxPosPtr[i] != nullptr)
+//        {
+//            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+//            {
+//                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
+//                    g_sChar.m_cLocation.Y--;
+//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//                }
+//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
+//                    g_sChar.m_cLocation.Y++;
+//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+//                }
+//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
+//                {
+//                    g_sChar.m_cLocation.X++;
+//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+//                    
+//                }
+//                else
+//                {
+//                    g_sChar.m_cLocation.X--;
+//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
+//                }
+//            }
+//        }
+//    }
+//
+//    //for (int i = 1; i < 7; i++)
+//    //{
+//    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+//    //    {
+//    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+//    //        {
+//    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+//    //                g_sChar.m_cLocation.Y++;
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//    //            }
+//    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+//    //                g_sChar.m_cLocation.Y--;
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+//    //            }
+//    //            else
+//    //            {
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//    //                g_sChar.m_cLocation.Y++;
+//    //            }
+//
+//    //        }
+//
+//    //    }
+//
+//    //}
+//}
 
 // Delete customer boxes
 void deleteBoxes()
@@ -1297,7 +1331,7 @@ void renderGame()
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
-    checkBoxCollision();
+    
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
@@ -1486,11 +1520,29 @@ void renderMainMenu()
     c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     if (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER)
-        g_Console.writeToBuffer(c, "Start New", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Start New", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Start New", 0xF0);
+        }
     else if (g_ePreviousGameState == S_HOME)
-        g_Console.writeToBuffer(c, "Back Home", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Back Home", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Back Home", 0xF0);
+        }
     else
-        g_Console.writeToBuffer(c, "Resume Work", 0xF0);
+        if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 43
+            && g_mouseEvent.mousePosition.Y == 9) {
+            g_Console.writeToBuffer(c, "Resume Work", 0xE0);
+        }
+        else {
+            g_Console.writeToBuffer(c, "Resume Work", 0xF0);
+        }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     g_Console.writeToBuffer(c, "Save", 0xF0);
@@ -1499,7 +1551,13 @@ void renderMainMenu()
     g_Console.writeToBuffer(c, "Load", 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
+        && g_mouseEvent.mousePosition.Y == 12) {
+        g_Console.writeToBuffer(c, "Exit Game", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    }
 }
 
 // Render home menu
@@ -1528,7 +1586,6 @@ void renderHome()
 // Render animation for menu screens
 void renderMenuAnimation() //tbd
 {
-    framesPassed++;
     if (framesPassed % 50 == 0)
     {
         for (int pGy = 0; pGy < 25; pGy++)
@@ -1833,7 +1890,7 @@ void renderCustomer()
         COORD c = g_Console.getConsoleSize();
         bool created = false;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) 
         {
             if (customerPtr[i] != nullptr)
             {
@@ -1866,6 +1923,11 @@ void renderCustomer()
                 {
                     avoiding[i] = 0;
                     travelling[i] = true;
+                }
+
+                if (customerPtr[i]->getPos().getX() == 62)
+                {
+                    customerPtr[i]->setYLock(false);
                 }
 
                 customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
@@ -1910,9 +1972,17 @@ void renderCustomer()
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (customerPtr[i]->getQuantity() == 0) {
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
+                                }
+
+                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
@@ -1932,6 +2002,9 @@ void renderCustomer()
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
 
                                 }
 
@@ -1945,11 +2018,18 @@ void renderCustomer()
                         if (sPtr[j] != nullptr) {
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
+                                
+                                if (customerPtr[i]->getQuantity() == 0) {
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
+                                }
 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
@@ -1969,6 +2049,9 @@ void renderCustomer()
 
                                 else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
 
                                 }
 
