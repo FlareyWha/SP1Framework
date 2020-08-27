@@ -1427,7 +1427,7 @@ void renderCustomerTimer(int shelf) //works ?
     std::ostringstream ss;
     c.X;
     c.Y;
-    int cTimer;
+    int cTimerArrival;
     for (int i = 0; i < 6; i++)
     {
         if (customerPtr[i] != nullptr && 
@@ -1435,11 +1435,15 @@ void renderCustomerTimer(int shelf) //works ?
         {
             shelf = ((customerPtr[i]->getEndPointY() - 1 ) / 6) -1;
             c.Y = ((shelf + 1) * 6) - 1; 
-            c.X = 37;
-            cTimer = 30 - timer[i];
-            for (int i = 0; i != cTimer; i++) {
+            c.X = 27;
+            if (shelf > 2)
+            {
+                c.X + 11;
+            }
+            cTimerArrival = ((30 - timer[i])/3)+1; //change this formula 
+            for (int i = 0; i != cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, ' ', colors[shelf]);
-                c.X--;
+                c.X++;
             }
         }
     }
