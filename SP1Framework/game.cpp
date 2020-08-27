@@ -353,6 +353,7 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
+    framesPassed++;
 
     switch (g_eGameState)
     {
@@ -794,7 +795,6 @@ void updateSons()
 // Process mouse inputs in Store screen
 void processStoreinput()
 {
-    framesPassed++;
     Player* pPtr = &p;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
         && framesPassed % 5 == 0) {
@@ -1550,7 +1550,6 @@ void renderHome()
 // Render animation for menu screens
 void renderMenuAnimation() //tbd
 {
-    framesPassed++;
     if (framesPassed % 50 == 0)
     {
         for (int pGy = 0; pGy < 25; pGy++)
