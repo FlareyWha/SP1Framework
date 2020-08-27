@@ -855,6 +855,64 @@ void deleteCustomer()
     }
 }
 
+void checkBoxCollision()
+{
+    for (int i = 1; i < 7; i++)
+    {
+        if (boxPosPtr[i] != nullptr)
+        {
+            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
+                {
+                    g_sChar.m_cLocation.X++;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+                    
+                }
+                else
+                {
+                    g_sChar.m_cLocation.X--;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
+                }
+            }
+        }
+    }
+
+    //for (int i = 1; i < 7; i++)
+    //{
+    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+    //    {
+    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+    //        {
+    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+    //                g_sChar.m_cLocation.Y++;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //            }
+    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+    //                g_sChar.m_cLocation.Y--;
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+    //            }
+    //            else
+    //            {
+    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+    //                g_sChar.m_cLocation.Y++;
+    //            }
+
+    //        }
+
+    //    }
+
+    //}
+}
+
 void deleteBoxes()
 {
     for (int i = 1; i < 7; i++)
@@ -1215,6 +1273,7 @@ void renderGame()
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
+    checkBoxCollision();
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();

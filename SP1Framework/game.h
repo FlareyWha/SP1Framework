@@ -115,6 +115,8 @@ void checkEnd();
 void deleteBoxes();
 void deleteCustomer();
 
+void checkBoxCollision();
+
 void updateSons(); // update son status and run logic
 void processStoreinput();
 void processDebugState();
