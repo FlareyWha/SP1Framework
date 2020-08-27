@@ -1983,6 +1983,35 @@ void renderCustomer()
                         travelling[i] = true;
                         break;
                     }
+                case 3:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+                case 4:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+                case 5:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+                case 6:
+                    if (timer[i] >= 10.9 || timer[i] <= 11.1)
+                    {
+                        customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                        travelling[i] = true;
+                        break;
+                    }
+                
                 }
 
                 if (travelling[i] == true)
@@ -2194,7 +2223,7 @@ void renderCustomer()
                     if (created != true)
                     {
                         customerPtr[i] = new Customer;
-                        customerPtr[i]->setItemToBuy(2);
+                        customerPtr[i]->setItemToBuy(day + 2);
                         timer[i] = 0;
                         customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
                         spawned[i] = true;
