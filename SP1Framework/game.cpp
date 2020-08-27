@@ -2083,9 +2083,11 @@ void renderCustomer()
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
                                     customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
-                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                    //p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
                                     switch (j)
                                     {
@@ -2130,9 +2132,11 @@ void renderCustomer()
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
+                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+
                                     customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
-                                    p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                    //p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
                                     switch (j)
                                     {
