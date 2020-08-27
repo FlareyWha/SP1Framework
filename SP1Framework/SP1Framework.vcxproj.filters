@@ -154,5 +154,11 @@
     <Text Include="Vegetable.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Bandages.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
+    <Text Include="InstantNoodles.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

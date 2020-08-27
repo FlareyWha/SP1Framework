@@ -111,10 +111,12 @@
     <ClInclude Include="Tutorial.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Bandages.txt" />
     <Text Include="CannedFood.txt" />
     <Text Include="EndOfWork.txt" />
     <Text Include="GameOver.txt" />
     <Text Include="HomeScreen.txt" />
+    <Text Include="InstantNoodles.txt" />
     <Text Include="Lvl2.txt" />
     <Text Include="Lvl4.txt" />
     <Text Include="MainMenu.txt" />
