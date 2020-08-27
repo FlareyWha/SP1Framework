@@ -510,9 +510,12 @@ void checkCustomerPlayerCollision()
 {
     for (int i = 1; i < 7; i++)
     {
+
+
         if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
         {
-            if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+                       
+            if  (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
             {
                 if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
                     g_sChar.m_cLocation.Y++;
@@ -528,9 +531,50 @@ void checkCustomerPlayerCollision()
                     g_sChar.m_cLocation.Y++;
                 }
 
+
+
+            }
+            else if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+            {
+                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+                    g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+                    g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//west
+                {
+                    g_sChar.m_cLocation.X++;
+                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+    
+
+                }
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//weird pushing problem is here //east
+                {   
+                   
+                    if (boxPosPtr[i]->getX()== 36 || boxPosPtr[i]->getX() == 57)
+                    {
+                        g_sChar.m_cLocation.X--;
+                        boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1);
+                    }
+                    else
+                    {
+                        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                        g_sChar.m_cLocation.Y++;
+                    }
+                    
+
+                }
+                
             }
 
+
+
         }
+
+
 
     }
 }
@@ -870,63 +914,69 @@ void deleteCustomer()
 }
 
 // Check for collision with box
-void checkBoxCollision()
-{
-    for (int i = 1; i < 7; i++)
-    {
-        if (boxPosPtr[i] != nullptr)
-        {
-            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
-            {
-                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
-                    g_sChar.m_cLocation.Y--;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-                }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
-                    g_sChar.m_cLocation.Y++;
-                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-                }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
-                {
-                    g_sChar.m_cLocation.X++;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
-                    
-                }
-                else
-                {
-                    g_sChar.m_cLocation.X--;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
-                }
-            }
-        }
-    }
-
-    //for (int i = 1; i < 7; i++)
-    //{
-    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-    //    {
-    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-    //        {
-    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-    //                g_sChar.m_cLocation.Y++;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //            }
-    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-    //                g_sChar.m_cLocation.Y--;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-    //            }
-    //            else
-    //            {
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //                g_sChar.m_cLocation.Y++;
-    //            }
-
-    //        }
-
-    //    }
-
-    //}
-}
+//void checkBoxCollision()
+//{
+//    for (int i = 1; i < 7; i++)
+//    {
+//        if (boxPosPtr[i] != nullptr)
+//        {
+//            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
+//            {
+//                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
+//                    g_sChar.m_cLocation.Y--;
+//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//                }
+//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
+//                    g_sChar.m_cLocation.Y++;
+//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+//                }
+//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())
+//                {
+//                    g_sChar.m_cLocation.X++;
+//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+//
+//                    /*boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//                    g_sChar.m_cLocation.Y++;*/
+//
+//                }
+//                else
+//                {
+//                   /* boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//                    g_sChar.m_cLocation.Y++;*/
+//
+//                    g_sChar.m_cLocation.X--;
+//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
+//                }
+//            }
+//        }
+//    }
+//
+//    //for (int i = 1; i < 7; i++)
+//    //{
+//    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+//    //    {
+//    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
+//    //        {
+//    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
+//    //                g_sChar.m_cLocation.Y++;
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//    //            }
+//    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
+//    //                g_sChar.m_cLocation.Y--;
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
+//    //            }
+//    //            else
+//    //            {
+//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+//    //                g_sChar.m_cLocation.Y++;
+//    //            }
+//
+//    //        }
+//
+//    //    }
+//
+//    //}
+//}
 
 // Delete customer boxes
 void deleteBoxes()
@@ -1295,8 +1345,8 @@ void renderGame()
         level = 5;
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
+    //checkBoxCollision();
     checkCustomerPlayerCollision();
-    checkBoxCollision();
     renderCharacter();  // renders the character into the buffer
     renderCustomer();
     renderBoxes();
