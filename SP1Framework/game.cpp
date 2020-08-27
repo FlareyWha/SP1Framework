@@ -353,7 +353,6 @@ void update(double dt)
     // get the delta time
     g_dElapsedTime += dt;
     g_dDeltaTime = dt;
-    framesPassed++;
 
     switch (g_eGameState)
     {
@@ -829,6 +828,7 @@ void updateSons()
 // Process mouse inputs in Store screen
 void processStoreinput()
 {
+    framesPassed++;
     Player* pPtr = &p;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
         && framesPassed % 5 == 0) {
@@ -1598,11 +1598,29 @@ void renderHome()
     c.X = 27;
     g_Console.writeToBuffer(c, "Options", 0xF0);
     c.Y += 2;
-    g_Console.writeToBuffer(c, "Next Day", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 34
+        && g_mouseEvent.mousePosition.Y == 20) {
+        g_Console.writeToBuffer(c, "Next Day", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Next Day", 0xF0);
+    }
     c.Y += 1;
-    g_Console.writeToBuffer(c, "Store", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 31
+        && g_mouseEvent.mousePosition.Y == 21) {
+        g_Console.writeToBuffer(c, "Store", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Store", 0xF0);
+    }
     c.Y += 1;
-    g_Console.writeToBuffer(c, "Menu", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 30
+        && g_mouseEvent.mousePosition.Y == 22) {
+        g_Console.writeToBuffer(c, "Menu", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Menu", 0xF0);
+    }
 }
 
 // Render animation for menu screens
@@ -1746,7 +1764,13 @@ void renderEndOfWorkScreen()
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
-    g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 28 && g_mouseEvent.mousePosition.X <= 48
+        && g_mouseEvent.mousePosition.Y == 12) {
+        g_Console.writeToBuffer(c, "Click here to go home", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
+    }
 }
 
 // Render cause of game over and game over screen
@@ -1825,14 +1849,30 @@ void renderStore()
         g_Console.writeToBuffer(c, "[$100]", 0xF0);
         ss.str("");
         c.Y += 2;
-        ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
-        if (day >= 5) {
-            c.Y += 2;
-            ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+        if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 39
+            && g_mouseEvent.mousePosition.Y == 8) {
+            ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xE0);
+            ss.str("");
+        }
+        else {
+            ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
             g_Console.writeToBuffer(c, ss.str(), 0xF0);
             ss.str("");
+        }
+        if (day >= 5) {
+            c.Y += 2;
+            if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 38
+                && g_mouseEvent.mousePosition.Y == 10) {
+                ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+                g_Console.writeToBuffer(c, ss.str(), 0xE0);
+                ss.str("");
+            }
+            else {
+                ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+                g_Console.writeToBuffer(c, ss.str(), 0xF0);
+                ss.str("");
+            }
         }
     }
     if (day < 4) {
@@ -1844,26 +1884,58 @@ void renderStore()
     c.Y += 2;
     g_Console.writeToBuffer(c, "[$50]", 0xF0);
     c.Y += 2;
-    ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
-    c.Y += 2;
-    if (day >= 1) {
-        ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
+    if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 38
+        && g_mouseEvent.mousePosition.Y == 14) {
+        ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
+        g_Console.writeToBuffer(c, ss.str(), 0xE0);
+        ss.str("");
+    }
+    else {
+        ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
         g_Console.writeToBuffer(c, ss.str(), 0xF0);
         ss.str("");
+    }
+    c.Y += 2;
+    if (day >= 1) {
+        if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 38
+            && g_mouseEvent.mousePosition.Y == 16) {
+            ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xE0);
+            ss.str("");
+        }
+        else {
+            ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+            ss.str("");
+        }
     }
     c.Y += 2;
     if (day >= 2) {
-        ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
+        if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 40
+            && g_mouseEvent.mousePosition.Y == 18) {
+            ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xE0);
+            ss.str("");
+        }
+        else {
+            ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+            ss.str("");
+        }
     }
     c.Y += 2;
     if (day >= 3) {
-        ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
-        g_Console.writeToBuffer(c, ss.str(), 0xF0);
-        ss.str("");
+        if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 43
+            && g_mouseEvent.mousePosition.Y == 20) {
+            ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xE0);
+            ss.str("");
+        }
+        else {
+            ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+            ss.str("");
+        }
     }
     c = g_Console.getConsoleSize();
     c.X /= 2;
