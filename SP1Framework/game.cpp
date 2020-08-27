@@ -1912,7 +1912,7 @@ void renderCustomer()
         COORD c = g_Console.getConsoleSize();
         bool created = false;
 
-        for (int i = 0; i < 6; i++)
+        for (int i = 0; i < 6; i++) 
         {
             if (customerPtr[i] != nullptr)
             {
