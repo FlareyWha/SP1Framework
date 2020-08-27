@@ -57,8 +57,6 @@ enum EGAMESTATES
 enum EDEBUGSTATES
 {
     D_OFF,
-    D_FRAMES,
-    D_INPUT,
     D_BOTH
 };
 
