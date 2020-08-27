@@ -518,11 +518,17 @@ void checkCustomerPlayerCollision()
             if  (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
             {
                 if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-                    g_sChar.m_cLocation.Y++;
+                    /*g_sChar.m_cLocation.Y++;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);*/
+
+                    g_sChar.m_cLocation.Y--;
                     boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
                 }
                 else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-                    g_sChar.m_cLocation.Y--;
+                    /*g_sChar.m_cLocation.Y--;
+                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);*/
+
+                    g_sChar.m_cLocation.Y++;
                     boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
                 }
                 else
