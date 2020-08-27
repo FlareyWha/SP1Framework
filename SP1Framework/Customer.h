@@ -32,6 +32,8 @@ public:
     int getItemToBuy();
     int getX();
     int getY();
+    int getEndPointX();
+    int getEndPointY();
     Position getEndPoint();
     bool getYLock();
     void setYLock(bool set);
