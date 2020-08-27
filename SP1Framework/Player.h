@@ -1,6 +1,7 @@
 #pragma once
 #include "Entity.h"
 #include "Powerup.h"
+#include "Son.h"
 #include "Framework/console.h"
 
 class Player :
@@ -42,8 +43,8 @@ public:
 	void takePay(int pay);
 
 	void payRent(); // rent cost = 200 
-	void payFood(); // food cost = 30
-	void payMedicine(); // medicine cost = 100
+	void payFood(Son* cPtr); // food cost = 30
+	void payMedicine(Son* cPtr); // medicine cost = 100
 	void isRentPaid();
 	bool getRentStatus();
 
@@ -54,7 +55,15 @@ public:
 	void setRent(int r);
 	void setFood(int f);
 	void setMedicine(int m);
+	int getRent();
+	int getFood();
+	int getMedicine();
 
-
+	void purchasecheaperFood(Player* p); //cheaper food
+	void purchasecheaperRent(Player* p); //cheaper rent
+	void purchaseplayerShoes(Player* p); //faster player
+	void purchaseslowerCustomers(Player* p); //slower customers
+	void purchaserichCustomers(Player* p); //more money per customer
+	void purchasethriftyCustomers(Player* p); //less chance of buying >1 item
 };
 

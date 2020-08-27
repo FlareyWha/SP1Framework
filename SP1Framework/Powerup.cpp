@@ -48,44 +48,32 @@ int Powerup::getTCustomerslvl()
 	return thriftyCustomers;
 }
 
-void Powerup::purchasecheaperFood()
+void Powerup::incFoodlvl()
 {
-	if (cheaperFood < 3) {
-		cheaperFood++;
-	}
+	cheaperFood++;
 }
 
-void Powerup::purchasecheaperRent()
+void Powerup::incRentlvl()
 {
-	if (cheaperRent < 3) {
-		cheaperRent++;
-	}
+	cheaperRent++;
 }
 
-void Powerup::purchaseplayerShoes()
+void Powerup::incShoeslvl()
 {
-	if (playerShoes < 2) {
-		playerShoes++;
-	}
+	playerShoes++;
 }
 
-void Powerup::purchaseslowerCustomers()
+void Powerup::incSCustomerslvl()
 {
-	if (slowerCustomers < 2) {
-		slowerCustomers++;
-	}
+	slowerCustomers++;
 }
 
-void Powerup::purchaserichCustomers()
+void Powerup::incRCustomerslvl()
 {
-	if (richCustomers < 3) {
-		richCustomers++;
-	}
+	richCustomers++;
 }
 
-void Powerup::purchasethriftyCustomers()
+void Powerup::incTCustomerslvl()
 {
-	if (thriftyCustomers < 3) {
-		thriftyCustomers++;
-	}
+	thriftyCustomers++;
 }
