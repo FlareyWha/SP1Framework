@@ -206,14 +206,14 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 
 void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 {
-	if (map.getGrid(pos.getY(), pos.getX() - 2) == 'C')
+	if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
 		avoiding = 0;
-	else if ((map.getGrid(pos.getY(), pos.getX() - 1) == 'C') && (pos.getX() - 1 != endPoint.getX()))
+	else if ((map.getGrid(pos.getY(), pos.getX() - 3) == 'C') && (pos.getX() - 1 != endPoint.getX()))
 	{
 		travelling = false;
 		avoiding = 1;
 	}
-	else if (map.getGrid(pos.getY(), pos.getX() + 1) == 'C')
+	else if (map.getGrid(pos.getY(), pos.getX() + 3) == 'C' && endPoint.getX() == 79 && endPoint.getY() == 15)
 	{
 		travelling = false;
 		avoiding = 5;
@@ -222,7 +222,7 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 
 void Customer::bumpIntoCustomer(int& avoiding, Map& map)
 {
-	int tempY, tempX;
+	int tempY, tempX = 0;
 	// avoiding 1-3 is for if the moving customer is on the right of a still customer
 	// avoiding 4-6 is for if the moving customer is on the left of a still customer
 	if (avoiding == 1)

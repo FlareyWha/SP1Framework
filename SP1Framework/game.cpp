@@ -967,6 +967,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
         g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
         g_bRestocking = true;
+        p.setPos(18, 1);
         COORD c;
         c.X = 18;
         c.Y = 1;
@@ -1837,7 +1838,7 @@ void renderCustomer()
                     travelling[i] = true;
                 }
 
-                //customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
 
 
@@ -1872,7 +1873,6 @@ void renderCustomer()
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
-                    
 
                     for (int j = 0; j < 3; j++) {
 
@@ -1886,17 +1886,17 @@ void renderCustomer()
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
-                                    switch (j) 
+                                    switch (j)
                                     {
-                                        case 0:
-                                            CustomerBoxColour[i] = 0x50;
-                                            break;
-                                        case 1:
-                                            CustomerBoxColour[i] = 0x10;
-                                            break;
-                                        case 3:
-                                            CustomerBoxColour[i] = 0xB0;
-                                            break;
+                                    case 0:
+                                        CustomerBoxColour[i] = 0x50;
+                                        break;
+                                    case 1:
+                                        CustomerBoxColour[i] = 0x10;
+                                        break;
+                                    case 3:
+                                        CustomerBoxColour[i] = 0xB0;
+                                        break;
                                     }
                                 }
 
@@ -1951,24 +1951,25 @@ void renderCustomer()
 
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
-
-                   /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
-                    {*/
-                        spawned[i] = false;
-                        delete customerPtr[i];
-                        customerPtr[i] = nullptr;
-
-                        delete boxPtr[i + 1];
-                        boxPtr[i + 1] = nullptr;
-                        delete boxPosPtr[i + 1];
-                        boxPosPtr[i + 1] = nullptr;
-
-                        CustomerBoxColour[i] = 0x77;
-
-                        timer[i] = -1;
-                        travelling[i] = false;
-                    /*}*/
                 }
+
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                {
+                    spawned[i] = false;
+                    delete customerPtr[i];
+                    customerPtr[i] = nullptr;
+
+                    delete boxPtr[i + 1];
+                    boxPtr[i + 1] = nullptr;
+                    delete boxPosPtr[i + 1];
+                    boxPosPtr[i + 1] = nullptr;
+
+                    CustomerBoxColour[i] = 0x77;
+
+                    timer[i] = -1;
+                    travelling[i] = false;
+                }
+
 
                /* if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
