@@ -1986,8 +1986,8 @@ void renderFramerate()
         if (customerPtr[i] != nullptr)
         {
             ss.str("");
-            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY() << ", Shelf " << customerPtr[i]->getItemToBuy();
-            c.X = 30;
+            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY() << ", Shelf " << customerPtr[i]->getItemToBuy() << ", endpos" << customerPtr[i]->getEndPoint().getX() << ", " << customerPtr[i]->getEndPoint().getY();
+            c.X = 15;
             c.Y = 14 + i;
             g_Console.writeToBuffer(c, ss.str(), 0x0F);
         }

@@ -202,7 +202,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
 	}
-}
+} 
 
 void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 {
