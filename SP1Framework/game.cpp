@@ -798,42 +798,48 @@ void processStoreinput()
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 14) {
+            && g_mouseEvent.mousePosition.Y == 14
+            && day >= 0) {
             if (p.getSavings() >= 50) {
                 p.purchasecheaperFood(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 16) {
+            && g_mouseEvent.mousePosition.Y == 16
+            && day >= 1) {
             if (p.getSavings() >= 50) {
                 p.purchasecheaperRent(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 38
-            && g_mouseEvent.mousePosition.Y == 8) {
+            && g_mouseEvent.mousePosition.Y == 8
+            && day >= 4) {
             if (p.getSavings() >= 100) {
                 p.purchaseplayerShoes(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 42
-            && g_mouseEvent.mousePosition.Y == 10) {
+            && g_mouseEvent.mousePosition.Y == 10
+            && day >= 5) {
             if (p.getSavings() >= 100) {
                 p.purchaseslowerCustomers(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 40
-            && g_mouseEvent.mousePosition.Y == 18) {
+            && g_mouseEvent.mousePosition.Y == 18
+            && day >= 2) {
             if (p.getSavings() >= 50) {
                 p.purchaserichCustomers(pPtr);
             }
         }
         else if (g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 43
-            && g_mouseEvent.mousePosition.Y == 20) {
+            && g_mouseEvent.mousePosition.Y == 20
+            && day >= 3) {
             if (p.getSavings() >= 50) {
                 p.purchasethriftyCustomers(pPtr);
             }
@@ -1058,8 +1064,7 @@ void processInputHome() //note lol
         }
         else if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 31)
-            && g_mouseEvent.mousePosition.Y == 21
-            && day != 0 && day >= 6) //Change to store state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 21) //Change to store state once mouse clicks on the button
         {
             g_eGameState = S_STORE;
         }
@@ -1399,10 +1404,8 @@ void renderHome()
     g_Console.writeToBuffer(c, "Options", 0xF0);
     c.Y += 2;
     g_Console.writeToBuffer(c, "Next Day", 0xF0);
-    if (day != 0 && day >= 6) {
-        c.Y += 1;
-        g_Console.writeToBuffer(c, "Store", 0xF0);
-    }
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Store", 0xF0);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Menu", 0xF0);
 }
@@ -1587,7 +1590,6 @@ void renderGameOver()
     g_Console.writeToBuffer(c, "back to the main menu!", 0xF0);
 }
 
-
 void renderTutorialLevel()
 {
     map.chooseMap(1, g_Console);
@@ -1618,36 +1620,51 @@ void renderStore()
     ss << "Savings : $" << p.getSavings();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
-    c.Y += 2;
-    g_Console.writeToBuffer(c, "[$100]", 0xF0);
-    ss.str("");
-    c.Y += 2;
-    ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
-    c.Y += 2;
-    ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
+    if (day >= 4) {
+        c.Y += 2;
+        g_Console.writeToBuffer(c, "[$100]", 0xF0);
+        ss.str("");
+        c.Y += 2;
+        ss << "Cooler Shoes (Lvl " << p.getPowerups()->getShoeslvl() << ")";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+        if (day >= 5) {
+            c.Y += 2;
+            ss << "Crowd Control (Lvl " << p.getPowerups()->getSCustomerslvl() << ")";
+            g_Console.writeToBuffer(c, ss.str(), 0xF0);
+            ss.str("");
+        }
+    }
+    if (day < 4) {
+        c.Y += 6;
+    }
+    else if (day < 5) {
+        c.Y += 2;
+    }
     c.Y += 2;
     g_Console.writeToBuffer(c, "[$50]", 0xF0);
-    ss.str("");
     c.Y += 2;
     ss << "Cheaper Food (Lvl " << p.getPowerups()->getFoodlvl() << ")";
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     c.Y += 2;
-    ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
+    if (day >= 1) {
+        ss << "Cheaper Rent (Lvl " << p.getPowerups()->getRentlvl() << ")";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+    }
     c.Y += 2;
-    ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
+    if (day >= 2) {
+        ss << "Rich Customers (Lvl " << p.getPowerups()->getRCustomerslvl() << ")";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+    }
     c.Y += 2;
-    ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    ss.str("");
+    if (day >= 3) {
+        ss << "Thrifty Customers (Lvl " << p.getPowerups()->getTCustomerslvl() << ")";
+        g_Console.writeToBuffer(c, ss.str(), 0xF0);
+        ss.str("");
+    }
     c = g_Console.getConsoleSize();
     c.X /= 2;
     c.X -= 5;
