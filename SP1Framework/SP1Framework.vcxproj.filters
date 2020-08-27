@@ -142,23 +142,5 @@
     <Text Include="Store.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="ToiletPaper.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Rice.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="CannedFood.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Vegetable.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="Bandages.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="InstantNoodles.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
 </Project>

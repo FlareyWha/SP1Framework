@@ -113,7 +113,7 @@ void checkEnd();
 void deleteBoxes();
 void deleteCustomer();
 
-void checkBoxCollision();
+
 
 void updateSons(); // update son status and run logic
 void processStoreinput();
@@ -131,6 +131,7 @@ void clearScreen();         // clears the current screen and draw from scratch
 void renderSplashScreen();  // renders the splash screen
 void renderGame();          // renders the game stuff
 void renderShelfAmount(); //renders the shelf stuff
+void renderCustomerTimer(int shelf);
 void renderItem(int shelf); //renders amount of items on shelf
 void renderMap();           // renders the map to the buffer first
 void renderHUD();        // renders the HUD
@@ -143,7 +144,7 @@ void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 void renderStore();
 
-void checkCustomerCollision();
+void checkCustomerPlayerCollision();
 
 void renderBoxes();
 void renderCustomer();
