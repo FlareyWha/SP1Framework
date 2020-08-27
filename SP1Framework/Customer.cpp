@@ -149,8 +149,8 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			{
 				if (map.getGrid(pos.getY() - 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (NORTH
 				{
-					pos.setY(pos.getY() - 1);
-					return 1;
+					//pos.setY(pos.getY() - 1);
+					//return 1;
 				}
 				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
@@ -162,12 +162,12 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			{
 				if (map.getGrid(pos.getY() + 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (SOUTH
 				{
-					pos.setY(pos.getY() + 1);
-					return 1;
+					//pos.setY(pos.getY() + 1);
+					//return 1;
 				}
 				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
-					pos.setY(pos.getY() - 1);
+					pos.setY(pos.getY() + 1);
 					return 1;
 				}
 			}
@@ -202,7 +202,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
 	}
-}
+} 
 
 void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 {
