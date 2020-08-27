@@ -151,5 +151,8 @@
     <Text Include="CannedFood.txt">
       <Filter>Resource Files</Filter>
     </Text>
+    <Text Include="Vegetable.txt">
+      <Filter>Resource Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

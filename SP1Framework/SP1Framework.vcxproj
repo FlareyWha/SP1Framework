@@ -124,6 +124,7 @@
     <Text Include="Store.txt" />
     <Text Include="ToiletPaper.txt" />
     <Text Include="Tutorial level.txt" />
+    <Text Include="Vegetable.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
