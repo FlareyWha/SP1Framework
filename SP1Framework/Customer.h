@@ -31,6 +31,8 @@ public:
     int getItemToBuy();
     int getX();
     int getY();
+    int getEndPointX();
+    int getEndPointY();
     Position getEndPoint();
     void setEndPoint(int x, int y);
 

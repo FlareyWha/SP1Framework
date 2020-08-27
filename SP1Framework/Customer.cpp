@@ -248,6 +248,16 @@ void Customer::setEndPoint(int x, int y)
 	endPoint.setY(y);
 }
 
+int Customer::getEndPointX()
+{
+	return endPoint.getX();
+}
+
+int Customer::getEndPointY()
+{
+	return endPoint.getY();
+}
+
 int Customer::getX() {
 	return pos.getX();
 }
