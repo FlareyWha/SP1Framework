@@ -113,7 +113,7 @@ void checkEnd();
 void deleteBoxes();
 void deleteCustomer();
 
-void checkBoxCollision();
+
 
 void updateSons(); // update son status and run logic
 void processStoreinput();
@@ -144,7 +144,7 @@ void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 void renderStore();
 
-void checkCustomerCollision();
+void checkCustomerPlayerCollision();
 
 void renderBoxes();
 void renderCustomer();
