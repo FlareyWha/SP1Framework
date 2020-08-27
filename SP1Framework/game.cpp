@@ -1838,6 +1838,11 @@ void renderCustomer()
                     travelling[i] = true;
                 }
 
+                if (customerPtr[i]->getPos().getX() == 62)
+                {
+                    customerPtr[i]->setYLock(false);
+                }
+
                 customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
 
@@ -1880,9 +1885,17 @@ void renderCustomer()
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (customerPtr[i]->getQuantity() == 0) {
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
+                                }
+
+                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
                                     p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
@@ -1916,7 +1929,13 @@ void renderCustomer()
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (customerPtr[i]->getQuantity() == 0) {
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    avoiding[i] = 5;
+                                    travelling[i] = false;
+                                }
+
+                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
@@ -1947,8 +1966,6 @@ void renderCustomer()
                         }
 
                     }
-
-
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
                 }
