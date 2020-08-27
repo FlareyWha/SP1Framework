@@ -1547,7 +1547,6 @@ void renderHome()
 // Render animation for menu screens
 void renderMenuAnimation() //tbd
 {
-    framesPassed++;
     if (framesPassed % 50 == 0)
     {
         for (int pGy = 0; pGy < 25; pGy++)
