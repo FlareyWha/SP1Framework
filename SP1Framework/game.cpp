@@ -1369,6 +1369,7 @@ void renderShelfAmount()
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
+            renderCustomerTimer(i);
         }
     }
     else if (g_eGameState == S_TUT) {
@@ -1376,6 +1377,7 @@ void renderShelfAmount()
             int amt = sPtr[i]->getAmount();
             amt = sPtr[i]->getAmount();
             renderItem(i);
+            renderCustomerTimer(i);
         }
     }
 }
@@ -1436,6 +1438,57 @@ void renderHUD()
     g_Console.writeToBuffer(c, ss.str(), 0x80);
 
 }
+
+void renderCustomerTimer(int shelf)
+{
+    const WORD colors[] = {
+        0x50, 0x10, 0xB0, 0xE0, 0xA0, 0x90, 0x60
+    };
+
+    COORD c;
+    std::ostringstream ss;
+    c.X = 37;
+    c.Y = -1;
+    int cTimer;
+    for (int i = 0; i < 6; i++)
+    {
+        if (customerPtr[i] != nullptr && 
+            customerPtr[i]->getEndPointX() == customerPtr[i]->getX() && customerPtr[i]->getEndPointY() == customerPtr[i]->getY())
+        {
+            cTimer = 7;
+            for (int x = 0; x <= shelf; x++) {
+                c.Y += 6;
+            }
+            if (shelf >= 3)
+            {
+                c.X += 21;
+            }
+            for (int x = 3; x <= shelf; x++) {
+                switch (x)
+                {
+                case 3: c.Y = 6;
+                    break;
+                case 4: c.Y = 12;
+                    break;
+                case 5: c.Y = 18;
+                    break;
+                }
+            }
+            for (int i = 0; i != cTimer; i++) {
+                g_Console.writeToBuffer(c, ' ', colors[shelf]);
+                c.X--;
+            }
+            if (shelf >= 3)
+            {
+                c.X = 48;
+            }
+            else {
+                c.X = 27;
+            }
+        }
+    }
+}
+
 
 // Render items for renderShelfAmount
 void renderItem(int shelf)
@@ -1503,7 +1556,7 @@ void renderMap()
 void renderMainMenu()
 {
     map.chooseMap(0, g_Console);
-    renderMenuAnimation();
+    //renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
     c.Y /= 25;
     c.X = c.X / 2 - 5;
@@ -1821,7 +1874,6 @@ void renderStore()
 // Render boxes
 void renderBoxes()
 {
-   
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
     for (int i = 0; i < 6; i++)
     {
