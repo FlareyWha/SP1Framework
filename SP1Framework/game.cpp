@@ -302,6 +302,7 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent) //movement
     case VK_SHIFT: key = K_SHIFT; break;
     case VK_F3: key = K_F3; break;
     case VK_F4: key = K_F4; break;
+    case VK_F5: key = K_F5; break;
     }
     // a key pressed event would be one with bKeyDown == true
     // a key released event would be one with bKeyDown == false
@@ -356,7 +357,6 @@ void update(double dt)
     switch (g_eGameState)
     {
         case S_SPLASHSCREEN: updateSplashScreen(); // game logic for the splash screen
-            p.receivePay(1000);
             break;
         case S_MENU: updateMenu();
             break;
@@ -930,7 +930,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
 
 void processDebugState() //Toggle debug options
 {
-    if (g_skKeyEvent[K_F3].keyDown)
+    if (g_skKeyEvent[K_F3].keyReleased)
     {
         if (g_eDebugState == D_OFF)
         {
@@ -940,6 +940,9 @@ void processDebugState() //Toggle debug options
         {
             g_eDebugState = D_OFF;
         }
+    }
+    if (g_skKeyEvent[K_F5].keyReleased) {
+        p.receivePay(1000);
     }
 }
 

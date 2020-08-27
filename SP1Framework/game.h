@@ -35,6 +35,7 @@ enum EKEYS
     K_SHIFT,
     K_F3,
     K_F4,
+    K_F5,
     K_COUNT,
 };
 
