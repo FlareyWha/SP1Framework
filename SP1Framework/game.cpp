@@ -1846,7 +1846,7 @@ void renderBoxes()
 //    //todo
 //}
 
-// Render customer current position
+// Render customer current position yeye
 void renderCustomer()
 {   
     if (g_bRestocking == false) {
