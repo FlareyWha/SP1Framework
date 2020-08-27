@@ -1173,7 +1173,7 @@ void processInputGameOver()
 void processInputHome() //note lol
 {
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
-        && framesPassed % 5 == 0)
+        )
     {
         COORD c = g_Console.getConsoleSize();
         Player* pPtr = &p;
@@ -1638,7 +1638,7 @@ void renderHomeExpenses(COORD c)
         }
     }
     c.Y += 1;
-    ss << "Food ($" << p.getFood() << ") [ ]";
+    ss << "Food ($" << p.getFood() << ") [ ]"; //lol
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     if (cPtr[1]->getStatusFed() == true) {
