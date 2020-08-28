@@ -2096,7 +2096,7 @@ void renderCustomer()
                     }
 
                     //for (int j = 0; j < 3; j++) {
-
+                     
                     //    if (sPtr[j] != nullptr) {
 
                     //        if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
