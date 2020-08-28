@@ -1,7 +1,4 @@
 #include "saveLoad.h"
-#include <fstream>
-#include <string>  
-#include <iostream>
 
 using namespace std;
 
@@ -96,7 +93,20 @@ void saveLoad::decryptPowerup()
     }
 }
 
-void saveLoad::loadSave(string save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 
+void saveLoad::savePlayerstats(LPCWSTR save, int days, int money, int son1, int son2)
+{
+    fstream myFile;
+
+    myFile.open(save);
+    if (myFile.is_open())
+    {
+        myFile >> ignore >> storedDays >> storedMoney >> storedSon1 >> storedSon2 >> storedPowerups;
+
+        myFile.close();
+    }
+}
+
+void saveLoad::loadSave(LPCWSTR save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 
 {
     fstream myFile;
 
@@ -116,7 +126,7 @@ void saveLoad::loadSave(string save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A
     myFile.close();
 }
 
-void saveLoad::saveSave(string save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 
+void saveLoad::saveSave(LPCWSTR save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 
 {
     fstream myFile;
 
