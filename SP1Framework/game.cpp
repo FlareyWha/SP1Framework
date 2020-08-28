@@ -1974,31 +1974,18 @@ void renderCustomer()
         {
             if (customerPtr[i] != nullptr)
             {
-              
-                if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                }
 
                 if (travelling[i] == true)
                 {
                     customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups()->getSCustomerslvl()));
-                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
                 }
-                    
-                else if (avoiding[i] == 4 || avoiding[i] == 6)
-                {
-                    avoiding[i] = 0;
-                    travelling[i] = true;
-                }
+
+                customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
 
                 if (customerPtr[i]->getPos().getX() == 62)
                 {
                     customerPtr[i]->setYLock(false);
                 }
-
-                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
 
 
@@ -2030,6 +2017,18 @@ void renderCustomer()
                     }
                 }
 
+                if (customerPtr[i]->getQuantity() == 0) {
+                    customerPtr[i]->setEndPoint(79, 15);
+                    avoiding[i] = 5;
+                    travelling[i] = false;
+                }
+
+                if (timer[i] >= 10.9 && timer[i] <= 11.1)
+                {
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                    travelling[i] = true;
+                }
+
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
@@ -2040,13 +2039,7 @@ void renderCustomer()
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
 
-                                if (customerPtr[i]->getQuantity() == 0) {
-                                    customerPtr[i]->setEndPoint(79, 15);
-                                    avoiding[i] = 5;
-                                    travelling[i] = false;
-                                }
-
-                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
@@ -2087,13 +2080,7 @@ void renderCustomer()
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
                                 
-                                if (customerPtr[i]->getQuantity() == 0) {
-                                    customerPtr[i]->setEndPoint(79, 15);
-                                    avoiding[i] = 5;
-                                    travelling[i] = false;
-                                }
-
-                                else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
                                     sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
 
@@ -2133,6 +2120,7 @@ void renderCustomer()
                     customerPtr[i]->setEndPoint(79, 15);
                     //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
 
+                    /*
                     spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
@@ -2146,9 +2134,10 @@ void renderCustomer()
 
                     timer[i] = -1;
                     travelling[i] = false;
+                    */
                 }
 
-                /*else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
                     spawned[i] = false;
                     delete customerPtr[i];
@@ -2163,7 +2152,7 @@ void renderCustomer()
 
                     timer[i] = -1;
                     travelling[i] = false;
-                }*/
+                }
             }
             else
             {
