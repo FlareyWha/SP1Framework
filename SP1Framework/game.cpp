@@ -2002,13 +2002,14 @@ void renderCustomer()
                 }
                 //checkCustomerCollision();
 
+
                 if (customerPtr[i]->getState() == true)
                 {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20); //green
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
                 }
                 else
                 {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44); //red
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
                 }
 
                 //checkCustomerCollision();
@@ -2210,6 +2211,7 @@ void renderCustomer()
                     boxPosPtr[i + 1] = nullptr;
 
                     CustomerBoxColour[i] = 0x77;
+                    
 
                     timer[i] = -1;
                     travelling[i] = false;
