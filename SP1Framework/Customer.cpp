@@ -35,6 +35,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	spawned = false;
 	timerSet = false;
 	timer = 0.0;
+	movingBack = false;
 }
 
 //Customer::Customer(Map map)
