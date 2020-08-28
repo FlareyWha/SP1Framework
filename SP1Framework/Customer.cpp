@@ -242,7 +242,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
 					pos.setY(pos.getY() + 1);
-					return 1;
+					return 3;
 				}
 			}
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
@@ -271,7 +271,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				{
 					pos.setX(pos.getX() + 1);
-					return 2;
+					return 0;
 				}
 			}
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
