@@ -2046,7 +2046,7 @@ void renderCustomer()
 
                 customerPtr[i]->customerCollision(map);   
 
-                if (customerPtr[i]->getPos().getX() == 62)
+                if (customerPtr[i]->getPos().getX() == 73)
                 {
                     customerPtr[i]->setYLock(false);
                 }
