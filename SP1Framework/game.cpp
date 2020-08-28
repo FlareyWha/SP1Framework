@@ -2116,7 +2116,7 @@ void renderCustomer()
                             {
                                 sPtr[j]->decreaseItem(1);
 
-                                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
 
                                 customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
 
