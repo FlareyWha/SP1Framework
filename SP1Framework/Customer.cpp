@@ -132,7 +132,14 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 		ss << q;
 		c.X = pos.getX();
 		c.Y = pos.getY();
-		console.writeToBuffer(c, ss.str(), 0x20);
+		if (q == 0)
+		{
+			console.writeToBuffer(c, 1, 0x20);
+		}
+		else
+		{
+			console.writeToBuffer(c, ss.str(), 0x20);
+		}		
 		map.setGrid(c.Y, c.X, 'C');
 	}
 }
