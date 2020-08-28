@@ -1141,6 +1141,7 @@ void processInputGameOver()
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
+    p.setPos(18, 1);
     g_ePreviousGameState = S_GAMEOVER;
 }
 
