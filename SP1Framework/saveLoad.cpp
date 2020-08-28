@@ -88,6 +88,10 @@ void saveLoad::savePlayerstats(LPCWSTR save, int days, int money, int son1, int 
 
         myFile.close();
     }
+    myFile << "Days = " << days << endl;
+    myFile << "Money = " << money << endl;
+    myFile << "son1Sick = " << son1 << endl;
+    myFile << "son2Sick = " << son2 << endl;
 }
 
 void saveLoad::loadSave(LPCWSTR save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 
