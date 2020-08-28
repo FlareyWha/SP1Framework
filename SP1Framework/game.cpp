@@ -232,6 +232,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
+    case S_CREDITS: gameplayKBHandler(keyboardEvent);
+        break;
     }
 }
 
@@ -270,6 +272,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
     case S_GAME: gameplayMouseHandler(mouseEvent); // handle gameplay mouse event
+        break;
+    case S_CREDITS: gameplayMouseHandler(mouseEvent);
         break;
     }
 } //140
@@ -392,6 +396,9 @@ void update(double dt)
             g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
         }
+        case S_CREDITS: {
+            updateCredits();
+        }
     }
 }
 
@@ -449,6 +456,11 @@ void updateGame()       // game logic
 
 // Store screen logic
 void updateStore()
+{
+    processUserInput();
+}
+
+void updateCredits()
 {
     processUserInput();
 }
@@ -987,7 +999,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             deleteCustomer();
             deleteBoxes();
         }
-    else if (g_dElapsedWorkTime >= 5) {
+    else if (g_dElapsedWorkTime >= 30) {
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -1065,8 +1077,17 @@ void processInputSplash() // All input processing related to Splashscreen
             && g_mouseEvent.mousePosition.Y == c.Y / 25 + 12) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_MENU;
+            g_eGameState = S_CREDITS;
         }
+    }
+}
+
+void processInputCredits()
+{
+    framesPassed++;
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
+        && framesPassed % 10 == 0) {
+        g_eGameState = S_MENU;
     }
 }
 
@@ -1248,6 +1269,9 @@ void processUserInput()
             g_eGameState = S_MENU;
         checkEnd();
         break;
+    case S_CREDITS: {
+        processInputCredits();
+    }
     }
     processDebugState();
 }
@@ -1280,6 +1304,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_TUT: renderTutorialLevel(); // render tutorial level ui
         break;
     case S_GAME: renderGame(); // render game screen ui
+        break;
+    case S_CREDITS: renderCredits();
         break;
     }
 
@@ -1985,6 +2011,26 @@ void renderIteminBox()
         break;
     }
     }
+}
+
+void renderCredits()
+{
+    COORD c{34, 1};
+    g_Console.writeToBuffer(c, "Credits", 0x0F);
+    c.Y += 5;
+    c.X -= 20;
+    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "All background music is generally credited to", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "FStudios royalty-free music", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "www.fesliyanstudios.com", 0x0F);
+    c.Y += 5;
+    c.X += 10;
+    g_Console.writeToBuffer(c, "Left click to head to main menu", 0x0F);
 }
 
 // Render boxes
