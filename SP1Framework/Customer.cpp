@@ -222,10 +222,15 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 		avoiding = 1;
 	}
 
+	else if (avoiding == 3 && map.getGrid(pos.getY() - 1, pos.getX()) == 'C')
+	{
+		avoiding = 2;
+	}
+
 	if (avoiding == 1)
 		pos.setY(pos.getY() + 1);
 	else if (avoiding == 2)
-		pos.setX(pos.getX() - 2);
+		pos.setX(pos.getX() - 3);
 	else if (avoiding == 3)
 		pos.setY(pos.getY() - 1);
 	else if (avoiding == 5) // to move down after collecting item
