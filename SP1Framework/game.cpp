@@ -17,6 +17,10 @@
 #include "Son.h"
 #include "Tutorial.h"
 
+//Sound dependencies
+#include <Windows.h>
+#pragma comment(lib, "winmm.lib")
+
 double  g_dElapsedTime;
 double g_dElapsedWorkTime;
 double  g_dDeltaTime;
@@ -1803,11 +1807,31 @@ void renderGameOver()
 // Render tutorial level ui
 void renderTutorialLevel()
 {
+    static bool alreadyPlayed1 = false;
+    static bool alreadyPlayed2 = false;
+    static bool alreadyPlayed3 = false;
+    static bool alreadyPlayed4 = false;
+    static bool alreadyPlayed5 = false;
+    static bool alreadyPlayed6 = false;
     map.chooseMap(1, g_Console);
     checkCustomerPlayerCollision();
     renderCharacter();  // renders the character into the buffer
     renderShelfAmount();
     renderHUD();
+
+    // Plays TTS for tutorial instructions
+    if (alreadyPlayed1 == false && tutorial.getTutorialFlag(0) == false) {
+        PlaySound(L"TutorialTTSF1.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed1 = true;
+    }
+    else if (alreadyPlayed2 == false && tutorial.getTutorialFlag(1) == false && tutorial.getTutorialFlag(0) == true) {
+        PlaySound(L"TutorialTTSF2.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed2 = true;
+    }
+    else if (alreadyPlayed3 == false && tutorial.getTutorialFlag(2) == false && tutorial.getTutorialFlag(1) == true) {
+        PlaySound(NULL, NULL, 0);
+        alreadyPlayed3 = true;
+    }
 
     if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
         renderCustomer();

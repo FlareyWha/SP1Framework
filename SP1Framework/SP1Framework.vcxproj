@@ -128,6 +128,10 @@
     <Text Include="Tutorial level.txt" />
     <Text Include="Vegetable.txt" />
   </ItemGroup>
+  <ItemGroup>
+    <Media Include="..\..\..\..\..\..\temp\TutorialTTSF1.wav" />
+    <Media Include="TutorialTTSF2.wav" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
