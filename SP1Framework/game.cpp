@@ -1158,8 +1158,9 @@ void processInputGameOver()
 // Process inputs on Home screen
 void processInputHome() //note lol
 {
+    framesPassed++;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
-        )
+        && framesPassed % 5 == 0)
     {
         COORD c = g_Console.getConsoleSize();
         Player* pPtr = &p;
