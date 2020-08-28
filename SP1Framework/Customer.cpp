@@ -29,6 +29,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	itemToBuy = 0;
 	passcheck = 0;
 	CustomerDirection = 0;
+	yLock = false;
 }
 
 //Customer::Customer(Map map)
