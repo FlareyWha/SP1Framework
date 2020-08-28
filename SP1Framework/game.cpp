@@ -2114,7 +2114,7 @@ void renderCustomer()
 
                             if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j)
                             {
-                                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+                                sPtr[j]->decreaseItem(1);
 
                                 p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
 
