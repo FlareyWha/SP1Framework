@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Windows.h>
 
-Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
+Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -32,7 +32,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
     else if (tutorialFlags[4] == false)
         flagFive(console, g_sChar, g_skKeyEvent, boxColour);
-    else if (tutorialFlags[5] == false)
+    else if (tutorialFlags[6] == false) // from this point on the flag will match the flag aka 6 = 6 
         flagSix(console);
     else if (tutorialFlags[6] == false)
         flagSeven(console);
@@ -92,6 +92,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {
         tutorialFlags[6] = true;
+        g_sChar.moving.UP = false;
+        g_sChar.moving.DOWN = false;
+        g_sChar.moving.LEFT = false;
+        g_sChar.moving.RIGHT = false;
     }
 }
 
@@ -269,7 +273,11 @@ void Tutorial::flagSix(Console& console)
 
 void Tutorial::flagSeven(Console& console)
 {
-   //yes
+    COORD c;
+
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "A customer has appeared.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)
