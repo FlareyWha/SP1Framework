@@ -33,6 +33,8 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	avoiding = 0;
 	travelling = false;
 	spawned = false;
+	timerSet = false;
+	timer = 0.0;
 }
 
 //Customer::Customer(Map map)
@@ -118,6 +120,16 @@ bool Customer::getMovingBack()
 	return movingBack;
 }
 
+bool Customer::getTimerSet()
+{
+	return timerSet;
+}
+
+double Customer::getTimer()
+{
+	return timer;
+}
+
 void Customer::setItemToBuy(int passcheck)
 {
 	itemToBuy = rand() % passcheck + 1;
@@ -141,6 +153,21 @@ void Customer::setSpawned(bool spawned)
 void Customer::setMovingBack(bool movingBack)
 {
 	this->movingBack = movingBack;
+}
+
+void Customer::setTimer(double timer)
+{
+	this->timer = timer;
+}
+
+void Customer::addTimer(double dt)
+{
+	timer += dt;
+}
+
+void Customer::setTimerSet(bool timerSet)
+{
+	this->timerSet = timerSet;
 }
 
 int Customer::getQuantity()
@@ -284,7 +311,7 @@ void Customer::customerCollision(Map& map)
 
 	if (avoiding == 4 || avoiding == 7)
 	{
-		avoiding == 0;
+		avoiding = 0;
 	}
 
 	if (avoiding != 0)

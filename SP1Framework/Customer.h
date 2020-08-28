@@ -8,6 +8,7 @@ class Customer :
     public Entity
 {
 private:
+    double timer;
     int passcheck;
     int itemToBuy;//to determine which item the customer is going to buy
     int quantity;//to determine how many of the item the customer is going to buy
@@ -17,6 +18,7 @@ private:
     bool travelling;
     bool spawned;
     bool movingBack;
+    bool timerSet;
     Position endPoint;
     Position prevPos;
     int CustomerDirection;
@@ -42,6 +44,8 @@ public:
     Position getEndPoint();
     bool getTravelling();
     bool getMovingBack();
+    bool getTimerSet();
+    double getTimer();
     void setYLock(bool set);
     void setEndPoint(int x, int y);
     void setQuantity(int quantity);
@@ -50,6 +54,9 @@ public:
     void setTravelling(bool travelling);
     void setSpawned(bool spawned);
     void setMovingBack(bool movingBack);
+    void setTimer(double timer);
+    void addTimer(double dt);
+    void setTimerSet(bool timerSet);
     void printOutCustomer(Console& console, Position pos, Map& map, int q, WORD s, bool state);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map);
