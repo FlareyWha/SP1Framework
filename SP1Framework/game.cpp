@@ -2063,18 +2063,20 @@ void renderCustomer()
                 }
                 //checkCustomerCollision();
 
-
-                if (customerPtr[i]->getState() == true)
+                WORD customerColour;
+                customerColour = 0x20;//green
+                if (customerPtr[i]->getState() == false)
                 {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
+                    //customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
+                    customerColour = 0x44; //red
                 }
-                else
-                {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
-                }
+                //else
+                //{
+                //    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
+                //}
 
                 //checkCustomerCollision();
-                
+                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -2153,7 +2155,7 @@ void renderCustomer()
                                 }
                             }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
                                 customerPtr[i]->setEndPoint(79, 15);
                                 avoiding[i] = 5;
