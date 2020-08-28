@@ -29,7 +29,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	itemToBuy = 0;
 	passcheck = 0;
 	CustomerDirection = 0;
-	yLock = false;
+	yLock = true;
 }
 
 //Customer::Customer(Map map)
@@ -235,6 +235,11 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 	if (avoiding == 4 || avoiding == 7)
 	{
 		avoiding == 0;
+	}
+
+	if (avoiding != 0)
+	{
+		avoiding++;
 	}
 }
 
