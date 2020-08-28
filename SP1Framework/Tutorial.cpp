@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Windows.h>
 
-Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
+Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
 	for (int i = 0; i < 10; i++)
 	{
