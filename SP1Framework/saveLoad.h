@@ -12,20 +12,21 @@ private:
 	int storedSon1;
 	int storedSon2;
 	int storedPowerups;
-	int encryptedPowerup;
 	int pShoes;
 	int pCrowdcontrol;
 	int pCheapfood;
 	int pCheaprent;
 	int pRichcustomers;
 	int pThriftycustomers;
+	long long encryptedPowerup;
 
 public:
 	saveLoad();
 	~saveLoad();
 	void chooseSave(int save);
-	void encryptPowerup(int type, int shoes, int crowdcontrol, int cheapfood,
+	void encryptPowerup(int shoes, int crowdcontrol, int cheapfood, 
 						int cheaprent, int richcustomers, int thriftycustomers);
+	void decryptPowerup();
 	void loadSave(string save);
 	void saveSave(string save);
 };

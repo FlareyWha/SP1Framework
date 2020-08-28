@@ -30,53 +30,69 @@ void saveLoad::chooseSave(int save) //maybe useful
     }
 }
 
-void saveLoad::encryptPowerup(int type, int shoes, int crowdcontrol, int cheapfood, 
-                              int cheaprent, int richcustomers, int thriftycustomers)
+void saveLoad::encryptPowerup(int shoes, int crowdcontrol, int cheapfood,
+    int cheaprent, int richcustomers, int thriftycustomers)
 {
-    switch (type)
+    for (int i = 0; i < shoes; i++)
     {
-    case 0: //encrypt
+        encryptedPowerup = encryptedPowerup * 2;
+    }
+    for (int i = 0; i < crowdcontrol; i++)
     {
-        encryptedPowerup = (shoes * 2) * (crowdcontrol * 3) * (cheapfood * 5) *
-                           (cheaprent * 7) * (richcustomers * 11) * (thriftycustomers * 13);
+        encryptedPowerup = encryptedPowerup * 3;
+    }
+    for (int i = 0; i < cheapfood; i++)
+    {
+        encryptedPowerup = encryptedPowerup * 5;
+    }
+    for (int i = 0; i < cheaprent; i++)
+    {
+        encryptedPowerup = encryptedPowerup * 7;
+    }
+    for (int i = 0; i < richcustomers; i++)
+    {
+        encryptedPowerup = encryptedPowerup * 11;
+    }
+    for (int i = 0; i < thriftycustomers; i++)
+    {
+        encryptedPowerup = encryptedPowerup * 13;
+    }
+}
 
-    }
-    case 1: //decrypt
+void saveLoad::decryptPowerup()
+{
+    while (encryptedPowerup > 1)
     {
-        while (encryptedPowerup != 1)
+        if (encryptedPowerup % 13 == 0)
         {
-            if (encryptedPowerup % 13 == 0)
-            {
-                pThriftycustomers++;
-                encryptedPowerup / 17;
-            }
-            else if (encryptedPowerup % 11 == 0)
-            {
-                pRichcustomers++;
-                encryptedPowerup / 13;
-            }
-            else if (encryptedPowerup % 7 == 0)
-            {
-                pCheaprent++;
-                encryptedPowerup / 11;
-            }
-            else if (encryptedPowerup % 5 == 0)
-            {
-                pCheapfood++;
-                encryptedPowerup / 5;
-            }
-            else if (encryptedPowerup % 3 == 0)
-            {
-                pCrowdcontrol++;
-                encryptedPowerup / 3;
-            }
-            else if (encryptedPowerup % 2 == 0)
-            {
-                pShoes++;
-                encryptedPowerup / 2;
-            }
+            pThriftycustomers++;
+            encryptedPowerup = encryptedPowerup / 13;
         }
-    }
+        else if (encryptedPowerup % 11 == 0)
+        {
+            pRichcustomers++;
+            encryptedPowerup = encryptedPowerup / 11;
+        }
+        else if (encryptedPowerup % 7 == 0)
+        {
+            pCheaprent++;
+            encryptedPowerup = encryptedPowerup / 7;
+        }
+        else if (encryptedPowerup % 5 == 0)
+        {
+            pCheapfood++;
+            encryptedPowerup = encryptedPowerup / 5;
+        }
+        else if (encryptedPowerup % 3 == 0)
+        {
+            pCrowdcontrol++;
+            encryptedPowerup = encryptedPowerup / 3;
+        }
+        else if (encryptedPowerup % 2 == 0)
+        {
+            pShoes++;
+            encryptedPowerup = encryptedPowerup / 2;
+        }
     }
 }
 
