@@ -1590,7 +1590,7 @@ void renderHome()
     c = g_Console.getConsoleSize();
     c.Y = 18;
     c.X = 27;
-    g_Console.writeToBuffer(c, "Options", 0xF0);
+    g_Console.writeToBuffer(c, "Options:", 0xF0);
     c.Y += 2;
     if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 34
         && g_mouseEvent.mousePosition.Y == 20) {
