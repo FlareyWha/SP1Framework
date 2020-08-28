@@ -162,6 +162,25 @@ void Map::printMap(std::fstream& level, Console& console)
 	}
 }
 
+void Map::printItemtxt(std::fstream& item, Console& console, WORD colour)
+{
+	COORD c;
+	Map map;
+	std::string output;
+
+	for (int pGy = 0; pGy < 9; pGy++)
+	{
+		c.Y = pGy + 14;
+		getline(item, output);
+		for (int pGx = 0; pGx < 14; pGx++)
+		{
+			c.X = pGx + 2;
+			mapArray[pGy][pGx] = output[pGx];
+			console.writeToBuffer(c, mapArray[pGy][pGx], colour);
+		}
+	}
+}
+
 char Map::collision(int currentY, int currentX, int moveToY, int moveToX, Map& map)
 {
 	return (map.getGrid((currentY + (moveToY)), (currentX + (moveToX))));

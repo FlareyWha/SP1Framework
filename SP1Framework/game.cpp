@@ -1158,8 +1158,9 @@ void processInputGameOver()
 // Process inputs on Home screen
 void processInputHome() //note lol
 {
+    framesPassed++;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
-        )
+        && framesPassed % 5 == 0)
     {
         COORD c = g_Console.getConsoleSize();
         Player* pPtr = &p;
@@ -1936,23 +1937,61 @@ void renderStore()
     c.X /= 2;
     c.X -= 5;
     c.Y = 22;
-    g_Console.writeToBuffer(c, "Home", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 35 && g_mouseEvent.mousePosition.X <= 38
+        && g_mouseEvent.mousePosition.Y == 22) {
+        g_Console.writeToBuffer(c, "Home", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Home", 0xF0);
+    }
 }
 
 void renderIteminBox()
 {
+    const WORD colors[] = {
+        0x0D, 0x01, 0x0B, 0x0E, 0x0A, 0x09
+    };
+    COORD c{ 1, 21 };
     int itemtag = boxPtr[0]->getTag();
-    COORD c{ 2, 13 };
+    Map itemrender;
     switch (itemtag) {
     case 0: {
         break;
     }
     case 1: {
         std::fstream rice("Rice.txt");
+        itemrender.printItemtxt(rice, g_Console, colors[3]);
+        g_Console.writeToBuffer(c, "Rice", colors[3]);
         break;
     }
     case 2: {
         std::fstream toiletpaper("ToiletPaper.txt");
+        itemrender.printItemtxt(toiletpaper, g_Console, colors[0]);
+        g_Console.writeToBuffer(c, "Toilet Paper", colors[0]);
+        break;
+    }
+    case 3: {
+        std::fstream cannedfood("CannedFood.txt");
+        itemrender.printItemtxt(cannedfood, g_Console, colors[2]);
+        g_Console.writeToBuffer(c, "Canned Food", colors[2]);
+        break;
+    }
+    case 4: {
+        std::fstream instant("InstantNoodles.txt");
+        itemrender.printItemtxt(instant, g_Console, colors[1]);
+        g_Console.writeToBuffer(c, "Instant Noodles", colors[1]);
+        break;
+    }
+    case 5: {
+        std::fstream veg("Vegetable.txt");
+        itemrender.printItemtxt(veg, g_Console, colors[4]);
+        g_Console.writeToBuffer(c, "Vegetables", colors[4]);
+        break;
+    }
+    case 6: {
+        std::fstream band("Bandages.txt");
+        itemrender.printItemtxt(band, g_Console, colors[5]);
+        g_Console.writeToBuffer(c, "Bandages", colors[5]);
         break;
     }
     }
@@ -2024,17 +2063,20 @@ void renderCustomer()
                 }
                 //checkCustomerCollision();
 
-                if (customerPtr[i]->getState() == true)
+                WORD customerColour;
+                customerColour = 0x20;//green
+                if (customerPtr[i]->getState() == false)
                 {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20); //green
+                    //customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
+                    customerColour = 0x44; //red
                 }
-                else
-                {
-                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44); //red
-                }
+                //else
+                //{
+                //    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
+                //}
 
                 //checkCustomerCollision();
-                
+                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -2113,7 +2155,7 @@ void renderCustomer()
                                 }
                             }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
                                 customerPtr[i]->setEndPoint(79, 15);
                                 avoiding[i] = 5;
@@ -2232,6 +2274,7 @@ void renderCustomer()
                     boxPosPtr[i + 1] = nullptr;
 
                     CustomerBoxColour[i] = 0x77;
+                    
 
                     timer[i] = -1;
                     travelling[i] = false;

@@ -137,7 +137,7 @@ int Customer::getItemToBuy()
 	return itemToBuy;
 }
 
-void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s)
+void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s, bool state)
 {
 	COORD c;
 	if (spawned == true)
@@ -147,7 +147,12 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 		ss << q;
 		c.X = pos.getX();
 		c.Y = pos.getY();
-		if (q == 0)
+		
+		if (state == false)
+		{
+			console.writeToBuffer(c,' ', s);
+		}
+		else if (q == 0)
 		{
 			console.writeToBuffer(c, 1, s);
 		}
@@ -155,6 +160,8 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 		{
 			console.writeToBuffer(c, ss.str(), s);
 		}		
+
+		
 		map.setGrid(c.Y, c.X, 'C');
 	}
 }

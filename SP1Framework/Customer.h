@@ -11,13 +11,11 @@ private:
     int passcheck;
     int itemToBuy;//to determine which item the customer is going to buy
     int quantity;//to determine how many of the item the customer is going to buy
-    int avoiding;
     bool bSatisfied;
-    bool yLock;
-    bool travelling;
     Position endPoint;
     Position prevPos;
     int CustomerDirection;
+    bool yLock;
 
 public:
     Customer();
@@ -30,7 +28,6 @@ public:
 
 
     bool getState();
-    bool getTravelling();
     int getQuantity();
     int getItemToBuy();
     int getX();
@@ -42,10 +39,8 @@ public:
     void setEndPoint(int x, int y);
     void setQuantity(int quantity);
     void setItemToBuy(int passcheck);
-    void setAvoiding(int number);
-    void setTravelling(int travelling);
-    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s);
+    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s, bool state);
     int moveCustomer(Map& map, int framesPassed, int timer);
-    void customerCollision(Map& map, bool& travelling);
+    void customerCollision(Map& map, bool& travelling, int& avoiding);
 };
 
