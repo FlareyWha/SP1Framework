@@ -2152,7 +2152,7 @@ void renderCustomer()
                                 customerPtr[i]->setEndPoint(79, 15);
                                 customerPtr[i]->setAvoiding(5);
                                 customerPtr[i]->setTravelling(false);
-                                movingBack[i] = true;
+                                customerPtr[i]->setMovingBack(true);
                                 customerPtr[i]->unSatisfied();
                             }
                         }
