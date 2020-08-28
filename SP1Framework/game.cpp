@@ -2023,7 +2023,7 @@ void renderCustomer()
                     customerPtr[i]->setYLock(false);
                 }
 
-                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
+                //customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
 
 
