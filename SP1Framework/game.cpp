@@ -2221,6 +2221,8 @@ void renderCustomer()
 
                     timer[i] = -1;
                     travelling[i] = false;
+                    movingBack[i] = false;
+                    map.setGrid(79, 15, '0');
                 }
             }
             else
