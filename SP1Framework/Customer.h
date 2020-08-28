@@ -42,6 +42,5 @@ public:
     void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
-    void bumpIntoCustomer(int& avoiding, Map& map);
 };
 
