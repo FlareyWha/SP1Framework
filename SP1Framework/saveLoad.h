@@ -13,7 +13,7 @@ private:
 	int storedSon1;
 	int storedSon2;
 	int storedPowerups;
-	int encryptedPowerup;
+	long long encryptedPowerup;
 	int pShoes;
 	int pCrowdcontrol;
 	int pCheapfood;
@@ -25,8 +25,9 @@ public:
 	saveLoad();
 	~saveLoad();
 	void chooseSave(int save);
-	void encryptPowerup(int type, int shoes, int crowdcontrol, int cheapfood,
+	void encryptPowerup(int shoes, int crowdcontrol, int cheapfood,
 						int cheaprent, int richcustomers, int thriftycustomers);
+	void decryptPowerup();
 	void savePlayerstats(LPCWSTR save, int days, int money, int son1, int son2);
 	void loadSave(LPCWSTR save);
 	void saveSave(LPCWSTR save);

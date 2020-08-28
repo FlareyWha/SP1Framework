@@ -1145,7 +1145,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 10) //saves game
         {
             Powerup* PowPtr = p.getPowerups();
-            saves.encryptPowerup(0, PowPtr->getShoeslvl(), PowPtr->getSCustomerslvl(), PowPtr->getFoodlvl(), PowPtr->getRentlvl(), PowPtr->getRCustomerslvl(), PowPtr->getTCustomerslvl());
+            saves.encryptPowerup(PowPtr->getShoeslvl(), PowPtr->getSCustomerslvl(), PowPtr->getFoodlvl(), PowPtr->getRentlvl(), PowPtr->getRCustomerslvl(), PowPtr->getTCustomerslvl());
             saves.saveSave(L"save1.txt");
         }
     }
