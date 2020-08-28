@@ -2147,7 +2147,7 @@ void renderCustomer()
                                 }
                             }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack == false && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
                                 customerPtr[i]->setEndPoint(79, 15);
                                 customerPtr[i]->setAvoiding(5);
