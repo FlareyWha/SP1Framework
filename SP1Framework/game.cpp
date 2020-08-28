@@ -28,6 +28,7 @@ int level, day;
 bool travelling[6];
 int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
+bool movingBack[6] = { false, false, false, false, false, false };
 bool g_bRestocking;
 
 double timer[6];
@@ -1975,37 +1976,31 @@ void renderCustomer()
         {
             if (customerPtr[i] != nullptr)
             {
-              
-                if (timer[i] >= 10.9 || timer[i] <= 11.1)
-                {
-                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
-                }
-
                 if (travelling[i] == true)
                 {
                     customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups()->getSCustomerslvl()));
-                    customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);
-                }
                     
-                else if (avoiding[i] == 4 || avoiding[i] == 6)
-                {
-                    avoiding[i] = 0;
-                    travelling[i] = true;
                 }
+
+                if (customerPtr[i]->getQuantity() == 0 && movingBack[i] != true) {
+                    customerPtr[i]->setEndPoint(79, 15);
+                    avoiding[i] = 5;
+                    travelling[i] = false;
+                    movingBack[i] = true;
+                }
+
+                customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);   
 
                 if (customerPtr[i]->getPos().getX() == 62)
                 {
                     customerPtr[i]->setYLock(false);
                 }
-
-                customerPtr[i]->bumpIntoCustomer(avoiding[i], map);
                 //checkCustomerCollision();
-
 
                 customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
 
                 //checkCustomerCollision();
+                
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -2031,6 +2026,12 @@ void renderCustomer()
                     }
                 }
 
+                if (timer[i] >= 10.9 && timer[i] <= 11.1)
+                {
+                    customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
+                    travelling[i] = true;
+                }
+
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
                 {
                     bool bComplain = false;
@@ -2038,12 +2039,6 @@ void renderCustomer()
                     for (int j = 0; j < 6; j++) {
 
                         if (sPtr[j] != nullptr) {
-
-                            /*if (customerPtr[i]->getQuantity() == 0) {
-                                customerPtr[i]->setEndPoint(79, 15);
-                                avoiding[i] = 5;
-                                travelling[i] = false;
-                            }*/
 
                             if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j)
                             {
@@ -2087,10 +2082,6 @@ void renderCustomer()
 
                             else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
-                                customerPtr[i]->setEndPoint(79, 15);
-                                avoiding[i] = 5;
-                                travelling[i] = false;
-
                             }
                         }
                     }
@@ -2189,27 +2180,9 @@ void renderCustomer()
                     //    }
 
                     //}
-
-
-                    customerPtr[i]->setEndPoint(79, 15);
-                    //customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + 1);
-
-                    spawned[i] = false;
-                    delete customerPtr[i];
-                    customerPtr[i] = nullptr;
-
-                    delete boxPtr[i + 1];
-                    boxPtr[i + 1] = nullptr;
-                    delete boxPosPtr[i + 1];
-                    boxPosPtr[i + 1] = nullptr;
-
-                    CustomerBoxColour[i] = 0x77;
-
-                    timer[i] = -1;
-                    travelling[i] = false;
                 }
 
-                /*else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
                     spawned[i] = false;
                     delete customerPtr[i];
@@ -2224,7 +2197,7 @@ void renderCustomer()
 
                     timer[i] = -1;
                     travelling[i] = false;
-                }*/
+                }
             }
             else
             {
