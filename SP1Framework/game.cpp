@@ -1942,7 +1942,7 @@ void renderStore()
 void renderIteminBox()
 {
     const WORD colors[] = {
-        0x05, 0x01, 0x0B, 0x0E, 0x0A, 0x09
+        0x0D, 0x01, 0x0B, 0x0E, 0x0A, 0x09
     };
     COORD c{ 1, 21 };
     int itemtag = boxPtr[0]->getTag();
