@@ -30,6 +30,8 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	passcheck = 0;
 	CustomerDirection = 0;
 	yLock = true;
+	avoiding = 0;
+	travelling = false;
 }
 
 //Customer::Customer(Map map)
@@ -98,18 +100,31 @@ void Customer::isSatisfied()
 void Customer::unSatisfied()
 {
 	bSatisfied = false;
-
 }
 
 bool Customer::getState()
 {
-	
 	return bSatisfied;
+}
+
+bool Customer::getTravelling()
+{
+	return travelling;
 }
 
 void Customer::setItemToBuy(int passcheck)
 {
 	itemToBuy = rand() % passcheck + 1;
+}
+
+void Customer::setAvoiding(int number)
+{
+	this->avoiding = number;
+}
+
+void Customer::setTravelling(int travelling)
+{
+	this->travelling = travelling;
 }
 
 int Customer::getQuantity()
@@ -212,7 +227,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 	}
 } 
 
-void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
+void Customer::customerCollision(Map& map, bool& travelling)
 {
 	if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
 		avoiding = 0;
