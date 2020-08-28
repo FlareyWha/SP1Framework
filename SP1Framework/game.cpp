@@ -16,6 +16,7 @@
 #include "Shelf.h"
 #include "Son.h"
 #include "Tutorial.h"
+#include "saveLoad.h"
 
 //Sound dependencies
 #include <Windows.h>
@@ -50,6 +51,7 @@ Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullpt
 Position* boxPosPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
 WORD BoxColour;
 Map map;
+saveLoad saves;
 int framesPassed;
 int frameMarker;
 
@@ -1134,6 +1136,17 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 12) //Exit once mouse clicks on the button
         {
             g_bQuitGame = true;
+        }
+    }
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    {
+        if ((g_mouseEvent.mousePosition.X >= 33
+            && g_mouseEvent.mousePosition.X <= 36)
+            && g_mouseEvent.mousePosition.Y == 10) //saves game
+        {
+            Powerup* PowPtr = p.getPowerups();
+            saves.encryptPowerup(0, PowPtr->getShoeslvl(), PowPtr->getSCustomerslvl(), PowPtr->getFoodlvl(), PowPtr->getRentlvl(), PowPtr->getRCustomerslvl(), PowPtr->getTCustomerslvl());
+            saves.saveSave(L"save1.txt");
         }
     }
 }
