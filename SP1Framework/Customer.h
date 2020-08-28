@@ -39,7 +39,7 @@ public:
     void setEndPoint(int x, int y);
     void setQuantity(int quantity);
     void setItemToBuy(int passcheck);
-    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s);
+    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s, bool state);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map, bool& travelling, int& avoiding);
 };
