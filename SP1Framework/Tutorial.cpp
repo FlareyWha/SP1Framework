@@ -112,8 +112,6 @@ void Tutorial::flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEv
     console.writeToBuffer(c, "left, down and right respectively", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "Press each key once to proceed.", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "left, down and right respectively", 0xF0);
 
     if (g_skKeyEvent[K_UP].keyDown)
     {
@@ -254,36 +252,14 @@ void Tutorial::flagSix(Console& console)
     c.Y += 1;
     console.writeToBuffer(c, "supermarket opens to restock the shelves", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "to the best of your ability. A recap of", 0xF0);
+    console.writeToBuffer(c, "to the best of your ability.", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "the controls will appear when you", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "click to continue.", 0xF0);
-
-    //fix the tutorialTimer and 3rd 
+    console.writeToBuffer(c, "Click to continue.", 0xF0);
 }
 
 void Tutorial::flagSeven(Console& console)
 {
-    COORD c;
-    c.Y = 4;
-    c.X = 40;
-    console.writeToBuffer(c, "Move: W (up), A (left), S (down), ", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "D (right). Shift to walk, Space when", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "grey box is touching coloured box to", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "take it. Space on grey area on shelf", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "when you have a coloued box to restock", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "the shelf. Colour of your box must ", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "match the colour on the top right of ", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "the shelf to successfully restock it.", 0xF0);
-    
+   //yes
 }
 
 bool Tutorial::getTutorialFlag(int number)
