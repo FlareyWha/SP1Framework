@@ -2070,6 +2070,7 @@ void renderCustomer()
                 {
                     customerPtr[i]->setTimer(12);
                     customerPtr[i]->setTimerSet(true);
+                    customerPtr[i]->setTravelling(false);
                 }
 
                 customerPtr[i]->printOutCustomer(g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
@@ -2156,7 +2157,6 @@ void renderCustomer()
                                 p.increaseUnsatisfiedCustomers();
                                 customerPtr[i]->setEndPoint(79, 15);
                                 customerPtr[i]->setAvoiding(5);
-                                customerPtr[i]->setTravelling(false);
                                 customerPtr[i]->setMovingBack(true);
                                 customerPtr[i]->unSatisfied();
                             }
