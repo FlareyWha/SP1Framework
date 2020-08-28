@@ -234,7 +234,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 	}
 } 
 
-void Customer::customerCollision(Map& map, bool& travelling)
+void Customer::customerCollision(Map& map)
 {
 	if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
 		avoiding = 0;

@@ -29,8 +29,6 @@ SMouseEvent g_mouseEvent;
 
 // Game specific variables here
 int level, day;
-bool travelling[6];
-int avoiding[6]; 
 bool spawned[6] = { false, false, false, false, false, false };
 bool movingBack[6] = { false, false, false, false, false, false };
 bool g_bRestocking;
@@ -154,8 +152,6 @@ void init( void )
 
     for (int i = 0; i < 6; i++) {
         timer[i] = -1;
-        travelling[i] = false;
-        avoiding[i] = 0; 
         /*
         spawned[i] = false;
         customerPtr[i] = nullptr;
@@ -905,7 +901,6 @@ void deleteCustomer()
         {
             delete customerPtr[i];
             customerPtr[i] = nullptr;
-            travelling[i] = false;
             timer[i] = -1;
         }
     }
@@ -2042,7 +2037,7 @@ void renderCustomer()
         {
             if (customerPtr[i] != nullptr)
             {
-                if (travelling[i] == true)
+                if (customerPtr[i]->getTravelling() == true)
                 {
                     customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups()->getSCustomerslvl()));
                     
@@ -2050,12 +2045,12 @@ void renderCustomer()
 
                 if (customerPtr[i]->getQuantity() == 0 && movingBack[i] != true) {
                     customerPtr[i]->setEndPoint(79, 15);
-                    avoiding[i] = 5;
-                    travelling[i] = false;
+                    customerPtr[i]->setAvoiding(5);
+                    customerPtr[i]->setTravelling(false);
                     movingBack[i] = true;
                 }
 
-                customerPtr[i]->customerCollision(map, travelling[i], avoiding[i]);   
+                customerPtr[i]->customerCollision(map);   
 
                 if (customerPtr[i]->getPos().getX() == 62)
                 {
@@ -2104,7 +2099,7 @@ void renderCustomer()
                 if (timer[i] >= 10.9 && timer[i] <= 11.1)
                 {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
-                    travelling[i] = true;
+                    customerPtr[i]->setTravelling(true);
                 }
 
                 if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
@@ -2158,8 +2153,8 @@ void renderCustomer()
                             else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
                                 customerPtr[i]->setEndPoint(79, 15);
-                                avoiding[i] = 5;
-                                travelling[i] = false;
+                                customerPtr[i]->setAvoiding(5);
+                                customerPtr[i]->setTravelling(false);
                                 movingBack[i] = true;
                                 customerPtr[i]->unSatisfied();
                             }
@@ -2277,7 +2272,7 @@ void renderCustomer()
                     
 
                     timer[i] = -1;
-                    travelling[i] = false;
+                    customerPtr[i]->setTravelling(false);
                     movingBack[i] = false;
                     map.setGrid(79, 15, '0');
                 }
