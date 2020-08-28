@@ -143,6 +143,7 @@ void renderEndOfWorkScreen();
 void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 void renderStore();
+void renderIteminBox();
 
 void checkCustomerPlayerCollision();
 

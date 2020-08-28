@@ -693,41 +693,44 @@ void pickUpBoxes()
 {
     if (p.isHoldingProduct() == false) {
         BoxColour = 0x70; //empty box grey
+        boxPtr[0]->setTag(0);
     }
 
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 3 && map.getGrid(3, 1) != 'A')
     {
         BoxColour = 0x50; //toilet paper purple
         p.holdsProduct();
+        boxPtr[0]->setTag(2);
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 4 && map.getGrid(4, 1) != 'A')
     {
         BoxColour = 0x10; //instant noodle dark blue          
         p.holdsProduct();
+        boxPtr[0]->setTag(4);
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 5 && map.getGrid(5, 1) != 'A')
     {
         BoxColour = 0xB0; //canned food teal
-
         p.holdsProduct();
+        boxPtr[0]->setTag(3);
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 6 && map.getGrid(6, 1) != 'A')
     {
         BoxColour = 0xE0; //rice cream
-
         p.holdsProduct();
+        boxPtr[0]->setTag(1);
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 7 && map.getGrid(7, 1) != 'A')
     {
         BoxColour = 0xA0; //vegetable green
-
         p.holdsProduct();
+        boxPtr[0]->setTag(5);
     }
     if (g_skKeyEvent[K_SPACE].keyReleased && boxPosPtr[0]->getX() == 2 && boxPosPtr[0]->getY() == 8 && map.getGrid(8, 1) != 'A')
     {
         BoxColour = 0x90;//bandages blue
-
         p.holdsProduct();
+        boxPtr[0]->setTag(6);
     }
 }
 
@@ -1419,7 +1422,7 @@ void renderHUD()
     c.X = 1;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-
+    renderIteminBox();
 }
 
 void renderCustomerTimer(int shelf) //works ?
@@ -1934,6 +1937,25 @@ void renderStore()
     c.X -= 5;
     c.Y = 22;
     g_Console.writeToBuffer(c, "Home", 0xF0);
+}
+
+void renderIteminBox()
+{
+    int itemtag = boxPtr[0]->getTag();
+    COORD c{ 2, 13 };
+    switch (itemtag) {
+    case 0: {
+        break;
+    }
+    case 1: {
+        std::fstream rice("Rice.txt");
+        break;
+    }
+    case 2: {
+        std::fstream toiletpaper("ToiletPaper.txt");
+        break;
+    }
+    }
 }
 
 // Render boxes
