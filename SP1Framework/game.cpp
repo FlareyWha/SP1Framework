@@ -2186,7 +2186,7 @@ void renderCustomer()
                                     case 1:
                                         CustomerBoxColour[i] = 0x10;
                                         break;
-                                    case 3:
+                                    case 2:
                                         CustomerBoxColour[i] = 0xB0;
                                         break;
                                     }
