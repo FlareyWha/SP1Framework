@@ -7,6 +7,7 @@ Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
 	for (int i = 0; i < 10; i++)
 	{
 		tutorialFlags[i] = false;
+        alreadyPlayed[i] = false;
 		
 		if (i < 6)
             pressed[i] = false;
@@ -36,25 +37,18 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (tutorialFlags[6] == false)
         flagSeven(console);
 
-    static bool alreadyPlayed1 = false;
-    static bool alreadyPlayed2 = false;
-    static bool alreadyPlayed3 = false;
-    static bool alreadyPlayed4 = false;
-    static bool alreadyPlayed5 = false;
-    static bool alreadyPlayed6 = false;
-
     // Plays TTS for tutorial instructions
-    if (alreadyPlayed1 == false && tutorialFlags[0] == false) {
+    if (alreadyPlayed[0] == false && tutorialFlags[0] == false) {
         PlaySound(L"TutorialTTSF1.wav", NULL, SND_FILENAME | SND_ASYNC);
-        alreadyPlayed1 = true;
+        alreadyPlayed[0] = true;
     }
-    else if (alreadyPlayed2 == false && tutorialFlags[1] == false && tutorialFlags[0] == true) {
+    else if (alreadyPlayed[1] == false && tutorialFlags[1] == false && tutorialFlags[0] == true) {
         PlaySound(L"TutorialTTSF2.wav", NULL, SND_FILENAME | SND_ASYNC);
-        alreadyPlayed2 = true;
+        alreadyPlayed[1] = true;
     }
-    else if (alreadyPlayed3 == false && tutorialFlags[2] == false && tutorialFlags[1] == true) {
+    else if (alreadyPlayed[2] == false && tutorialFlags[2] == false && tutorialFlags[1] == true) {
         PlaySound(NULL, NULL, 0);
-        alreadyPlayed3 = true;
+        alreadyPlayed[2] = true;
     }
 
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
