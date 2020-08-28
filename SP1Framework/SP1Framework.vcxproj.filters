@@ -180,5 +180,17 @@
     <Media Include="TutorialTTSF2.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="..\..\..\..\Downloads\TutorialTTSF3.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="TutorialTTSF5.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="TutorialTTSF4.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="TutorialTTSF6.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
 </Project>

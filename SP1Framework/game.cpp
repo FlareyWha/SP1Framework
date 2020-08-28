@@ -232,6 +232,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
+    case S_CREDITS: gameplayKBHandler(keyboardEvent);
+        break;
     }
 }
 
@@ -270,6 +272,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
     case S_GAME: gameplayMouseHandler(mouseEvent); // handle gameplay mouse event
+        break;
+    case S_CREDITS: gameplayMouseHandler(mouseEvent);
         break;
     }
 } //140
@@ -392,6 +396,9 @@ void update(double dt)
             g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
         }
+        case S_CREDITS: {
+            updateCredits();
+        }
     }
 }
 
@@ -449,6 +456,11 @@ void updateGame()       // game logic
 
 // Store screen logic
 void updateStore()
+{
+    processUserInput();
+}
+
+void updateCredits()
 {
     processUserInput();
 }
@@ -539,8 +551,17 @@ void checkCustomerPlayerCollision()
                 }
                 else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//west
                 {
-                    g_sChar.m_cLocation.X++;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+
+                    if (customerPtr[i - 1]->getX() == boxPosPtr[i]->getX() - 1)
+                    {
+                        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                        g_sChar.m_cLocation.Y++;
+                    }
+                    else
+                    {
+                        g_sChar.m_cLocation.X++;
+                        boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+                    }
 
 
                 }
@@ -987,7 +1008,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             deleteCustomer();
             deleteBoxes();
         }
-    else if (g_dElapsedWorkTime >= 5) {
+    else if (g_dElapsedWorkTime >= 30) {
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -1065,8 +1086,17 @@ void processInputSplash() // All input processing related to Splashscreen
             && g_mouseEvent.mousePosition.Y == c.Y / 25 + 12) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_MENU;
+            g_eGameState = S_CREDITS;
         }
+    }
+}
+
+void processInputCredits()
+{
+    framesPassed++;
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
+        && framesPassed % 10 == 0) {
+        g_eGameState = S_MENU;
     }
 }
 
@@ -1141,6 +1171,7 @@ void processInputGameOver()
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
+    p.setPos(18, 1);
     g_ePreviousGameState = S_GAMEOVER;
 }
 
@@ -1247,6 +1278,9 @@ void processUserInput()
             g_eGameState = S_MENU;
         checkEnd();
         break;
+    case S_CREDITS: {
+        processInputCredits();
+    }
     }
     processDebugState();
 }
@@ -1279,6 +1313,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_TUT: renderTutorialLevel(); // render tutorial level ui
         break;
     case S_GAME: renderGame(); // render game screen ui
+        break;
+    case S_CREDITS: renderCredits();
         break;
     }
 
@@ -1581,7 +1617,7 @@ void renderHome()
     c = g_Console.getConsoleSize();
     c.Y = 18;
     c.X = 27;
-    g_Console.writeToBuffer(c, "Options", 0xF0);
+    g_Console.writeToBuffer(c, "Options:", 0xF0);
     c.Y += 2;
     if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 34
         && g_mouseEvent.mousePosition.Y == 20) {
@@ -1986,6 +2022,26 @@ void renderIteminBox()
     }
 }
 
+void renderCredits()
+{
+    COORD c{34, 1};
+    g_Console.writeToBuffer(c, "Credits", 0x0F);
+    c.Y += 5;
+    c.X -= 20;
+    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "All background music is generally credited to", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "FStudios royalty-free music", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "www.fesliyanstudios.com", 0x0F);
+    c.Y += 5;
+    c.X += 10;
+    g_Console.writeToBuffer(c, "Left click to head to main menu", 0x0F);
+}
+
 // Render boxes
 void renderBoxes()
 {
@@ -2107,21 +2163,77 @@ void renderCustomer()
 
                 if ((customerPtr[i]->getTimer() >= 30.95) && (customerPtr[i]->getTimer() <= 31.05))
                 {
-                    bool bComplain = false;
+                    
 
-                    for (int j = 0; j < 6; j++) {
+                    //for (int j = 0; j < 6; j++) {
 
+                    //    if (sPtr[j] != nullptr) {
+
+                    //        if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && (customerPtr[i]->getY() == 7 || customerPtr[i]->getY() == 13 || customerPtr[i]->getY() == 19) )
+                    //        {
+                    //            sPtr[j]->decreaseItem(1);
+
+                    //            p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+
+                    //            customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
+
+                    //            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+                    //                switch (j)
+                    //                {
+                    //                case 0:
+                    //                    CustomerBoxColour[i] = 0x50;
+                    //                    break;
+                    //                case 1:
+                    //                    CustomerBoxColour[i] = 0x10;
+                    //                    break;
+                    //                case 2:
+                    //                    CustomerBoxColour[i] = 0xB0;
+                    //                    break;
+                    //                }
+                    //            }
+
+                    //            else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3))
+                    //            {
+                    //                switch (j)
+                    //                {
+                    //                case 3:
+                    //                    CustomerBoxColour[i] = 0xE0;
+                    //                    break;
+                    //                case 4:
+                    //                    CustomerBoxColour[i] = 0xA0;
+                    //                    break;
+                    //                case 5:
+                    //                    CustomerBoxColour[i] = 0x90;
+                    //                    break;
+                    //                }
+                    //            }
+                    //        }
+
+                    //        else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                    //            p.increaseUnsatisfiedCustomers();
+                    //            customerPtr[i]->setEndPoint(79, 15);
+                    //            customerPtr[i]->setAvoiding(5);
+                    //            customerPtr[i]->setMovingBack(true);
+                    //            customerPtr[i]->unSatisfied();
+                    //        }
+                    //    }
+                    //}
+
+                    for (int j = 0; j < 3; j++) {
+                     
                         if (sPtr[j] != nullptr) {
 
-                            if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j)
-                            {
-                                sPtr[j]->decreaseItem(1);
+                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+   
 
-                                p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(1);
 
-                                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
+                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
 
-                                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
+
                                     switch (j)
                                     {
                                     case 0:
@@ -2136,8 +2248,35 @@ void renderCustomer()
                                     }
                                 }
 
-                                else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j)
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setAvoiding(5);
+                                    customerPtr[i]->setMovingBack(true);
+                                    customerPtr[i]->unSatisfied();
+                                    CustomerBoxColour[i] = 0x77;
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    for (int j = 3; j < 6; j++) {
+
+                        if (sPtr[j] != nullptr) {
+
+                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3)) {
+                                
+                                
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
+                                    sPtr[j]->decreaseItem(1);
+
+                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
+
                                     switch (j)
                                     {
                                     case 3:
@@ -2151,112 +2290,18 @@ void renderCustomer()
                                         break;
                                     }
                                 }
-                            }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
-                                p.increaseUnsatisfiedCustomers();
-                                customerPtr[i]->setEndPoint(79, 15);
-                                customerPtr[i]->setAvoiding(5);
-                                customerPtr[i]->setMovingBack(true);
-                                customerPtr[i]->unSatisfied();
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setAvoiding(5);
+                                    customerPtr[i]->setMovingBack(true);
+                                    customerPtr[i]->unSatisfied();
+                                    CustomerBoxColour[i] = 0x77;
+                                }
                             }
                         }
                     }
-
-                    //for (int j = 0; j < 3; j++) {
-                     
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
-
-                    //            if (customerPtr[i]->getQuantity() == 0) {
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                    //            {
-                    //                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                    //                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-                    //                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
-
-                    //                switch (j)
-                    //                {
-                    //                case 0:
-                    //                    CustomerBoxColour[i] = 0x50;
-                    //                    break;
-                    //                case 1:
-                    //                    CustomerBoxColour[i] = 0x10;
-                    //                    break;
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xB0;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                    //                p.increaseUnsatisfiedCustomers();
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-
-                    //            }
-
-                    //        }
-
-                    //    }
-                    //}
-
-                    //for (int j = 3; j < 6; j++) {
-
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
-                    //            
-                    //            if (customerPtr[i]->getQuantity() == 0) {
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                    //            {
-                    //                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                    //                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-                    //                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
-
-                    //                switch (j)
-                    //                {
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xE0;
-                    //                    break;
-                    //                case 4:
-                    //                    CustomerBoxColour[i] = 0xA0;
-                    //                    break;
-                    //                case 5:
-                    //                    CustomerBoxColour[i] = 0x90;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                    //                p.increaseUnsatisfiedCustomers();
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-
-                    //            }
-
-                    //        }
-
-                    //    }
-
-                    //}
                 }
 
                 else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)

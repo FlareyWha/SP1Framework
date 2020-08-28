@@ -2,7 +2,7 @@
 #include <sstream>
 #include <Windows.h>
 
-Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}
+Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
 	for (int i = 0; i < 10; i++)
 	{
@@ -32,7 +32,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
     else if (tutorialFlags[4] == false)
         flagFive(console, g_sChar, g_skKeyEvent, boxColour);
-    else if (tutorialFlags[5] == false)
+    else if (tutorialFlags[6] == false) // from this point on the flag will match the flag aka 6 = 6 
         flagSix(console);
     else if (tutorialFlags[6] == false)
         flagSeven(console);
@@ -47,8 +47,24 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         alreadyPlayed[1] = true;
     }
     else if (alreadyPlayed[2] == false && tutorialFlags[2] == false && tutorialFlags[1] == true) {
-        PlaySound(NULL, NULL, 0);
+        PlaySound(L"TutorialTTSF3.wav", NULL, SND_FILENAME | SND_ASYNC);
         alreadyPlayed[2] = true;
+    }
+    else if (alreadyPlayed[3] == false && tutorialFlags[3] == false && tutorialFlags[2] == true) {
+        PlaySound(L"TutorialTTSF4.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[3] = true;
+    }
+    else if (alreadyPlayed[4] == false && tutorialFlags[4] == false && tutorialFlags[3] == true) {
+        PlaySound(L"TutorialTTSF5.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[4] = true;
+    }
+    else if (alreadyPlayed[5] == false && tutorialFlags[5] == false && tutorialFlags[4] == true) {
+        PlaySound(L"TutorialTTSF6.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[5] = true;
+    }
+    else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[5] == true) {
+        PlaySound(NULL, NULL, 0);
+        alreadyPlayed[6] = true;
     }
 
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
@@ -76,6 +92,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {
         tutorialFlags[6] = true;
+        g_sChar.moving.UP = false;
+        g_sChar.moving.DOWN = false;
+        g_sChar.moving.LEFT = false;
+        g_sChar.moving.RIGHT = false;
     }
 }
 
@@ -153,17 +173,17 @@ void Tutorial::flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKey
     c.Y += 1;
     console.writeToBuffer(c, "box on the left. Your empty box (grey)", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "must touch it. Also, if u have trouble", 0xF0);
+    console.writeToBuffer(c, "must touch it. Also, safety is key ", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "moving, press shift to walk. Try it!", 0xF0);
+    console.writeToBuffer(c, "press Shift to walk to avoid accidents.", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "Optional: Shift { }", 0xF0);
+    console.writeToBuffer(c, "Try it! Optional: Shift { }", 0xF0);
 
     if (pressed[4] == true)
     {
-        c.X += 17;
+        c.X += 25;
         console.writeToBuffer(c, ' ', 0xAA);
-        c.X -= 17;
+        c.X -= 25;
     }
 
     if (g_skKeyEvent[K_SHIFT].keyDown)
@@ -177,17 +197,17 @@ void Tutorial::flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
     COORD c;
     c.Y = 4;
     c.X = 40;
-    console.writeToBuffer(c, "Press space when ur grey box", 0xF0);
+    console.writeToBuffer(c, "Press Space when your grey box", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "is touching the purple box", 0xF0);
+    console.writeToBuffer(c, "is touching the purple box.", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "Space { }", 0xF0);
+    console.writeToBuffer(c, "hit Space to pick the item! { }", 0xF0);
 
     if (pressed[5] == true && boxColour == 0x50)
     {
-        c.X += 7;
+        c.X += 29;
         console.writeToBuffer(c, ' ', 0xAA);
-        c.X -= 7;
+        c.X -= 29;
     }
 
     if (g_skKeyEvent[K_SPACE].keyDown)
@@ -205,13 +225,13 @@ void Tutorial::flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
     c.Y += 1;
     console.writeToBuffer(c, "some toilet paper, its time", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "to put it on the shelf. Go", 0xF0);
+    console.writeToBuffer(c, "to stock up the shelves. Go", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "to the shelf marked with the", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "same colour as the item you are", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "holding to restock it. Press space", 0xF0);
+    console.writeToBuffer(c, "holding to restock. Press space", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "on the grey area of the shelf", 0xF0);
     c.Y += 1;
@@ -219,9 +239,9 @@ void Tutorial::flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyE
 
     if (pressed[5] == true && boxColour == 0x70)
     {
-        c.X += 18;
+        c.X += 17;
         console.writeToBuffer(c, ' ', 0xAA);
-        c.X -= 18;
+        c.X -= 17;
     }
 
     if (g_skKeyEvent[K_SPACE].keyDown)
@@ -253,7 +273,11 @@ void Tutorial::flagSix(Console& console)
 
 void Tutorial::flagSeven(Console& console)
 {
-   //yes
+    COORD c;
+
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "A customer has appeared.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)

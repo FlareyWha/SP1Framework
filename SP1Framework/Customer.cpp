@@ -242,7 +242,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
 					pos.setY(pos.getY() + 1);
-					return 1;
+					return 3;
 				}
 			}
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
@@ -271,7 +271,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				{
 					pos.setX(pos.getX() + 1);
-					return 2;
+					return 0;
 				}
 			}
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
@@ -281,7 +281,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 
 void Customer::customerCollision(Map& map)
 {
-	if ((map.getGrid(pos.getY(), pos.getX() - 3) == 'C') && (pos.getX() - endPoint.getX() > 48))
+	if ((map.getGrid(pos.getY(), pos.getX() - 3) == 'C') && (pos.getX() - endPoint.getX() > 19))
 	{
 		travelling = false;
 		avoiding = 1;
@@ -299,7 +299,6 @@ void Customer::customerCollision(Map& map)
 	else if (avoiding == 3)
 	{
 		pos.setY(pos.getY() - 1);
-		travelling = true;
 	}
 	else if (avoiding == 5) // to move down after collecting item
 	{
@@ -315,6 +314,7 @@ void Customer::customerCollision(Map& map)
 	if (avoiding == 4 || avoiding == 7)
 	{
 		avoiding = 0;
+		travelling = true;
 	}
 
 	if (avoiding != 0)

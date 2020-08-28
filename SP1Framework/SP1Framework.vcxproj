@@ -134,7 +134,11 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\..\..\..\temp\TutorialTTSF1.wav" />
+    <Media Include="..\..\..\..\Downloads\TutorialTTSF3.wav" />
     <Media Include="TutorialTTSF2.wav" />
+    <Media Include="TutorialTTSF4.wav" />
+    <Media Include="TutorialTTSF5.wav" />
+    <Media Include="TutorialTTSF6.wav" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
