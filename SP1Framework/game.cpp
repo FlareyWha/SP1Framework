@@ -1975,6 +1975,7 @@ void renderCustomer()
     if (g_bRestocking == false) {
         COORD c = g_Console.getConsoleSize();
         bool created = false;
+        
 
         for (int i = 0; i < 6; i++) 
         {
@@ -2001,7 +2002,14 @@ void renderCustomer()
                 }
                 //checkCustomerCollision();
 
-                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+                if (customerPtr[i]->getState() == true)
+                {
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20); //green
+                }
+                else
+                {
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44); //red
+                }
 
                 //checkCustomerCollision();
                 
@@ -2089,6 +2097,7 @@ void renderCustomer()
                                 avoiding[i] = 5;
                                 travelling[i] = false;
                                 movingBack[i] = true;
+                                customerPtr[i]->unSatisfied();
                             }
                         }
                     }

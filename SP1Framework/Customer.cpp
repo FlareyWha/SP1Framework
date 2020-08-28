@@ -21,7 +21,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	{
 		quantity = 2;
 	}
-	bSatisfied = false;
+	bSatisfied = true;
 	prevPos.setX(0);
 	prevPos.setY(0);
 	pos.setX(79); //change when we spawn them
@@ -122,7 +122,7 @@ int Customer::getItemToBuy()
 	return itemToBuy;
 }
 
-void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q)
+void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s)
 {
 	COORD c;
 	if (spawned == true)
@@ -134,11 +134,11 @@ void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Ma
 		c.Y = pos.getY();
 		if (q == 0)
 		{
-			console.writeToBuffer(c, 1, 0x20);
+			console.writeToBuffer(c, 1, s);
 		}
 		else
 		{
-			console.writeToBuffer(c, ss.str(), 0x20);
+			console.writeToBuffer(c, ss.str(), s);
 		}		
 		map.setGrid(c.Y, c.X, 'C');
 	}
@@ -222,10 +222,15 @@ void Customer::customerCollision(Map& map, bool& travelling, int& avoiding)
 		avoiding = 1;
 	}
 
+	else if (avoiding == 3 && map.getGrid(pos.getY() - 1, pos.getX()) == 'C')
+	{
+		avoiding = 2;
+	}
+
 	if (avoiding == 1)
 		pos.setY(pos.getY() + 1);
 	else if (avoiding == 2)
-		pos.setX(pos.getX() - 2);
+		pos.setX(pos.getX() - 3);
 	else if (avoiding == 3)
 		pos.setY(pos.getY() - 1);
 	else if (avoiding == 5) // to move down after collecting item
