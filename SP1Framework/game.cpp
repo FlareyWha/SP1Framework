@@ -1937,7 +1937,13 @@ void renderStore()
     c.X /= 2;
     c.X -= 5;
     c.Y = 22;
-    g_Console.writeToBuffer(c, "Home", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 35 && g_mouseEvent.mousePosition.X <= 38
+        && g_mouseEvent.mousePosition.Y == 22) {
+        g_Console.writeToBuffer(c, "Home", 0xE0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Home", 0xF0);
+    }
 }
 
 void renderIteminBox()
