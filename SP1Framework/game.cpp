@@ -2029,9 +2029,8 @@ void renderCustomer()
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
                     boxPosPtr[i + 1] = new Position;
+                    CustomerBoxColour[i] = 0x77;
                 }
-
-                CustomerBoxColour[i] = 0x77;
                 
                 if (boxPosPtr[i + 1] != nullptr) {
                     switch (customerDirection[i])
@@ -2104,8 +2103,12 @@ void renderCustomer()
                                 }
                             }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
+                                customerPtr[i]->setEndPoint(79, 15);
+                                avoiding[i] = 5;
+                                travelling[i] = false;
+                                movingBack[i] = true;
                             }
                         }
                     }
