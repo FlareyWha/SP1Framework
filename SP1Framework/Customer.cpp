@@ -32,6 +32,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	yLock = true;
 	avoiding = 0;
 	travelling = false;
+	spawned = false;
 }
 
 //Customer::Customer(Map map)
@@ -112,6 +113,11 @@ bool Customer::getTravelling()
 	return travelling;
 }
 
+bool Customer::getMovingBack()
+{
+	return movingBack;
+}
+
 void Customer::setItemToBuy(int passcheck)
 {
 	itemToBuy = rand() % passcheck + 1;
@@ -122,9 +128,19 @@ void Customer::setAvoiding(int number)
 	this->avoiding = number;
 }
 
-void Customer::setTravelling(int travelling)
+void Customer::setTravelling(bool travelling)
 {
 	this->travelling = travelling;
+}
+
+void Customer::setSpawned(bool spawned)
+{
+	this->spawned = spawned;
+}
+
+void Customer::setMovingBack(bool movingBack)
+{
+	this->movingBack = movingBack;
 }
 
 int Customer::getQuantity()
@@ -137,7 +153,7 @@ int Customer::getItemToBuy()
 	return itemToBuy;
 }
 
-void Customer::printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s, bool state)
+void Customer::printOutCustomer(Console& console, Position pos, Map& map, int q, WORD s, bool state)
 {
 	COORD c;
 	if (spawned == true)

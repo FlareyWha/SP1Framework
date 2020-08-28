@@ -29,8 +29,6 @@ SMouseEvent g_mouseEvent;
 
 // Game specific variables here
 int level, day;
-bool spawned[6] = { false, false, false, false, false, false };
-bool movingBack[6] = { false, false, false, false, false, false };
 bool g_bRestocking;
 
 double timer[6];
@@ -153,7 +151,6 @@ void init( void )
     for (int i = 0; i < 6; i++) {
         timer[i] = -1;
         /*
-        spawned[i] = false;
         customerPtr[i] = nullptr;
         sPtr[i] = nullptr;
         */
@@ -2043,11 +2040,11 @@ void renderCustomer()
                     
                 }
 
-                if (customerPtr[i]->getQuantity() == 0 && movingBack[i] != true) {
+                if (customerPtr[i]->getQuantity() == 0 && customerPtr[i]->getMovingBack() == false) {
                     customerPtr[i]->setEndPoint(79, 15);
                     customerPtr[i]->setAvoiding(5);
                     customerPtr[i]->setTravelling(false);
-                    movingBack[i] = true;
+                    customerPtr[i]->setMovingBack(true);
                 }
 
                 customerPtr[i]->customerCollision(map);   
@@ -2071,7 +2068,7 @@ void renderCustomer()
                 //}
 
                 //checkCustomerCollision();
-                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
+                customerPtr[i]->printOutCustomer(g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -2259,7 +2256,6 @@ void renderCustomer()
 
                 else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
                 {
-                    spawned[i] = false;
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
 
@@ -2270,9 +2266,7 @@ void renderCustomer()
 
                     CustomerBoxColour[i] = 0x77;
                     
-
                     timer[i] = -1;
-                    customerPtr[i]->setTravelling(false);
                     movingBack[i] = false;
                     map.setGrid(79, 15, '0');
                 }
@@ -2287,7 +2281,7 @@ void renderCustomer()
                         customerPtr[i]->setItemToBuy(day + 2);
                         timer[i] = 0;
                         customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
-                        spawned[i] = true;
+                        customerPtr[i]->setSpawned(true);
                         created = true;
                     }
                     spawnTimer = 0;

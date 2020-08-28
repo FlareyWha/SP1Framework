@@ -15,6 +15,8 @@ private:
     bool bSatisfied;
     bool yLock;
     bool travelling;
+    bool spawned;
+    bool movingBack;
     Position endPoint;
     Position prevPos;
     int CustomerDirection;
@@ -39,13 +41,16 @@ public:
     int getEndPointY();
     Position getEndPoint();
     bool getTravelling();
+    bool getMovingBack();
     void setYLock(bool set);
     void setEndPoint(int x, int y);
     void setQuantity(int quantity);
     void setItemToBuy(int passcheck);
     void setAvoiding(int number);
     void setTravelling(bool travelling);
-    void printOutCustomer(bool spawned, Console& console, Position pos, Map& map, int q, WORD s, bool state);
+    void setSpawned(bool spawned);
+    void setMovingBack(bool movingBack);
+    void printOutCustomer(Console& console, Position pos, Map& map, int q, WORD s, bool state);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map);
 };
