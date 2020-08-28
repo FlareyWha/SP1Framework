@@ -32,7 +32,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
     else if (tutorialFlags[4] == false)
         flagFive(console, g_sChar, g_skKeyEvent, boxColour);
-    else if (tutorialFlags[5] == false)
+    else if (tutorialFlags[6] == false) // from this point on the flag will match the flag aka 6 = 6 
         flagSix(console);
     else if (tutorialFlags[6] == false)
         flagSeven(console);
@@ -273,7 +273,11 @@ void Tutorial::flagSix(Console& console)
 
 void Tutorial::flagSeven(Console& console)
 {
-   //yes
+    COORD c;
+
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "A customer has appeared.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)
