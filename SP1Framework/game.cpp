@@ -1442,7 +1442,7 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((30 - customerPtr[i]->getTimer())/3)+2; //change this formula if u change anything about customer timer
+            cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
             for (int i = 0; i != cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
