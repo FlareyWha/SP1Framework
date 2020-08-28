@@ -92,6 +92,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {
         tutorialFlags[6] = true;
+        g_sChar.moving.UP = false;
+        g_sChar.moving.DOWN = false;
+        g_sChar.moving.LEFT = false;
+        g_sChar.moving.RIGHT = false;
     }
 }
 
