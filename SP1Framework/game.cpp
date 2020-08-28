@@ -31,7 +31,6 @@ SMouseEvent g_mouseEvent;
 int level, day;
 bool g_bRestocking;
 
-double timer[6];
 double spawnTimer;
 SGameChar   g_sChar;
 EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
@@ -149,7 +148,6 @@ void init( void )
     }
 
     for (int i = 0; i < 6; i++) {
-        timer[i] = -1;
         /*
         customerPtr[i] = nullptr;
         sPtr[i] = nullptr;
@@ -370,9 +368,9 @@ void update(double dt)
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
-                if (timer[i] != -1)
+                if (customerPtr[i] != nullptr && customerPtr[i]->getTimer() != -1)
                 {
-                    timer[i] += dt;
+                    customerPtr[i]->addTimer(dt);
                 }
             }
             if (tutorial.getTutorialFlag(5) == true)
@@ -386,9 +384,9 @@ void update(double dt)
             spawnTimer += dt;
             for (int i = 0; i < 6; i++)
             {
-                if (timer[i] != -1)
+                if (customerPtr[i] != nullptr && customerPtr[i]->getTimer() != -1)
                 {
-                    timer[i] += dt;
+                    customerPtr[i]->addTimer(dt);
                 }
             }
             g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
@@ -898,7 +896,6 @@ void deleteCustomer()
         {
             delete customerPtr[i];
             customerPtr[i] = nullptr;
-            timer[i] = -1;
         }
     }
 }
@@ -1445,7 +1442,7 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((30 - timer[i])/3)+2; //change this formula if u change anything about customer timer
+            cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
             for (int i = 0; i != cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
@@ -2040,7 +2037,7 @@ void renderCustomer()
                     
                 }
 
-                if (customerPtr[i]->getQuantity() == 0 && customerPtr[i]->getMovingBack() == false) {
+                if (customerPtr[i]->getQuantity() == 0 && customerPtr[i]->getMovingBack() != true) {
                     customerPtr[i]->setEndPoint(79, 15);
                     customerPtr[i]->setAvoiding(5);
                     customerPtr[i]->setTravelling(false);
@@ -2049,7 +2046,7 @@ void renderCustomer()
 
                 customerPtr[i]->customerCollision(map);   
 
-                if (customerPtr[i]->getPos().getX() == 62)
+                if (customerPtr[i]->getPos().getX() == 73)
                 {
                     customerPtr[i]->setYLock(false);
                 }
@@ -2068,6 +2065,14 @@ void renderCustomer()
                 //}
 
                 //checkCustomerCollision();
+
+                if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
+                {
+                    customerPtr[i]->setTimer(12);
+                    customerPtr[i]->setTimerSet(true);
+                    customerPtr[i]->setTravelling(false);
+                }
+
                 customerPtr[i]->printOutCustomer(g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
                 
                 if (boxPtr[i + 1] == nullptr) {
@@ -2093,29 +2098,86 @@ void renderCustomer()
                     }
                 }
 
-                if (timer[i] >= 10.9 && timer[i] <= 11.1)
+                if (customerPtr[i]->getTimer() >= 10.95 && customerPtr[i]->getTimer() <= 11.05)
                 {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     customerPtr[i]->setTravelling(true);
+                    customerPtr[i]->setTimer(-1);
                 }
 
-                if ((timer[i] >= 30.95) && (timer[i] <= 31.05))
+                if ((customerPtr[i]->getTimer() >= 30.95) && (customerPtr[i]->getTimer() <= 31.05))
                 {
-                    bool bComplain = false;
+                    
 
-                    for (int j = 0; j < 6; j++) {
+                    //for (int j = 0; j < 6; j++) {
 
+                    //    if (sPtr[j] != nullptr) {
+
+                    //        if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && (customerPtr[i]->getY() == 7 || customerPtr[i]->getY() == 13 || customerPtr[i]->getY() == 19) )
+                    //        {
+                    //            sPtr[j]->decreaseItem(1);
+
+                    //            p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+
+                    //            customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
+
+                    //            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+                    //                switch (j)
+                    //                {
+                    //                case 0:
+                    //                    CustomerBoxColour[i] = 0x50;
+                    //                    break;
+                    //                case 1:
+                    //                    CustomerBoxColour[i] = 0x10;
+                    //                    break;
+                    //                case 2:
+                    //                    CustomerBoxColour[i] = 0xB0;
+                    //                    break;
+                    //                }
+                    //            }
+
+                    //            else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3))
+                    //            {
+                    //                switch (j)
+                    //                {
+                    //                case 3:
+                    //                    CustomerBoxColour[i] = 0xE0;
+                    //                    break;
+                    //                case 4:
+                    //                    CustomerBoxColour[i] = 0xA0;
+                    //                    break;
+                    //                case 5:
+                    //                    CustomerBoxColour[i] = 0x90;
+                    //                    break;
+                    //                }
+                    //            }
+                    //        }
+
+                    //        else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                    //            p.increaseUnsatisfiedCustomers();
+                    //            customerPtr[i]->setEndPoint(79, 15);
+                    //            customerPtr[i]->setAvoiding(5);
+                    //            customerPtr[i]->setMovingBack(true);
+                    //            customerPtr[i]->unSatisfied();
+                    //        }
+                    //    }
+                    //}
+
+                    for (int j = 0; j < 3; j++) {
+                     
                         if (sPtr[j] != nullptr) {
 
-                            if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j)
-                            {
-                                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
+                            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+   
 
-                                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                {
+                                    sPtr[j]->decreaseItem(1);
 
-                                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
+                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
 
-                                if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
+
                                     switch (j)
                                     {
                                     case 0:
@@ -2130,8 +2192,35 @@ void renderCustomer()
                                     }
                                 }
 
-                                else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j)
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setAvoiding(5);
+                                    customerPtr[i]->setMovingBack(true);
+                                    customerPtr[i]->unSatisfied();
+                                    CustomerBoxColour[i] = 0x77;
+                                }
+
+                            }
+
+                        }
+                    }
+
+                    for (int j = 3; j < 6; j++) {
+
+                        if (sPtr[j] != nullptr) {
+
+                            if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3)) {
+                                
+                                
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
                                 {
+                                    sPtr[j]->decreaseItem(1);
+
+                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+
+                                    customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
+
                                     switch (j)
                                     {
                                     case 3:
@@ -2145,113 +2234,18 @@ void renderCustomer()
                                         break;
                                     }
                                 }
-                            }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() == false && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
-                                p.increaseUnsatisfiedCustomers();
-                                customerPtr[i]->setEndPoint(79, 15);
-                                customerPtr[i]->setAvoiding(5);
-                                customerPtr[i]->setTravelling(false);
-                                customerPtr[i]->setMovingBack(true);
-                                customerPtr[i]->unSatisfied();
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                    p.increaseUnsatisfiedCustomers();
+                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setAvoiding(5);
+                                    customerPtr[i]->setMovingBack(true);
+                                    customerPtr[i]->unSatisfied();
+                                    CustomerBoxColour[i] = 0x77;
+                                }
                             }
                         }
                     }
-
-                    //for (int j = 0; j < 3; j++) {
-                     
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
-
-                    //            if (customerPtr[i]->getQuantity() == 0) {
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                    //            {
-                    //                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                    //                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-                    //                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
-
-                    //                switch (j)
-                    //                {
-                    //                case 0:
-                    //                    CustomerBoxColour[i] = 0x50;
-                    //                    break;
-                    //                case 1:
-                    //                    CustomerBoxColour[i] = 0x10;
-                    //                    break;
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xB0;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                    //                p.increaseUnsatisfiedCustomers();
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-
-                    //            }
-
-                    //        }
-
-                    //    }
-                    //}
-
-                    //for (int j = 3; j < 6; j++) {
-
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * j) {
-                    //            
-                    //            if (customerPtr[i]->getQuantity() == 0) {
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
-                    //            {
-                    //                sPtr[j]->decreaseItem(customerPtr[i]->getQuantity());
-
-                    //                p.AddDayEarnings(customerPtr[i]->getQuantity()); //for adding amount earned daily// can change it if need be
-
-                    //                customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
-
-                    //                switch (j)
-                    //                {
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xE0;
-                    //                    break;
-                    //                case 4:
-                    //                    CustomerBoxColour[i] = 0xA0;
-                    //                    break;
-                    //                case 5:
-                    //                    CustomerBoxColour[i] = 0x90;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
-                    //                p.increaseUnsatisfiedCustomers();
-                    //                customerPtr[i]->setEndPoint(79, 15);
-                    //                avoiding[i] = 5;
-                    //                travelling[i] = false;
-
-                    //            }
-
-                    //        }
-
-                    //    }
-
-                    //}
                 }
 
                 else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
@@ -2265,8 +2259,6 @@ void renderCustomer()
                     boxPosPtr[i + 1] = nullptr;
 
                     CustomerBoxColour[i] = 0x77;
-                    
-                    timer[i] = -1;
                     map.setGrid(79, 15, '0');
                 }
             }
@@ -2278,7 +2270,7 @@ void renderCustomer()
                     {
                         customerPtr[i] = new Customer;
                         customerPtr[i]->setItemToBuy(day + 2);
-                        timer[i] = 0;
+                        customerPtr[i]->setTimer(0);
                         customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
                         customerPtr[i]->setSpawned(true);
                         created = true;
@@ -2367,15 +2359,15 @@ void renderFramerate()
 
     for (int i = 0; i < 6; i++)
     {
-        ss.str("");
-        double display = timer[i];
-        ss << display;
-        c.X = 0;
-        c.Y = 14 + i;
-        g_Console.writeToBuffer(c, ss.str(), 0x0F);
-
         if (customerPtr[i] != nullptr)
         {
+            ss.str("");
+            double display = customerPtr[i]->getTimer();
+            ss << display;
+            c.X = 0;
+            c.Y = 14 + i;
+            g_Console.writeToBuffer(c, ss.str(), 0x0F);
+
             ss.str("");
             ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY() << ", Shelf " << customerPtr[i]->getItemToBuy() << ", endpos" << customerPtr[i]->getEndPoint().getX() << ", " << customerPtr[i]->getEndPoint().getY();
             c.X = 15;

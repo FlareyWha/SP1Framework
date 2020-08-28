@@ -33,6 +33,9 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	avoiding = 0;
 	travelling = false;
 	spawned = false;
+	timerSet = false;
+	timer = 0.0;
+	movingBack = false;
 }
 
 //Customer::Customer(Map map)
@@ -118,6 +121,16 @@ bool Customer::getMovingBack()
 	return movingBack;
 }
 
+bool Customer::getTimerSet()
+{
+	return timerSet;
+}
+
+double Customer::getTimer()
+{
+	return timer;
+}
+
 void Customer::setItemToBuy(int passcheck)
 {
 	itemToBuy = rand() % passcheck + 1;
@@ -141,6 +154,21 @@ void Customer::setSpawned(bool spawned)
 void Customer::setMovingBack(bool movingBack)
 {
 	this->movingBack = movingBack;
+}
+
+void Customer::setTimer(double timer)
+{
+	this->timer = timer;
+}
+
+void Customer::addTimer(double dt)
+{
+	timer += dt;
+}
+
+void Customer::setTimerSet(bool timerSet)
+{
+	this->timerSet = timerSet;
 }
 
 int Customer::getQuantity()
@@ -214,9 +242,10 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
 					pos.setY(pos.getY() + 1);
-					return 1;
+					return 3;
 				}
 			}
+			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
 		if ((endPoint.getX() - pos.getX()) != 0)
 		{
@@ -242,7 +271,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				else if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				{
 					pos.setX(pos.getX() + 1);
-					return 2;
+					return 0;
 				}
 			}
 			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
@@ -252,9 +281,7 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 
 void Customer::customerCollision(Map& map)
 {
-	if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
-		avoiding = 0;
-	else if ((map.getGrid(pos.getY(), pos.getX() - 3) == 'C') && (pos.getX() - 1 != endPoint.getX()))
+	if ((map.getGrid(pos.getY(), pos.getX() - 3) == 'C') && (pos.getX() - endPoint.getX() > 19))
 	{
 		travelling = false;
 		avoiding = 1;
@@ -270,7 +297,9 @@ void Customer::customerCollision(Map& map)
 	else if (avoiding == 2)
 		pos.setX(pos.getX() - 3);
 	else if (avoiding == 3)
+	{
 		pos.setY(pos.getY() - 1);
+	}
 	else if (avoiding == 5) // to move down after collecting item
 	{
 		pos.setY(pos.getY() + 1);
@@ -284,7 +313,8 @@ void Customer::customerCollision(Map& map)
 
 	if (avoiding == 4 || avoiding == 7)
 	{
-		avoiding == 0;
+		avoiding = 0;
+		travelling = true;
 	}
 
 	if (avoiding != 0)
