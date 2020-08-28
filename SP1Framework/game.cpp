@@ -1997,6 +1997,7 @@ void renderCustomer()
     if (g_bRestocking == false) {
         COORD c = g_Console.getConsoleSize();
         bool created = false;
+        
 
         for (int i = 0; i < 6; i++) 
         {
@@ -2023,7 +2024,14 @@ void renderCustomer()
                 }
                 //checkCustomerCollision();
 
-                customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity());
+                if (customerPtr[i]->getState() == true)
+                {
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20); //green
+                }
+                else
+                {
+                    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44); //red
+                }
 
                 //checkCustomerCollision();
                 
@@ -2031,9 +2039,8 @@ void renderCustomer()
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
                     boxPosPtr[i + 1] = new Position;
+                    CustomerBoxColour[i] = 0x77;
                 }
-
-                CustomerBoxColour[i] = 0x77;
                 
                 if (boxPosPtr[i + 1] != nullptr) {
                     switch (customerDirection[i])
@@ -2106,8 +2113,13 @@ void renderCustomer()
                                 }
                             }
 
-                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
+                            else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && movingBack[i] != true) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
                                 p.increaseUnsatisfiedCustomers();
+                                customerPtr[i]->setEndPoint(79, 15);
+                                avoiding[i] = 5;
+                                travelling[i] = false;
+                                movingBack[i] = true;
+                                customerPtr[i]->unSatisfied();
                             }
                         }
                     }
