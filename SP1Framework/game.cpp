@@ -1420,7 +1420,7 @@ void renderHUD()
 void renderCustomerTimer(int shelf) //works ?
 {
     const WORD colors[] = {
-        0x50, 0x10, 0xB0, 0xE0, 0xA0, 0x90, 0x60
+        0x56, 0x16, 0xB6, 0xE6, 0xA6, 0x96, 0x66
     };
 
     COORD c;
@@ -1444,9 +1444,10 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((30 - timer[i])/3)+1; //change this formula if u change anything about customer timer
+            cTimerArrival = ((30 - timer[i])/3)+2; //change this formula if u change anything about customer timer
+            
             for (int i = 0; i != cTimerArrival; i++) {
-                g_Console.writeToBuffer(c, ' ', colors[shelf]);
+                g_Console.writeToBuffer(c, char(220), colors[shelf]);
                 c.X++;
             }
         }
