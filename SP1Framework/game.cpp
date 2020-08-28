@@ -2267,7 +2267,6 @@ void renderCustomer()
                     CustomerBoxColour[i] = 0x77;
                     
                     timer[i] = -1;
-                    movingBack[i] = false;
                     map.setGrid(79, 15, '0');
                 }
             }
