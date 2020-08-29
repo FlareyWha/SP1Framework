@@ -1011,7 +1011,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             deleteCustomer();
             deleteBoxes();
         }
-    else if (g_dElapsedWorkTime >= 5) { //change back ltr to 30
+    else if (g_dElapsedWorkTime >= 30) { //change back ltr to 30
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -1107,6 +1107,11 @@ void processInputCredits()
 void processInputMenu() //All input processing related to Main Menu
 {
     framesPassed++;
+    static bool alreadyPlayed = false;
+    if (!alreadyPlayed && (g_ePreviousGameState != S_HOME && g_ePreviousGameState != S_SPLASHSCREEN)) {
+        PlaySound(L"BGM.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+        alreadyPlayed = true;
+    }
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
         && (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER))
     {
@@ -1127,6 +1132,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to previous game state once mouse clicks on the button
         {
             g_eGameState = g_ePreviousGameState;
+            alreadyPlayed = false;
         }
     }
 
@@ -1253,6 +1259,11 @@ int getNumberStr(std::string line)
 // Process inputs on End of work screen
 void processInputEndOfWorkScreen()
 {
+    static bool alreadyPlayed = false;
+    if (!alreadyPlayed) {
+        PlaySound(L"BGM.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+        alreadyPlayed = true;
+    }
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
     {
         COORD c = g_Console.getConsoleSize();
@@ -1264,6 +1275,7 @@ void processInputEndOfWorkScreen()
             p.resetDayEarnings(); //reset daily amount earned back to 0
             
             g_eGameState = S_HOME;
+            alreadyPlayed = false;
         }
     }
 }
