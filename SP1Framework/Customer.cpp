@@ -11,7 +11,26 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 {
 	//itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
 	/*quantity = rand() % 2 + 1;*/
-	Player p;
+	bSatisfied = true;
+	prevPos.setX(0);
+	prevPos.setY(0);
+	pos.setX(79); //change when we spawn them
+	pos.setY(9); // ^
+	itemToBuy = 0;
+	passcheck = 0;
+	CustomerDirection = 0;
+	yLock = true;
+	avoiding = 0;
+	travelling = false;
+	spawned = false;
+	timerSet = false;
+	timer = 0.0;
+	movingBack = false;
+	colliding = false;
+}
+
+Customer::Customer(Player p)
+{
 	int i = rand() % 100 + 1;
 	if (i <= (50 + 7 * (p.getPowerups()->getTCustomerslvl())))
 	{
@@ -36,17 +55,8 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 	timerSet = false;
 	timer = 0.0;
 	movingBack = false;
+	colliding = false;
 }
-
-//Customer::Customer(Map map)
-//{
-//	int x, y;
-//	bool spawnComplete = false;
-//	while (spawnComplete == false)
-//	{
-//		
-//	}
-//}
 
 Customer::~Customer()
 {
@@ -131,6 +141,21 @@ double Customer::getTimer()
 	return timer;
 }
 
+bool Customer::getColliding()
+{
+	return colliding;
+}
+
+Position Customer::getPrevPos()
+{
+	return prevPos;
+}
+
+int Customer::getAvoiding()
+{
+	return avoiding;
+}
+
 void Customer::setItemToBuy(int passcheck)
 {
 	itemToBuy = rand() % passcheck + 1;
@@ -181,7 +206,7 @@ int Customer::getItemToBuy()
 	return itemToBuy;
 }
 
-void Customer::printOutCustomer(Console& console, Position pos, Map& map, int q, WORD s, bool state)
+void Customer::printOutCustomer(Console& console, Map& map, int q, WORD s)
 {
 	COORD c;
 	if (spawned == true)
@@ -192,7 +217,7 @@ void Customer::printOutCustomer(Console& console, Position pos, Map& map, int q,
 		c.X = pos.getX();
 		c.Y = pos.getY();
 		
-		if (state == false)
+		if (bSatisfied == false)
 		{
 			console.writeToBuffer(c,' ', s);
 		}
@@ -204,9 +229,7 @@ void Customer::printOutCustomer(Console& console, Position pos, Map& map, int q,
 		{
 			console.writeToBuffer(c, ss.str(), s);
 		}		
-
-		
-		map.setGrid(c.Y, c.X, 'C');
+		map.setGrid(pos.getY(), pos.getX(), 'C');
 	}
 }
 
@@ -221,12 +244,12 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 		{
 			if (map.isNegative(endPoint.getY(), pos.getY()) == true) //changed in attempt to fix collision
 			{
-				if (map.getGrid(pos.getY() - 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (NORTH
-				{
+				//if (map.getGrid(pos.getY() - 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (NORTH
+				//{
 					//pos.setY(pos.getY() - 1);
 					//return 1;
-				}
-				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				//}
+				if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
 					pos.setY(pos.getY() - 1);
 					return 1;
@@ -234,18 +257,17 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 			}
 			else if (map.isNegative(endPoint.getY(), pos.getY()) == false)
 			{
-				if (map.getGrid(pos.getY() + 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (SOUTH
-				{
+				//if (map.getGrid(pos.getY() + 1, pos.getX()) == 'C') //CHANGE THIS FOR COLLISION WITH CUSTOMERS ON Y AXIS (SOUTH
+				//{
 					//pos.setY(pos.getY() + 1);
 					//return 1;
-				}
-				else if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
+				//}
+				if (map.getGrid(pos.getY() - 1, pos.getX()) == '0')
 				{
 					pos.setY(pos.getY() + 1);
 					return 3;
 				}
 			}
-			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
 		if ((endPoint.getX() - pos.getX()) != 0)
 		{
@@ -254,28 +276,33 @@ int Customer::moveCustomer(Map& map, int framesPassed, int timer)
 				if (map.getGrid(pos.getY(), pos.getX() - 3) == 'C')
 				{
 					pos.setX(pos.getX());
+					colliding = true;
 				}
 				else if (map.getGrid(pos.getY(), pos.getX() - 1) == '0')
 				{
 					pos.setX(pos.getX() - 1);
+					colliding = false;
 					return 2;
 				}
 			}
 
 			else if (map.isNegative(endPoint.getX(), pos.getX()) == false)
 			{
-				if (map.getGrid(pos.getY(), pos.getX() + 3) == 'C')
-				{
-					pos.setX(pos.getX());
-				}
-				else if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
+				//if (map.getGrid(pos.getY(), pos.getX() + 3) == 'C')
+				//{
+					//pos.setX(pos.getX());
+					//colliding = true;
+				//}
+				if (map.getGrid(pos.getY(), pos.getX() + 1) == '0')
 				{
 					pos.setX(pos.getX() + 1);
+					colliding = false;
 					return 0;
 				}
 			}
-			map.setGrid(prevPos.getY(), prevPos.getX(), '0');
 		}
+		map.setGrid(prevPos.getY(), prevPos.getX(), '0');
+		map.setGrid(pos.getY(), pos.getX(), 'C');
 	}
 } 
 

@@ -1005,12 +1005,12 @@ void deleteBoxes()
 // Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
-    if (p.getUnsatisfiedCustomers() == 10) {
+    if (p.getUnsatisfiedCustomers() == 50) { // change back ltr to 10
             g_eGameState = S_GAMEOVER;
             deleteCustomer();
             deleteBoxes();
         }
-    else if (g_dElapsedWorkTime >= 30) {
+    else if (g_dElapsedWorkTime >= 5) { //change back ltr to 30
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -2099,10 +2099,10 @@ void renderCustomer()
         {
             if (customerPtr[i] != nullptr)
             {
+                
                 if (customerPtr[i]->getTravelling() == true)
                 {
                     customerDirection[i] = customerPtr[i]->moveCustomer(map, framesPassed, 4 + (p.getPowerups()->getSCustomerslvl()));
-                    
                 }
 
                 if (customerPtr[i]->getQuantity() == 0 && customerPtr[i]->getMovingBack() != true) {
@@ -2118,8 +2118,8 @@ void renderCustomer()
                 {
                     customerPtr[i]->setYLock(false);
                 }
-                //checkCustomerCollision();
 
+                //checkCustomerCollision();
                 WORD customerColour;
                 customerColour = 0x20;//green
                 if (customerPtr[i]->getState() == false)
@@ -2131,7 +2131,7 @@ void renderCustomer()
                 //{
                 //    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
                 //}
-
+                customerPtr[i]->printOutCustomer(g_Console, map, customerPtr[i]->getQuantity(), customerColour);
                 //checkCustomerCollision();
 
                 if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
@@ -2140,8 +2140,6 @@ void renderCustomer()
                     customerPtr[i]->setTimerSet(true);
                     customerPtr[i]->setTravelling(false);
                 }
-
-                customerPtr[i]->printOutCustomer(g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), customerColour, customerPtr[i]->getState());
                 
                 if (boxPtr[i + 1] == nullptr) {
                     boxPtr[i + 1] = new Box;
@@ -2336,7 +2334,7 @@ void renderCustomer()
                 {
                     if (created != true)
                     {
-                        customerPtr[i] = new Customer;
+                        customerPtr[i] = new Customer(p);
                         customerPtr[i]->setItemToBuy(day + 2);
                         customerPtr[i]->setTimer(0);
                         customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
@@ -2437,8 +2435,8 @@ void renderFramerate()
             g_Console.writeToBuffer(c, ss.str(), 0x0F);
 
             ss.str("");
-            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY() << ", Shelf " << customerPtr[i]->getItemToBuy() << ", endpos" << customerPtr[i]->getEndPoint().getX() << ", " << customerPtr[i]->getEndPoint().getY();
-            c.X = 15;
+            ss << customerPtr[i] << " pos:" << customerPtr[i]->getPos().getX() << ", " << customerPtr[i]->getPos().getY() << ", Shelf " << customerPtr[i]->getItemToBuy() << ", endpos" << customerPtr[i]->getEndPoint().getX() << ", " << customerPtr[i]->getEndPoint().getY() << ", " << map.getGrid(customerPtr[i]->getPrevPos().getY(), customerPtr[i]->getPrevPos().getX()) << ", " << customerPtr[i]->getColliding();
+            c.X = 10;
             c.Y = 14 + i;
             g_Console.writeToBuffer(c, ss.str(), 0x0F);
         }
