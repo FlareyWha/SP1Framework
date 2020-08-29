@@ -1937,12 +1937,12 @@ void renderEndOfWorkScreen()
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
-    c.Y += 8;
+    /*c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Customers served: ";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    c.Y += 1;
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+    c.Y += 9;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
