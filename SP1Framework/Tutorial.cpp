@@ -94,7 +94,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[5] = true;
         proceed = true;
-        PlaySound(L"BGM1.wav", NULL, SND_FILENAME | SND_ASYNC);
+        PlaySound(L"IntenseMusic(30).wav", NULL, SND_FILENAME | SND_ASYNC);
     }
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {

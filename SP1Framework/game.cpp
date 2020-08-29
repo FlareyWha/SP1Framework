@@ -2233,11 +2233,21 @@ void renderBoxes()
 // Render customer current position yeye
 void renderCustomer()
 {   
+    static bool alreadyPlayed = false;
+    static bool alreadyPlayed2 = false;
+    if (!alreadyPlayed2 && g_bRestocking) {
+        PlaySound(L"IntenseMusic(30).wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+        alreadyPlayed2 = true;
+        alreadyPlayed = false;
+    }
     if (g_bRestocking == false) {
         COORD c = g_Console.getConsoleSize();
         bool created = false;
-        
-
+        if (!alreadyPlayed) {
+            PlaySound(L"BGM1.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+            alreadyPlayed = true;
+            alreadyPlayed2 = false;
+        }
         for (int i = 0; i < 6; i++) 
         {
             if (customerPtr[i] != nullptr)
