@@ -131,6 +131,9 @@
   <ItemGroup>
     <Media Include="..\..\..\..\..\..\temp\TutorialTTSF1.wav" />
     <Media Include="..\..\..\..\Downloads\TutorialTTSF3.wav" />
+    <Media Include="BGM.wav" />
+    <Media Include="IntenseMusic(30).wav" />
+    <Media Include="IntenseMusic(60sec).wav" />
     <Media Include="TutorialTTSF2.wav" />
     <Media Include="TutorialTTSF4.wav" />
     <Media Include="TutorialTTSF5.wav" />

@@ -1261,6 +1261,12 @@ void processUserInput()
 //--------------------------------------------------------------
 void render()// make render functions for our level and put it in the switch case
 {
+    static bool hasPlayed = false;
+    if (!hasPlayed) {
+        PlaySound(L"BGM.wav", NULL, SND_FILENAME | SND_LOOP | SND_ASYNC);
+        hasPlayed = true;
+    }
+
     clearScreen();      // clears the current screen and draw from scratch 
     switch (g_eGameState)
     {

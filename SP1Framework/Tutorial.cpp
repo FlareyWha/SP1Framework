@@ -37,6 +37,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (tutorialFlags[6] == false)
         flagSeven(console);
 
+
     // Plays TTS for tutorial instructions
     if (alreadyPlayed[0] == false && tutorialFlags[0] == false) {
         PlaySound(L"TutorialTTSF1.wav", NULL, SND_FILENAME | SND_ASYNC);
@@ -62,10 +63,15 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         PlaySound(L"TutorialTTSF6.wav", NULL, SND_FILENAME | SND_ASYNC);
         alreadyPlayed[5] = true;
     }
-    else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[5] == true) {
-        PlaySound(NULL, NULL, 0);
+    /*else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[5] == true) {
+        PlaySound(L"BGM1.wav", NULL, SND_FILENAME | SND_ASYNC);
         alreadyPlayed[6] = true;
-    }
+    }*/
+    /*else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[7] == true) {
+        PlaySound(L"IntenseMusic(30sec).wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[6] = true;
+    }*/
+
 
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
         tutorialFlags[0] = true;
@@ -88,11 +94,13 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[5] = true;
         proceed = true;
+        PlaySound(L"BGM1.wav", NULL, SND_FILENAME | SND_ASYNC);
     }
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {
         tutorialFlags[6] = true;
     }
+
 }
 
 void Tutorial::flagOne(Console& console)
