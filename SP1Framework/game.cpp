@@ -1132,6 +1132,7 @@ void processInputMenu() //All input processing related to Main Menu
             && g_mouseEvent.mousePosition.Y == 9) //Change to previous game state once mouse clicks on the button
         {
             g_eGameState = g_ePreviousGameState;
+            g_ePreviousGameState = S_MENU;
             alreadyPlayed = false;
         }
     }
@@ -2247,7 +2248,7 @@ void renderCustomer()
 {   
     static bool alreadyPlayed = false;
     static bool alreadyPlayed2 = false;
-    if (!alreadyPlayed2 && g_bRestocking) {
+    if ((!alreadyPlayed2 && g_bRestocking) || (g_bRestocking && g_ePreviousGameState == S_MENU)) {
         PlaySound(L"IntenseMusic(30).wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
         alreadyPlayed2 = true;
         alreadyPlayed = false;
