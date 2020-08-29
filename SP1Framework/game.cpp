@@ -2202,7 +2202,7 @@ void renderCredits()
     g_Console.writeToBuffer(c, "Credits", 0x0F);
     c.Y += 5;
     c.X -= 20;
-    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    g_Console.writeToBuffer(c, "All dialogue speech sounds are credited to discord bot", 0x0F);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
     c.Y += 2;

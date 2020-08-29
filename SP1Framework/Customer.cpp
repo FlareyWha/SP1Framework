@@ -11,6 +11,7 @@ Customer::Customer()//sets which item they want to buy and how much to do so
 {
 	//itemToBuy = rand() % 6 + 1; // 1 = rice, 2 = toilet paper, 3 = canned food, 4 = instant noodles, 5 = vegetables, 6 = bandages
 	/*quantity = rand() % 2 + 1;*/
+	quantity = 0;
 	bSatisfied = true;
 	prevPos.setX(0);
 	prevPos.setY(0);
