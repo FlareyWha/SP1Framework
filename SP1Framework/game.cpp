@@ -30,6 +30,8 @@ SMouseEvent g_mouseEvent;
 // Game specific variables here
 int level, day;
 bool g_bRestocking;
+bool saveSuccessful;
+bool loadSuccessful;
 
 double spawnTimer;
 SGameChar   g_sChar;
@@ -1104,6 +1106,7 @@ void processInputCredits()
 // Process inputs on menu screen
 void processInputMenu() //All input processing related to Main Menu
 {
+    framesPassed++;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
         && (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER))
     {
@@ -1158,6 +1161,8 @@ void processInputMenu() //All input processing related to Main Menu
             outdata << "Rich Customers = " << PowerupsPtr->getRCustomerslvl() << std::endl;
             outdata << "Thrifty Customers = " << PowerupsPtr->getTCustomerslvl() << std::endl;
             outdata.close();
+
+            saveSuccessful = true;
         }
     }
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
@@ -1175,6 +1180,7 @@ void processInputMenu() //All input processing related to Main Menu
                 loadValues(x, line);
             }
             indata.close();
+            loadSuccessful = true;
         }
     }
 }
@@ -1724,6 +1730,25 @@ void renderMainMenu()
     }
     else {
         g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    }
+
+    if (saveSuccessful) {
+        c.X = 31;
+        c.Y = 17;
+        static int localFramesPassed = framesPassed;
+        g_Console.writeToBuffer(c, "Save Successful!", 0xFA);
+        if (framesPassed == localFramesPassed + 120) {
+            saveSuccessful = false;
+        }
+    }
+    else if (loadSuccessful) {
+        c.X = 31;
+        c.Y = 17;
+        static int localFramesPassed = framesPassed;
+        g_Console.writeToBuffer(c, "Load Successful!", 0xF2);
+        if (framesPassed == localFramesPassed + 120) {
+            loadSuccessful = false;
+        }
     }
 }
 
