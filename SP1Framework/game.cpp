@@ -1610,7 +1610,7 @@ void renderCustomerTimer(int shelf) //works ?
 
             cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
-            for (int i = 0; i != cTimerArrival; i++) {
+            for (int i = 0; i <= cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
                 c.X++;
             }
@@ -1649,7 +1649,7 @@ void renderItem(int shelf)
             break;
         }
     }
-    for (int i = 0; i != amt; i++) {
+    for (int i = 0; i < amt; i++) {
         g_Console.writeToBuffer(c, ' ', colors[shelf]);
         c.X--;
     }

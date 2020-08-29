@@ -32,10 +32,16 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagFour(console, g_sChar, g_skKeyEvent, boxColour);
     else if (tutorialFlags[4] == false)
         flagFive(console, g_sChar, g_skKeyEvent, boxColour);
-    else if (tutorialFlags[6] == false) // from this point on the flag will match the flag aka 6 = 6 
+    else if (tutorialFlags[5] == false) // from this point on the flag will match the flag aka 6 = 6 
         flagSix(console);
     else if (tutorialFlags[6] == false)
-        flagSeven(console);
+        flagSeven();
+    else if (tutorialFlags[7] == false)
+        flagEight(console);
+    else if (tutorialFlags[8] == false)
+        flagNine(console);
+    else if (tutorialFlags[9] == false)
+        flagTen(console);
 
 
     // Plays TTS for tutorial instructions
@@ -95,16 +101,25 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[5] = true;
         proceed = true;
         PlaySound(L"IntenseMusic(30).wav", NULL, SND_FILENAME | SND_ASYNC);
-    }
-    else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
-    {
-        tutorialFlags[6] = true;
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
         g_sChar.moving.RIGHT = false;
     }
-
+    else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
+    {
+        tutorialFlags[6] = true;
+        tutorialFlags[7] = true;
+        tutorialTimer = 0;
+    }
+    else if (tutorialTimer >= 10 && tutorialFlags[7] == true && tutorialFlags[8] == false)
+    {
+        tutorialFlags[8] = true;
+    }
+    else if (tutorialTimer >= 30 && tutorialFlags[8] == true && tutorialFlags[9] == false)
+    {
+        tutorialFlags[9] = true;
+    }
 }
 
 void Tutorial::flagOne(Console& console)
@@ -279,13 +294,72 @@ void Tutorial::flagSix(Console& console)
     console.writeToBuffer(c, "Click to continue.", 0xF0);
 }
 
-void Tutorial::flagSeven(Console& console)
+void Tutorial::flagSeven()
+{
+    //yes
+}
+
+void Tutorial::flagEight(Console& console)
 {
     COORD c;
 
     c.Y = 4;
     c.X = 40;
-    console.writeToBuffer(c, "A customer has appeared.", 0xF0);
+    console.writeToBuffer(c, "A customer has appeared. They will", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "wait at the entrance for 10 secs", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "until they find an item to buy.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "The number on the customer", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "represents how much of an item they", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "want to buy. For now, keep on", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "restocking.", 0xF0);
+}
+
+void Tutorial::flagNine(Console& console)
+{
+    COORD c;
+
+    c.Y = 14;
+    c.X = 17;
+    console.writeToBuffer(c, "The customer is moving towards the shelf. They will wait there", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "for 20 secs. After that, if they got what they want, they will", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "leave and be happy. If not, they will be unsatisfied. You can", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "see the number of unsatisfied customers at the top left. If it", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "reaches 10, it is game over as I will fire you. Our ", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "customers can be very rough, so try not to stand in their way", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "or they will push you. Also, if you are wondering why they", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "are still going while you are reading this, its because im", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "preparing you for your future. Thank me later.", 0xF0);
+}
+
+void Tutorial::flagTen(Console& console)
+{
+    COORD c;
+
+    c.Y = 14;
+    c.X = 17;
+    console.writeToBuffer(c, "The customer is now leaving. For each item a customer buys,", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "you will earn money. The amount you earn is shown on the top", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "right. You now have about 1min 30secs till the supermarket", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "closes. You can see the time left on the top middle.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Satisfy as many customers as you can. Good luck!", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)
