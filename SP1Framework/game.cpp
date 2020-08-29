@@ -4,7 +4,6 @@
 #include "game.h"
 #include "Map.h"
 #include "Framework\console.h"
-#include <string>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -1142,12 +1141,107 @@ void processInputMenu() //All input processing related to Main Menu
     {
         if ((g_mouseEvent.mousePosition.X >= 33
             && g_mouseEvent.mousePosition.X <= 36)
-            && g_mouseEvent.mousePosition.Y == 10) //saves game
+            && g_mouseEvent.mousePosition.Y == 10
+            && g_ePreviousGameState == S_HOME) //saves game
         {
-            saves.savePlayerstats(L"save1.txt", day, p.getSavings(), 1, 2);
-            saves.saveSave(L"save1.txt");
+            std::ofstream outdata; // outdata is like cin
+            Powerup* PowerupsPtr = p.getPowerups();
+            outdata.open("Save.dat"); // opens the file
+            outdata << "Day = " << day << std::endl;
+            outdata << "Savings = " << p.getSavings() << std::endl;
+            outdata << "Son One State = " << cPtr[0]->getStatus() << std::endl;
+            outdata << "Son Two State = " << cPtr[1]->getStatus() << std::endl;
+            outdata << "Cheaper Food = " << PowerupsPtr->getFoodlvl() << std::endl;
+            outdata << "Cheaper Rent = " << PowerupsPtr->getRentlvl() << std::endl;
+            outdata << "Player Shoes = " << PowerupsPtr->getShoeslvl() << std::endl;
+            outdata << "Slower Customers = " << PowerupsPtr->getSCustomerslvl() << std::endl;
+            outdata << "Rich Customers = " << PowerupsPtr->getRCustomerslvl() << std::endl;
+            outdata << "Thrifty Customers = " << PowerupsPtr->getTCustomerslvl() << std::endl;
+            outdata.close();
         }
     }
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    {
+        if ((g_mouseEvent.mousePosition.X >= 33
+            && g_mouseEvent.mousePosition.X <= 36)
+            && g_mouseEvent.mousePosition.Y == 11
+            && g_ePreviousGameState == S_HOME) //saves game
+        {
+            std::fstream indata; // indata is like cout
+            indata.open("Save.dat"); // opens the file
+            std::string line;
+            for (int x = 0; x < 10; x++) {
+                getline(indata, line);
+                loadValues(x, line);
+            }
+            indata.close();
+        }
+    }
+}
+
+void loadValues(int x, std::string line)
+{
+    Powerup* PowerupsPtr = p.getPowerups();
+    switch (x) {
+    case 0:
+        //Get saved days
+        day = getNumberStr(line);
+        break;
+    case 1:
+        //get saved savings (money)
+        p.setSavings(getNumberStr(line));
+        break;
+    case 2: {
+        //get saved son1 state 
+        bool son1state = getNumberStr(line);
+        if (!son1state) { cPtr[0]->Recovers(); }
+        else { cPtr[0]->isSick(); }
+        break;
+    }
+    case 3: {
+        //get saved son2 state
+        bool son2state = getNumberStr(line);
+        if (!son2state) { cPtr[1]->Recovers(); }
+        else { cPtr[1]->isSick(); }
+        break;
+    }
+    case 4:
+        //get cheaperfood lvl
+        PowerupsPtr->setFoodlvl(getNumberStr(line));
+        break;
+    case 5:
+        //get cheaperrent lvl
+        PowerupsPtr->setRentlvl(getNumberStr(line));
+        break;
+    case 6:
+        //get playershoes lvl
+        PowerupsPtr->setShoeslvl(getNumberStr(line));
+        break;
+    case 7:
+        //get slowercustomers lvl
+        PowerupsPtr->setSCustomerslvl(getNumberStr(line));
+        break;
+    case 8:
+        //get rich customers lvl
+        PowerupsPtr->setRCustomerslvl(getNumberStr(line));
+        break;
+    case 9:
+        //get thrifty customers lvl
+        PowerupsPtr->setTCustomerslvl(getNumberStr(line));
+        break;
+    }
+}
+
+int getNumberStr(std::string line)
+{
+    int y = 0;
+    for (; y < line.length(); y++) {
+        if (isdigit(line[y]))
+            break;
+    }
+    line = line.substr(y, line.length() - y);
+    int number = atoi(line.c_str());
+    return number;
 }
 
 // Process inputs on End of work screen
@@ -1600,10 +1694,28 @@ void renderMainMenu()
         }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Save", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 36
+        && g_mouseEvent.mousePosition.Y == 10 && g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Save", 0xE0);
+    }
+    else if (g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Save", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Save", 0xF8);
+    }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Load", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 36
+        && g_mouseEvent.mousePosition.Y == 11 && g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Load", 0xE0);
+    }
+    else if (g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Load", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Load", 0xF8);
+    }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41

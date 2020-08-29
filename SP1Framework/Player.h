@@ -29,6 +29,7 @@ public:
 
 	int getStrikes(); // return strikes
 	int getSavings(); // return savings
+	void setSavings(int savings);
 
 	int getTotalEarned();
 	void AddDayEarnings(int i);

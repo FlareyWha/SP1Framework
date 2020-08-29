@@ -140,6 +140,9 @@
     <Media Include="TutorialTTSF5.wav" />
     <Media Include="TutorialTTSF6.wav" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Save.dat" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -24,6 +24,11 @@ int Player::getSavings() {
 	return savings;
 }
 
+void Player::setSavings(int savings)
+{
+	this->savings = savings;
+}
+
 int Player::getTotalEarned()
 {
 	return dayEarnings;

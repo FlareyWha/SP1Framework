@@ -93,21 +93,20 @@ void saveLoad::decryptPowerup()
     }
 }
 
-void saveLoad::savePlayerstats(LPCWSTR save, int days, int money, int son1, int son2)
+void saveLoad::savePlayerstats(int days, int money, int son1, int son2)
 {
     fstream myFile;
 
-    myFile.open(save);
+    myFile.open("save1.txt");
     if (myFile.is_open())
     {
         myFile >> ignore >> storedDays >> storedMoney >> storedSon1 >> storedSon2 >> storedPowerups;
-
+        myFile << "Days = " << days << endl;
+        myFile << "Money = " << money << endl;
+        myFile << "son1Sick = " << son1 << endl;
+        myFile << "son2Sick = " << son2 << endl;
         myFile.close();
     }
-    myFile << "Days = " << days << endl;
-    myFile << "Money = " << money << endl;
-    myFile << "son1Sick = " << son1 << endl;
-    myFile << "son2Sick = " << son2 << endl;
 }
 
 void saveLoad::loadSave(LPCWSTR save) //DOES NOT WORK, HOW THE FUCK DO YOU CALL A .TXT 

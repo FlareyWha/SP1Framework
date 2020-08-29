@@ -2,6 +2,7 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
+#include <string>
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -124,6 +125,8 @@ void processInputEndOfWorkScreen();
 void processInputGameOver();
 void processInputHome();
 void processInputMenu();
+void loadValues(int x, std::string line);
+int getNumberStr(std::string line);
 void processInputSplash();
 void processInputCredits();
 

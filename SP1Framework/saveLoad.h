@@ -28,7 +28,7 @@ public:
 	void encryptPowerup(int shoes, int crowdcontrol, int cheapfood,
 						int cheaprent, int richcustomers, int thriftycustomers);
 	void decryptPowerup();
-	void savePlayerstats(LPCWSTR save, int days, int money, int son1, int son2);
+	void savePlayerstats(int days, int money, int son1, int son2);
 	void loadSave(LPCWSTR save);
 	void saveSave(LPCWSTR save);
 };
