@@ -1177,7 +1177,7 @@ void processInputMenu() //All input processing related to Main Menu
         if ((g_mouseEvent.mousePosition.X >= 33
             && g_mouseEvent.mousePosition.X <= 36)
             && g_mouseEvent.mousePosition.Y == 11
-            && g_ePreviousGameState == S_HOME) //saves game
+            && (g_ePreviousGameState == S_HOME || g_ePreviousGameState == S_TUT || g_ePreviousGameState == S_GAME)) //loads game
         {
             std::fstream indata; // indata is like cout
             indata.open("Save.dat"); // opens the file
@@ -1188,6 +1188,11 @@ void processInputMenu() //All input processing related to Main Menu
             }
             indata.close();
             loadSuccessful = true;
+            if (loadSuccessful) {
+                loadSuccessful = false;
+                g_eGameState = S_HOME;
+                g_ePreviousGameState = S_MENU;
+            }
         }
     }
 }
@@ -1732,10 +1737,11 @@ void renderMainMenu()
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 36
-        && g_mouseEvent.mousePosition.Y == 11 && g_ePreviousGameState == S_HOME) {
+        && g_mouseEvent.mousePosition.Y == 11 
+        && (g_ePreviousGameState == S_HOME || g_ePreviousGameState == S_TUT || g_ePreviousGameState == S_GAME)) {
         g_Console.writeToBuffer(c, "Load", 0xE0);
     }
-    else if (g_ePreviousGameState == S_HOME) {
+    else if (g_ePreviousGameState == S_HOME || g_ePreviousGameState == S_TUT || g_ePreviousGameState == S_GAME) {
         g_Console.writeToBuffer(c, "Load", 0xF0);
     }
     else {
