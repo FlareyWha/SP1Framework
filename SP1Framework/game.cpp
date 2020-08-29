@@ -39,7 +39,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
-Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
+Customer* customerPtr[10] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr, nullptr , nullptr , nullptr , nullptr };
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 Son* cPtr[2] = { nullptr, nullptr };
 
@@ -2267,7 +2267,24 @@ void renderCustomer()
             alreadyPlayed = true;
             alreadyPlayed2 = false;
         }
-        for (int i = 0; i < 6; i++) 
+        static bool waveGone;
+
+        //Check if current wave of customers is gone
+        if (customerPtr[(sizeof(customerPtr) / sizeof(customerPtr[0])) - 1] == nullptr) {
+            waveGone = true;
+        }
+        else {
+            waveGone = false;
+        }
+
+        //Scalable difficulty formula
+        int customerMultiplier = 6;
+        customerMultiplier += day;
+        if (customerMultiplier >= 10) {
+            customerMultiplier = 10;
+        }
+
+        for (int i = 0; i < customerMultiplier; i++) 
         {
             if (customerPtr[i] != nullptr)
             {
@@ -2504,7 +2521,7 @@ void renderCustomer()
             {
                 if (spawnTimer >= 5)
                 {
-                    if (created != true)
+                    if (created != true && waveGone)
                     {
                         customerPtr[i] = new Customer(p);
                         customerPtr[i]->setItemToBuy(day + 2);
