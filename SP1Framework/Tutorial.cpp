@@ -4,7 +4,7 @@
 
 Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < 20; i++)
 	{
 		tutorialFlags[i] = false;
         alreadyPlayed[i] = false;
@@ -42,6 +42,9 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagNine(console);
     else if (tutorialFlags[9] == false)
         flagTen(console);
+    else if (tutorialFlags[10] == false)
+        flagEleven(console);
+    
 
 
     // Plays TTS for tutorial instructions
@@ -78,8 +81,14 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         alreadyPlayed[6] = true;
     }*/
 
-
-    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
+    if (g_skKeyEvent[K_F4].keyDown)
+    {
+        for (int i = 0; i < 10; i++) // delete ltr this is for testing
+        {
+            tutorialFlags[i] = true;
+        }
+    }
+    else if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
         tutorialFlags[0] = true;
     else if (allTrue == true && tutorialFlags[0] == true && tutorialFlags[1] == false)
         tutorialFlags[1] = true;
@@ -109,15 +118,22 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (g_dElaspedWorkTime >= 30 && tutorialFlags[5] == true && tutorialFlags[6] == false)
     {
         tutorialFlags[6] = true;
-        tutorialFlags[7] = true;
         tutorialTimer = 0;
     }
-    else if (tutorialTimer >= 10 && tutorialFlags[7] == true && tutorialFlags[8] == false)
+    else if (tutorialTimer >= 10 && tutorialFlags[6] == true && tutorialFlags[7] == false)
+    {
+        tutorialFlags[7] = true;
+    }
+    else if (tutorialTimer >= 30 && tutorialFlags[7] == true && tutorialFlags[8] == false)
     {
         tutorialFlags[8] = true;
     }
-    else if (tutorialTimer >= 30 && tutorialFlags[8] == true && tutorialFlags[9] == false)
+    else if (g_dElaspedWorkTime >= 150 && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
+        for (int i = 0; i < 9; i++) // delete ltr this is for testing
+        {
+            tutorialFlags[i] = true;
+        }
         tutorialFlags[9] = true;
     }
 }
@@ -349,7 +365,7 @@ void Tutorial::flagTen(Console& console)
 {
     COORD c;
 
-    c.Y = 14;
+    c.Y = 19;
     c.X = 17;
     console.writeToBuffer(c, "The customer is now leaving. For each item a customer buys,", 0xF0);
     c.Y += 1;
@@ -360,6 +376,19 @@ void Tutorial::flagTen(Console& console)
     console.writeToBuffer(c, "closes. You can see the time left on the top middle.", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "Satisfy as many customers as you can. Good luck!", 0xF0);
+}
+
+void Tutorial::flagEleven(Console& console)
+{
+    COORD c;
+
+    c.Y = 10;
+    c.X = 17;
+    console.writeToBuffer(c, "This is the end-of-work screen. After each day, I will summarise", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "what has happened throughout the day. Go to the home screen", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "to continue", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)

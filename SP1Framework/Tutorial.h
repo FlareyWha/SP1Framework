@@ -6,7 +6,7 @@
 class Tutorial
 {
 private:
-	bool tutorialFlags[10];
+	bool tutorialFlags[20];
 	bool pressed[6];
 	bool allTrue;
 	bool proceed;
@@ -26,6 +26,7 @@ public:
 	void flagEight(Console& console);
 	void flagNine(Console& console);
 	void flagTen(Console& console);
+	void flagEleven(Console& console);
 
 	bool getTutorialFlag(int number);
 	bool getProceed(void);
