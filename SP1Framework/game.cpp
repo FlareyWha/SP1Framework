@@ -4,7 +4,6 @@
 #include "game.h"
 #include "Map.h"
 #include "Framework\console.h"
-#include <string>
 #include <iostream>
 #include <iomanip>
 #include <sstream>
@@ -16,6 +15,7 @@
 #include "Shelf.h"
 #include "Son.h"
 #include "Tutorial.h"
+#include "saveLoad.h"
 
 //Sound dependencies
 #include <Windows.h>
@@ -30,6 +30,8 @@ SMouseEvent g_mouseEvent;
 // Game specific variables here
 int level, day;
 bool g_bRestocking;
+bool saveSuccessful;
+bool loadSuccessful;
 
 double spawnTimer;
 SGameChar   g_sChar;
@@ -50,6 +52,7 @@ Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullpt
 Position* boxPosPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
 WORD BoxColour;
 Map map;
+saveLoad saves;
 int framesPassed;
 int frameMarker;
 
@@ -232,6 +235,8 @@ void keyboardHandler(const KEY_EVENT_RECORD& keyboardEvent)
         break;
     case S_GAME: gameplayKBHandler(keyboardEvent); // handle gameplay keyboard event 
         break;
+    case S_CREDITS: gameplayKBHandler(keyboardEvent);
+        break;
     }
 }
 
@@ -270,6 +275,8 @@ void mouseHandler(const MOUSE_EVENT_RECORD& mouseEvent)
     case S_TUT: gameplayMouseHandler(mouseEvent);
         break;
     case S_GAME: gameplayMouseHandler(mouseEvent); // handle gameplay mouse event
+        break;
+    case S_CREDITS: gameplayMouseHandler(mouseEvent);
         break;
     }
 } //140
@@ -392,6 +399,9 @@ void update(double dt)
             g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
             break;
         }
+        case S_CREDITS: {
+            updateCredits();
+        }
     }
 }
 
@@ -449,6 +459,11 @@ void updateGame()       // game logic
 
 // Store screen logic
 void updateStore()
+{
+    processUserInput();
+}
+
+void updateCredits()
 {
     processUserInput();
 }
@@ -539,8 +554,17 @@ void checkCustomerPlayerCollision()
                 }
                 else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//west
                 {
-                    g_sChar.m_cLocation.X++;
-                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+
+                    if (customerPtr[i - 1]->getX() == boxPosPtr[i]->getX() - 1)
+                    {
+                        boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
+                        g_sChar.m_cLocation.Y++;
+                    }
+                    else
+                    {
+                        g_sChar.m_cLocation.X++;
+                        boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
+                    }
 
 
                 }
@@ -987,7 +1011,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
             deleteCustomer();
             deleteBoxes();
         }
-    else if (g_dElapsedWorkTime >= 5) {
+    else if (g_dElapsedWorkTime >= 30) {
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
@@ -1065,14 +1089,24 @@ void processInputSplash() // All input processing related to Splashscreen
             && g_mouseEvent.mousePosition.Y == c.Y / 25 + 12) //Change to main game state once mouse clicks on the button
         {
             g_ePreviousGameState = g_eGameState;
-            g_eGameState = S_MENU;
+            g_eGameState = S_CREDITS;
         }
+    }
+}
+
+void processInputCredits()
+{
+    framesPassed++;
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED
+        && framesPassed % 10 == 0) {
+        g_eGameState = S_MENU;
     }
 }
 
 // Process inputs on menu screen
 void processInputMenu() //All input processing related to Main Menu
 {
+    framesPassed++;
     if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED 
         && (g_ePreviousGameState == S_SPLASHSCREEN || g_ePreviousGameState == S_GAMEOVER))
     {
@@ -1106,6 +1140,114 @@ void processInputMenu() //All input processing related to Main Menu
             g_bQuitGame = true;
         }
     }
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    {
+        if ((g_mouseEvent.mousePosition.X >= 33
+            && g_mouseEvent.mousePosition.X <= 36)
+            && g_mouseEvent.mousePosition.Y == 10
+            && g_ePreviousGameState == S_HOME) //saves game
+        {
+            std::ofstream outdata; // outdata is like cin
+            Powerup* PowerupsPtr = p.getPowerups();
+            outdata.open("Save.dat"); // opens the file
+            outdata << "Day = " << day << std::endl;
+            outdata << "Savings = " << p.getSavings() << std::endl;
+            outdata << "Son One State = " << cPtr[0]->getStatus() << std::endl;
+            outdata << "Son Two State = " << cPtr[1]->getStatus() << std::endl;
+            outdata << "Cheaper Food = " << PowerupsPtr->getFoodlvl() << std::endl;
+            outdata << "Cheaper Rent = " << PowerupsPtr->getRentlvl() << std::endl;
+            outdata << "Player Shoes = " << PowerupsPtr->getShoeslvl() << std::endl;
+            outdata << "Slower Customers = " << PowerupsPtr->getSCustomerslvl() << std::endl;
+            outdata << "Rich Customers = " << PowerupsPtr->getRCustomerslvl() << std::endl;
+            outdata << "Thrifty Customers = " << PowerupsPtr->getTCustomerslvl() << std::endl;
+            outdata.close();
+
+            saveSuccessful = true;
+        }
+    }
+    if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED)
+    {
+        if ((g_mouseEvent.mousePosition.X >= 33
+            && g_mouseEvent.mousePosition.X <= 36)
+            && g_mouseEvent.mousePosition.Y == 11
+            && g_ePreviousGameState == S_HOME) //saves game
+        {
+            std::fstream indata; // indata is like cout
+            indata.open("Save.dat"); // opens the file
+            std::string line;
+            for (int x = 0; x < 10; x++) {
+                getline(indata, line);
+                loadValues(x, line);
+            }
+            indata.close();
+            loadSuccessful = true;
+        }
+    }
+}
+
+void loadValues(int x, std::string line)
+{
+    Powerup* PowerupsPtr = p.getPowerups();
+    switch (x) {
+    case 0:
+        //Get saved days
+        day = getNumberStr(line);
+        break;
+    case 1:
+        //get saved savings (money)
+        p.setSavings(getNumberStr(line));
+        break;
+    case 2: {
+        //get saved son1 state 
+        bool son1state = getNumberStr(line);
+        if (!son1state) { cPtr[0]->Recovers(); }
+        else { cPtr[0]->isSick(); }
+        break;
+    }
+    case 3: {
+        //get saved son2 state
+        bool son2state = getNumberStr(line);
+        if (!son2state) { cPtr[1]->Recovers(); }
+        else { cPtr[1]->isSick(); }
+        break;
+    }
+    case 4:
+        //get cheaperfood lvl
+        PowerupsPtr->setFoodlvl(getNumberStr(line));
+        break;
+    case 5:
+        //get cheaperrent lvl
+        PowerupsPtr->setRentlvl(getNumberStr(line));
+        break;
+    case 6:
+        //get playershoes lvl
+        PowerupsPtr->setShoeslvl(getNumberStr(line));
+        break;
+    case 7:
+        //get slowercustomers lvl
+        PowerupsPtr->setSCustomerslvl(getNumberStr(line));
+        break;
+    case 8:
+        //get rich customers lvl
+        PowerupsPtr->setRCustomerslvl(getNumberStr(line));
+        break;
+    case 9:
+        //get thrifty customers lvl
+        PowerupsPtr->setTCustomerslvl(getNumberStr(line));
+        break;
+    }
+}
+
+int getNumberStr(std::string line)
+{
+    int y = 0;
+    for (; y < line.length(); y++) {
+        if (isdigit(line[y]))
+            break;
+    }
+    line = line.substr(y, line.length() - y);
+    int number = atoi(line.c_str());
+    return number;
 }
 
 // Process inputs on End of work screen
@@ -1141,6 +1283,7 @@ void processInputGameOver()
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
+    p.setPos(18, 1);
     g_ePreviousGameState = S_GAMEOVER;
 }
 
@@ -1247,6 +1390,9 @@ void processUserInput()
             g_eGameState = S_MENU;
         checkEnd();
         break;
+    case S_CREDITS: {
+        processInputCredits();
+    }
     }
     processDebugState();
 }
@@ -1285,6 +1431,8 @@ void render()// make render functions for our level and put it in the switch cas
     case S_TUT: renderTutorialLevel(); // render tutorial level ui
         break;
     case S_GAME: renderGame(); // render game screen ui
+        break;
+    case S_CREDITS: renderCredits();
         break;
     }
 
@@ -1558,10 +1706,28 @@ void renderMainMenu()
         }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Save", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 36
+        && g_mouseEvent.mousePosition.Y == 10 && g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Save", 0xE0);
+    }
+    else if (g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Save", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Save", 0xF8);
+    }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
-    g_Console.writeToBuffer(c, "Load", 0xF0);
+    if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 36
+        && g_mouseEvent.mousePosition.Y == 11 && g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Load", 0xE0);
+    }
+    else if (g_ePreviousGameState == S_HOME) {
+        g_Console.writeToBuffer(c, "Load", 0xF0);
+    }
+    else {
+        g_Console.writeToBuffer(c, "Load", 0xF8);
+    }
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 20;
     if (g_mouseEvent.mousePosition.X >= 33 && g_mouseEvent.mousePosition.X <= 41
@@ -1570,6 +1736,25 @@ void renderMainMenu()
     }
     else {
         g_Console.writeToBuffer(c, "Exit Game", 0xF0);
+    }
+
+    if (saveSuccessful) {
+        c.X = 31;
+        c.Y = 17;
+        static int localFramesPassed = framesPassed;
+        g_Console.writeToBuffer(c, "Save Successful!", 0xFA);
+        if (framesPassed == localFramesPassed + 120) {
+            saveSuccessful = false;
+        }
+    }
+    else if (loadSuccessful) {
+        c.X = 31;
+        c.Y = 17;
+        static int localFramesPassed = framesPassed;
+        g_Console.writeToBuffer(c, "Load Successful!", 0xF2);
+        if (framesPassed == localFramesPassed + 120) {
+            loadSuccessful = false;
+        }
     }
 }
 
@@ -1587,7 +1772,7 @@ void renderHome()
     c = g_Console.getConsoleSize();
     c.Y = 18;
     c.X = 27;
-    g_Console.writeToBuffer(c, "Options", 0xF0);
+    g_Console.writeToBuffer(c, "Options:", 0xF0);
     c.Y += 2;
     if (g_mouseEvent.mousePosition.X >= 27 && g_mouseEvent.mousePosition.X <= 34
         && g_mouseEvent.mousePosition.Y == 20) {
@@ -1990,6 +2175,26 @@ void renderIteminBox()
         break;
     }
     }
+}
+
+void renderCredits()
+{
+    COORD c{34, 1};
+    g_Console.writeToBuffer(c, "Credits", 0x0F);
+    c.Y += 5;
+    c.X -= 20;
+    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
+    c.Y += 2;
+    g_Console.writeToBuffer(c, "All background music is generally credited to", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "FStudios royalty-free music", 0x0F);
+    c.Y += 1;
+    g_Console.writeToBuffer(c, "www.fesliyanstudios.com", 0x0F);
+    c.Y += 5;
+    c.X += 10;
+    g_Console.writeToBuffer(c, "Left click to head to main menu", 0x0F);
 }
 
 // Render boxes

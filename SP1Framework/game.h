@@ -2,6 +2,7 @@
 #define _GAME_H
 
 #include "Framework\timer.h"
+#include <string>
 
 extern CStopWatch g_swTimer;
 extern bool g_bQuitGame;
@@ -50,6 +51,7 @@ enum EGAMESTATES
     S_STORE,
     S_TUT,
     S_GAME,
+    S_CREDITS,
     S_COUNT
 };
 
@@ -101,6 +103,7 @@ void updateHome();            // Home logic
 void updateTutorial();        // Tutorial logic
 void updateGame();          // Game logic
 void updateStore();
+void updateCredits();
 
 void moveCharacter(); // moves the character, collision detection, physics, etc
 void actuallyMoving();
@@ -122,8 +125,10 @@ void processInputEndOfWorkScreen();
 void processInputGameOver();
 void processInputHome();
 void processInputMenu();
+void loadValues(int x, std::string line);
+int getNumberStr(std::string line);
 void processInputSplash();
-void processStoreinput();
+void processInputCredits();
 
 
 void processUserInput();    // checks if you should change states or do something else with the game, e.g. pause, exit
@@ -144,6 +149,7 @@ void renderGameOver();
 void renderTutorialLevel(); // renders tutorial level
 void renderStore();
 void renderIteminBox();
+void renderCredits();
 
 void checkCustomerPlayerCollision();
 

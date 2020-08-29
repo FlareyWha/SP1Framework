@@ -22,6 +22,12 @@ public:
 	int getSCustomerslvl(); //get current level of slowerCustomers
 	int getRCustomerslvl(); //get current level of richCustomers
 	int getTCustomerslvl(); //get current level of thriftyCustomers
+	void setFoodlvl(int l);
+	void setRentlvl(int l);
+	void setShoeslvl(int l);
+	void setSCustomerslvl(int l);
+	void setRCustomerslvl(int l);
+	void setTCustomerslvl(int l);
 
 	void incFoodlvl();
 	void incRentlvl();

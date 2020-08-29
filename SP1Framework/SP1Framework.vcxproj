@@ -90,6 +90,7 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Powerup.cpp" />
+    <ClCompile Include="saveLoad.cpp" />
     <ClCompile Include="Shelf.cpp" />
     <ClCompile Include="Son.cpp" />
     <ClCompile Include="Tutorial.cpp" />
@@ -106,6 +107,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Powerup.h" />
+    <ClInclude Include="saveLoad.h" />
     <ClInclude Include="Shelf.h" />
     <ClInclude Include="Son.h" />
     <ClInclude Include="Tutorial.h" />
@@ -123,6 +125,8 @@
     <Text Include="Lvl3.txt" />
     <Text Include="Lvl5.txt" />
     <Text Include="Rice.txt" />
+    <Text Include="save1.txt" />
+    <Text Include="save2.txt" />
     <Text Include="Store.txt" />
     <Text Include="ToiletPaper.txt" />
     <Text Include="Tutorial level.txt" />
@@ -138,6 +142,9 @@
     <Media Include="TutorialTTSF4.wav" />
     <Media Include="TutorialTTSF5.wav" />
     <Media Include="TutorialTTSF6.wav" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Save.dat" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

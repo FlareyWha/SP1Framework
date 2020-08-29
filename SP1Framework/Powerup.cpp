@@ -48,6 +48,36 @@ int Powerup::getTCustomerslvl()
 	return thriftyCustomers;
 }
 
+void Powerup::setFoodlvl(int l)
+{
+	cheaperFood = l;
+}
+
+void Powerup::setRentlvl(int l)
+{
+	cheaperRent = l;
+}
+
+void Powerup::setShoeslvl(int l)
+{
+	playerShoes = l;
+}
+
+void Powerup::setSCustomerslvl(int l)
+{
+	slowerCustomers = l;
+}
+
+void Powerup::setRCustomerslvl(int l)
+{
+	richCustomers = l;
+}
+
+void Powerup::setTCustomerslvl(int l)
+{
+	thriftyCustomers = l;
+}
+
 void Powerup::incFoodlvl()
 {
 	cheaperFood++;
