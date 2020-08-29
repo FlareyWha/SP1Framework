@@ -22,7 +22,10 @@ public:
 	void flagFour(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
 	void flagFive(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT], WORD boxColour);
 	void flagSix(Console& console);
-	void flagSeven(Console& console);
+	void flagSeven();
+	void flagEight(Console& console);
+	void flagNine(Console& console);
+	void flagTen(Console& console);
 
 	bool getTutorialFlag(int number);
 	bool getProceed(void);
