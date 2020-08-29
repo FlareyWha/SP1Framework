@@ -3,6 +3,7 @@
 #include "Map.h"
 #include "Windows.h"
 #include "Position.h"
+#include "Player.h"
 
 class Customer :
     public Entity
@@ -22,17 +23,19 @@ private:
     Position endPoint;
     Position prevPos;
     int CustomerDirection;
+
+    bool colliding;
     
 
 public:
     Customer();
+    Customer(Player p);
     ~Customer();
     void moveToShelfContainingItem(int itemToBuy);
     bool entranceWaiting(void);
     bool shelfWaiting(void);
     void isSatisfied();
     void unSatisfied();
-
 
     bool getState();
     int getQuantity();
@@ -46,6 +49,9 @@ public:
     bool getMovingBack();
     bool getTimerSet();
     double getTimer();
+    bool getColliding();//delete
+    Position getPrevPos();//delete
+    int getAvoiding(); //delete
     void setYLock(bool set);
     void setEndPoint(int x, int y);
     void setQuantity(int quantity);
@@ -57,7 +63,7 @@ public:
     void setTimer(double timer);
     void addTimer(double dt);
     void setTimerSet(bool timerSet);
-    void printOutCustomer(Console& console, Position pos, Map& map, int q, WORD s, bool state);
+    void printOutCustomer(Console& console, Map& map, int q, WORD s);
     int moveCustomer(Map& map, int framesPassed, int timer);
     void customerCollision(Map& map);
 };
