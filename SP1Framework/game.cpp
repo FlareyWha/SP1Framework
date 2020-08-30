@@ -78,6 +78,49 @@ Console g_Console(g_ConsoleX, g_ConsoleY, "SP1 Framework");
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
+
+void deleteEverything() //delete everything when player exists game
+{
+    deleteCustomer(); //delete customers
+    deleteBoxes(); //delete customer boxes & positions
+
+    //delete player box
+    if (boxPtr[0] != nullptr)
+    {
+        delete boxPtr[0];
+        boxPtr[0] = nullptr;
+    }
+    if (boxPosPtr[0] != nullptr)
+    {
+        delete boxPosPtr[0];
+        boxPosPtr[0] = nullptr;
+
+    }
+
+    //delete shelves
+    for (int i = 0; i < 6; i++)
+    {
+        if (sPtr[i] != nullptr)
+        {
+           delete sPtr[i];
+           sPtr[i] = nullptr;
+        }
+    }
+    
+    //delete Sons
+    for (int i = 0; i < 2;i++)
+    {
+        if (cPtr[i] != nullptr)
+        {
+            delete cPtr[i];
+            cPtr[i] = nullptr;
+        }
+    }
+    
+
+
+}
+
 void init( void )
 {
     
@@ -175,6 +218,7 @@ void shutdown( void )
 {
     // Reset to white text on black background
     colour(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+    deleteEverything();
 
     g_Console.clearBuffer();
 }
@@ -917,7 +961,7 @@ void processStoreinput()
 // Delete customers and reset their variables
 void deleteCustomer()
 {
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 10; i++)
     {
         if (customerPtr[i] != nullptr)
         {
@@ -1557,14 +1601,12 @@ void renderHUD()
     ss << "Day:" << day;
     c.X = 20;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
-    
+    g_Console.writeToBuffer(c, ss.str(), 0x80);    
     ss.str("");// display the daily income
     ss << "Money earned: $" << p.getTotalEarned();
     c.X = 60;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-
     ss.str("");     // displays the elapsed time
     if (g_bRestocking == false) {
         int minute;
@@ -1585,12 +1627,11 @@ void renderHUD()
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36;
-    c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
-
+    //ss.str(""); //probably can be implemented cleaner
+    //ss << framesPassed << "frames";
+    //c.X = 36;
+    //c.Y = 24;
+    //g_Console.writeToBuffer(c, ss.str(), 0x80);
     ss.str(""); //probably can be implemented cleaner
     ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
     c.X = 1;
