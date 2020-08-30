@@ -160,12 +160,6 @@
     <Text Include="ToiletPaper.txt">
       <Filter>Resource Files</Filter>
     </Text>
-    <Text Include="save1.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
-    <Text Include="save2.txt">
-      <Filter>Resource Files</Filter>
-    </Text>
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\..\..\..\temp\TutorialTTSF1.wav">

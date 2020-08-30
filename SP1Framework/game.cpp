@@ -58,6 +58,8 @@ int customerDirection[10];
 WORD CustomerBoxColour[10]; //customer box position
 int customerMultiplier;
 bool increased;
+int total;
+bool totalLock;
 
 //tutorial stuff;
 Tutorial tutorial;
@@ -184,6 +186,8 @@ void init( void )
 
     customerMultiplier = 6;
     increased = false;
+    total = 0;
+    totalLock = false;
 
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
@@ -1577,7 +1581,7 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((20 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
+            cTimerArrival = ((20 - (customerPtr[i]->getTimer()) + i)/2)+2; //change this formula if u change anything about customer timer
             
             for (int i = 0; i < cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
@@ -2198,40 +2202,85 @@ void renderBoxes()
     }
    
 }
-
-bool checkWaveGone(int number)
+void checkWaveGone(int number)
 {
-    if (customerPtr[number] == nullptr) {
-        return true;
-    }
-    else {
-        return false;
+    for (int i = 0; i < number; i++)
+    {
+        if (customerPtr[i] == nullptr) {
+            total++;
+        }
     }
 }
 
-bool switchWaveGone()
+bool switchWaveGone(int customerMultiplier)
 {
+    total = 0;
     bool returnval;
     switch (day) {
     case 0:
-        returnval = checkWaveGone(5);
-        return returnval;
+        checkWaveGone(6);
+        if (total == 6)
+        {
+            returnval = true;
+            return returnval;
+        }
+        else if (total < 6)
+        {
+            returnval = false;
+            return returnval;
+        }
         break;
     case 1:
-        returnval = checkWaveGone(6);
-        return returnval;
+        checkWaveGone(7);
+        if (total == 7)
+        {
+            returnval = true;
+            return returnval;
+        }
+        else if (total < 7)
+        {
+            returnval = false;
+            return returnval;
+        }
         break;
     case 2:
-        returnval = checkWaveGone(7);
-        return returnval;
+        checkWaveGone(8);
+        if (total == 8)
+        {
+            returnval = true;
+            return returnval;
+        }
+        else if (total < 8)
+        {
+            returnval = false;
+            return returnval;
+        }
         break;
     case 3:
-        returnval = checkWaveGone(8);
-        return returnval;
+        checkWaveGone(9);
+        if (total == 9)
+        {
+            returnval = true;
+            return returnval;
+        }
+        else if (total < 9)
+        {
+            returnval = false;
+            return returnval;
+        }
         break;
     default:
-        returnval = checkWaveGone(9);
-        return returnval;
+        checkWaveGone(10);
+        if (total == 10)
+        {
+            returnval = true;
+            return returnval;
+        }
+        else if (total < 10)
+        {
+            returnval = false;
+            return returnval;
+        }
         break;
     }
 }
@@ -2258,7 +2307,7 @@ void renderCustomer()
         }
         bool waveGone;
         //Check if current wave of customers is gone
-        waveGone = switchWaveGone();
+        waveGone = switchWaveGone(customerMultiplier);
         //Scalable difficulty formula
 
         if (increased == false)
@@ -2308,7 +2357,7 @@ void renderCustomer()
 
                 if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
                 {
-                    customerPtr[i]->setTimer(5.10);
+                    customerPtr[i]->setTimer(5.10 + i);
                     customerPtr[i]->setTimerSet(true);
                     customerPtr[i]->setTravelling(false);
                 }
@@ -2336,14 +2385,14 @@ void renderCustomer()
                     }
                 }
 
-                if (customerPtr[i]->getTimer() >= 4.95 && customerPtr[i]->getTimer() <= 5.05)
+                if (customerPtr[i]->getTimer() >= 4.95 + i && customerPtr[i]->getTimer() <= 5.05 + i)
                 {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     customerPtr[i]->setTravelling(true);
                     customerPtr[i]->setTimer(-1);
                 }
 
-                if ((customerPtr[i]->getTimer() >= 19.95) && (customerPtr[i]->getTimer() <= 20.05))
+                if ((customerPtr[i]->getTimer() >= 19.95 + i) && (customerPtr[i]->getTimer() <= 20.05 + i))
                 {
                     
 
@@ -2438,6 +2487,7 @@ void renderCustomer()
                 {
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
+                    total--;
 
                     delete boxPtr[i + 1];
                     boxPtr[i + 1] = nullptr;
@@ -2450,23 +2500,16 @@ void renderCustomer()
             }
             else
             {
-                if (spawnTimer >= 1)
+                if (waveGone == true)
                 {
-                    if (created != true && waveGone == true)
-                    {
-                        customerPtr[i] = new Customer(p);
-                        customerPtr[i]->setItemToBuy(day + 2);
-                        customerPtr[i]->setTimer(0);
-                        customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
-                        customerPtr[i]->setSpawned(true);
-                        created = true;
-                    }
-                    spawnTimer = 0;
+                    customerPtr[i] = new Customer(p);
+                    customerPtr[i]->setItemToBuy(day + 2);
+                    customerPtr[i]->setTimer(0);
+                    customerPtr[i]->setPos(customerPtr[i]->getPos().getX(), customerPtr[i]->getPos().getY() + i);
+                    customerPtr[i]->setSpawned(true);
                 }
             }
         }
-        if (spawnTimer >= 1)
-            spawnTimer = 0;
     }
 }
 
