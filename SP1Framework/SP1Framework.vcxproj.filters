@@ -201,6 +201,15 @@
     <Media Include="BGM.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="TutorialTTSF10.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="TutorialTTSF9.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="TutorialTTSF8.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <None Include="Save.dat">
