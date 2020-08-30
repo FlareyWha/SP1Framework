@@ -64,7 +64,6 @@ bool increased;
 //tutorial stuff;
 Tutorial tutorial;
 double tutorialTimer;
-bool tutorialComplete;
 
 // Console object
 int g_ConsoleX = 80;
@@ -155,8 +154,6 @@ void init( void )
 
     customerMultiplier = 6;
     increased = false;
-
-    tutorialComplete = false;
 
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
@@ -397,7 +394,10 @@ void update(double dt)
                     customerPtr[i]->addTimer(dt);
                 }
             }
-            g_dElapsedWorkTime += dt; updateGame();// gameplay logic when we are in the game
+            g_dElapsedWorkTime += dt; 
+            if (tutorial.getComplete() == false)
+                tutorialTimer += dt;
+            updateGame();// gameplay logic when we are in the game
             break;
         }
         case S_CREDITS: {
@@ -1502,11 +1502,6 @@ void renderSplashScreen()  // renders the splash screen
 // Render game levels and entities
 void renderGame()
 {
-    if (tutorialComplete == false)
-    {
-        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
-    }
-   
     if (day < 5) {
         level = day + 1;
     }
@@ -1521,6 +1516,11 @@ void renderGame()
     renderBoxes();
     renderShelfAmount();
     renderHUD();
+
+    if (tutorial.getComplete() == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
+    }
 }
 
 // Render amount of items on the shelf
@@ -1830,7 +1830,7 @@ void renderHome()
     else {
         g_Console.writeToBuffer(c, "Menu", 0xF0);
     }
-    if (tutorialComplete == false)
+    if (tutorial.getComplete() == false)
     {
         tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
     }
@@ -1984,7 +1984,7 @@ void renderEndOfWorkScreen()
     else {
         g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
     }
-    if (tutorialComplete == false)
+    if (tutorial.getComplete() == false)
     {
         tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
     }
@@ -2165,6 +2165,11 @@ void renderStore()
     }
     else {
         g_Console.writeToBuffer(c, "Home", 0xF0);
+    }
+
+    if (tutorial.getComplete() == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
     }
 }
 

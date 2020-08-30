@@ -4,7 +4,7 @@
 
 Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
-	for (int i = 0; i < 20; i++)
+	for (int i = 0; i < 14; i++)
 	{
 		tutorialFlags[i] = false;
         alreadyPlayed[i] = false;
@@ -14,6 +14,7 @@ Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial 
 	}
     allTrue = true;
     proceed = true;
+    complete = false;
 }
 
 Tutorial::~Tutorial()
@@ -46,8 +47,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagEleven(console);
     else if (tutorialFlags[11] == false)
         flagTwelve(console);
-    
-
+    else if (tutorialFlags[12] == false)
+        flagThirteen(console);
+    else if (tutorialFlags[13] == false)
+        flagFourteen(console);
 
     // Plays TTS for tutorial instructions
     if (alreadyPlayed[0] == false && tutorialFlags[0] == false) {
@@ -122,11 +125,11 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[6] = true;
         tutorialTimer = 0;
     }
-    else if (tutorialTimer >= 10 && tutorialFlags[6] == true && tutorialFlags[7] == false)
+    else if (tutorialTimer >= 5 && tutorialFlags[6] == true && tutorialFlags[7] == false)
     {
         tutorialFlags[7] = true;
     }
-    else if (tutorialTimer >= 30 && tutorialFlags[7] == true && tutorialFlags[8] == false)
+    else if (tutorialTimer >= 15 && tutorialFlags[7] == true && tutorialFlags[8] == false)
     {
         tutorialFlags[8] = true;
     }
@@ -138,8 +141,21 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[10] = true;
     }
-}
+    else if (g_eGameStates == S_STORE && tutorialFlags[10] == true && tutorialFlags[11] == false)
+    {
+        tutorialFlags[11] = true;
+    }
+    else if (g_eGameStates == S_GAME && tutorialFlags[11] == true && tutorialFlags[12] == false)
+    {
+        tutorialFlags[12] = true;
+        tutorialTimer = 0;
+    }
+    else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && g_eGameStates == S_GAME && tutorialFlags[12] == true && tutorialFlags[13] == false)
+    {
+        tutorialFlags[13] = true;
+    }
 
+}
 void Tutorial::flagOne(Console& console)
 {
     COORD c;
@@ -325,7 +341,7 @@ void Tutorial::flagEight(Console& console)
     c.X = 40;
     console.writeToBuffer(c, "A customer has appeared. They will", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "wait at the entrance for 10 secs", 0xF0);
+    console.writeToBuffer(c, "wait at the entrance for 5 secs", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "until they find an item to buy.", 0xF0);
     c.Y += 1;
@@ -346,7 +362,7 @@ void Tutorial::flagNine(Console& console)
     c.X = 17;
     console.writeToBuffer(c, "The customer is moving towards the shelf. They will wait there", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "for 20 secs. After that, if they got what they want, they will", 0xF0);
+    console.writeToBuffer(c, "for 15 secs. After that, if they got what they want, they will", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "leave and be happy. If not, they will be unsatisfied. You can", 0xF0);
     c.Y += 1;
@@ -373,7 +389,7 @@ void Tutorial::flagTen(Console& console)
     c.Y += 1;
     console.writeToBuffer(c, "you will earn money. The amount you earn is shown on the top", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "right. You now have about 1min 30secs till the supermarket", 0xF0);
+    console.writeToBuffer(c, "right. You now have about 1min 40secs till the supermarket", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "closes. You can see the time left on the top middle.", 0xF0);
     c.Y += 1;
@@ -448,6 +464,11 @@ void Tutorial::flagFourteen(Console& console)
 bool Tutorial::getTutorialFlag(int number)
 {
     return tutorialFlags[number];
+}
+
+bool Tutorial::getComplete(void)
+{
+    return complete;
 }
 
 void Tutorial::setTutorialFlag(int number, bool set)
