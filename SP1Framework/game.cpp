@@ -2244,6 +2244,39 @@ void renderBoxes()
     //}
 }
 
+bool checkWaveGone(int number)
+{
+    if (customerPtr[number] == nullptr) {
+        return true;
+    }
+    else {
+        return false;
+    }
+}
+
+bool switchWaveGone()
+{
+    bool returnval;
+    switch (day) {
+    case 0:
+        returnval = checkWaveGone(6);
+        return returnval;
+        break;
+    case 1:
+        returnval = checkWaveGone(7);
+        return returnval;
+        break;
+    case 2:
+        returnval = checkWaveGone(8);
+        return returnval;
+        break;
+    default:
+        returnval = checkWaveGone(9);
+        return returnval;
+        break;
+    }
+}
+
 //void moveCustomer()
 //{
 //    //todo
@@ -2268,15 +2301,8 @@ void renderCustomer()
             alreadyPlayed2 = false;
         }
         static bool waveGone;
-
         //Check if current wave of customers is gone
-        if (customerPtr[(sizeof(customerPtr) / sizeof(customerPtr[0])) - 1] == nullptr) {
-            waveGone = true;
-        }
-        else {
-            waveGone = false;
-        }
-
+        waveGone = switchWaveGone();
         //Scalable difficulty formula
         int customerMultiplier = 6;
         customerMultiplier += day;
@@ -2521,7 +2547,7 @@ void renderCustomer()
             {
                 if (spawnTimer >= 5)
                 {
-                    if (created != true && waveGone)
+                    if (created != true && waveGone == true)
                     {
                         customerPtr[i] = new Customer(p);
                         customerPtr[i]->setItemToBuy(day + 2);
