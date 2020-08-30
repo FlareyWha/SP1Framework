@@ -1504,7 +1504,7 @@ void renderGame()
 {
     if (tutorialComplete == false)
     {
-        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
     }
    
     if (day < 5) {
@@ -1794,10 +1794,6 @@ void renderMainMenu()
 // Render home menu
 void renderHome() 
 {
-    if (tutorialComplete == false)
-    {
-        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
-    }
     map.chooseMap(6, g_Console);
     renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
@@ -1833,6 +1829,10 @@ void renderHome()
     }
     else {
         g_Console.writeToBuffer(c, "Menu", 0xF0);
+    }
+    if (tutorialComplete == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
     }
 }
 
@@ -1948,11 +1948,6 @@ void renderHomeExpenses(COORD c)
 // Render end of work screen information
 void renderEndOfWorkScreen()
 {
-    if (tutorialComplete == false)
-    {
-        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
-    }
-
     map.chooseMap(7, g_Console);
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;
@@ -1989,6 +1984,11 @@ void renderEndOfWorkScreen()
     else {
         g_Console.writeToBuffer(c, "Click here to go home", 0xF0);
     }
+    if (tutorialComplete == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
+    }
+
 }
 
 // Render cause of game over and game over screen
@@ -2043,7 +2043,7 @@ void renderTutorialLevel()
         renderCustomer();
 
     renderBoxes();
-    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
+    tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
 }
 
 // Render store perks available for purchase; one unlocked per day

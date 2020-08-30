@@ -20,7 +20,7 @@ Tutorial::~Tutorial()
 {
 }
 
-void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour, double& tutorialTimer)
+void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour, double& tutorialTimer, EGAMESTATES g_eGameStates)
 {
     if (tutorialFlags[0] == false)
         flagOne(console);
@@ -44,6 +44,8 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         flagTen(console);
     else if (tutorialFlags[10] == false)
         flagEleven(console);
+    else if (tutorialFlags[11] == false)
+        flagTwelve(console);
     
 
 
@@ -131,6 +133,10 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (tutorialTimer >= 120 && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
         tutorialFlags[9] = true;
+    }
+    else if (g_eGameStates == S_HOME && tutorialFlags[9] == true && tutorialFlags[10] == false)
+    {
+        tutorialFlags[10] = true;
     }
 }
 
@@ -384,13 +390,59 @@ void Tutorial::flagEleven(Console& console)
 {
     COORD c;
 
-    c.Y = 10;
-    c.X = 17;
+    c.Y = 15;
+    c.X = 10;
     console.writeToBuffer(c, "This is the end-of-work screen. After each day, I will summarise", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "what has happened throughout the day. Go to the home screen", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "to continue", 0xF0);
+}
+
+void Tutorial::flagTwelve(Console& console)
+{
+    COORD c;
+    
+    c.Y = 15;
+    c.X = 5;
+    console.writeToBuffer(c, "This is your home. Each day, you have to feed your sons. If you dont,", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "they have a higher chance to fall sick compared to normal. If they become", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "sick, you have to feed them medicine, if not they will become hospitalised", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "and you cannot afford the fee. You can access a store from your home", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Go to it now.", 0xF0);
+
+}
+
+void Tutorial::flagThirteen(Console& console)
+{
+    COORD c;
+    c.Y = 5;
+    c.X = 5;
+    console.writeToBuffer(c, "This is the store. You can buy perks that help you. For now,", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "there is only one item. As u continue working, more items will be on", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "sale for you to buy. All of them will help you out. Now, go back home", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "and go to the next day of work by clicking next day.", 0xF0);
+}
+
+void Tutorial::flagFourteen(Console& console)
+{
+    COORD c;
+    c.Y = 4;
+    c.X = 40;
+    console.writeToBuffer(c, "Thats all the help I will give", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "you. Its up to you to keep your", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "job and help our town. Good luck!", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "Click to continue.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)

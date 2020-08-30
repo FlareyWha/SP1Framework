@@ -15,7 +15,7 @@ private:
 public:
 	Tutorial();
 	~Tutorial();
-	void tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour, double& tutorialTimer);
+	void tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mouseEvent, SKeyEvent g_skKeyEvent[K_COUNT], double g_dElaspedWorkTime, Player p, WORD boxColour, double& tutorialTimer, EGAMESTATES g_eGameState);
 	void flagOne(Console& console);
 	void flagTwo(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
 	void flagThree(Console& console, SGameChar& g_sChar, SKeyEvent g_skKeyEvent[K_COUNT]);
@@ -27,6 +27,9 @@ public:
 	void flagNine(Console& console);
 	void flagTen(Console& console);
 	void flagEleven(Console& console);
+	void flagTwelve(Console& console);
+	void flagThirteen(Console& console);
+	void flagFourteen(Console& console);
 
 	bool getTutorialFlag(int number);
 	void setTutorialFlag(int number, bool set);
