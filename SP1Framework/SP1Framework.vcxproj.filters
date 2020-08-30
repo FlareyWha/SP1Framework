@@ -201,25 +201,25 @@
     <Media Include="BGM.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS8.wav">
+    <Media Include="TutorialTTS8.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS9.wav">
+    <Media Include="TutorialTTS9.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS10.wav">
+    <Media Include="TutorialTTS10.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS11.wav">
+    <Media Include="TutorialTTS11.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS12.wav">
+    <Media Include="TutorialTTS12.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS13.wav">
+    <Media Include="TutorialTTS13.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS14.wav">
+    <Media Include="TutorialTTS14.wav">
       <Filter>Resource Files</Filter>
     </Media>
   </ItemGroup>
