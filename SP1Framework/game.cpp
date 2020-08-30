@@ -58,6 +58,8 @@ int frameMarker;
 
 int customerDirection[10];
 WORD CustomerBoxColour[10];
+int customerMultiplier;
+bool increased;
 
 //tutorial stuff;
 Tutorial tutorial;
@@ -150,12 +152,8 @@ void init( void )
         sPtr[5]->setShelf(0x90);
     }
 
-    for (int i = 0; i < 6; i++) {
-        /*
-        customerPtr[i] = nullptr;
-        sPtr[i] = nullptr;
-        */
-    }
+    customerMultiplier = 6;
+    increased = false;
 
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
@@ -373,7 +371,7 @@ void update(double dt)
             break;
         case S_TUT: { // game logic for tutorial phase of game
             spawnTimer += dt;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
                 if (customerPtr[i] != nullptr && customerPtr[i]->getTimer() != -1)
                 {
@@ -389,7 +387,7 @@ void update(double dt)
         }
         case S_GAME: { // game logic for the main game
             spawnTimer += dt;
-            for (int i = 0; i < 6; i++)
+            for (int i = 0; i < 10; i++)
             {
                 if (customerPtr[i] != nullptr && customerPtr[i]->getTimer() != -1)
                 {
@@ -1026,6 +1024,7 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
         g_sChar.moving.RIGHT = false;
         g_dElapsedWorkTime = 0.0;
         g_bRestocking = true;
+        increased = false;
         p.setPos(18, 1);
         COORD c;
         c.X = 18;
@@ -2312,8 +2311,13 @@ void renderCustomer()
         //Check if current wave of customers is gone
         waveGone = switchWaveGone();
         //Scalable difficulty formula
-        int customerMultiplier = 6;
-        customerMultiplier += day;
+
+        if (increased == false)
+        {
+            customerMultiplier += day;
+            increased = true;
+        }
+
         if (customerMultiplier >= 10) {
             customerMultiplier = 10;
         }
@@ -2487,7 +2491,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    //CustomerBoxColour[i] = 0x77;
+                                    CustomerBoxColour[i] = 0x77;
                                 }
 
                             }
@@ -2530,7 +2534,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    //CustomerBoxColour[i] = 0x77;
+                                    CustomerBoxColour[i] = 0x77;
                                 }
                             }
                         }
@@ -2646,7 +2650,7 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
 
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 10; i++)
     {
         if (customerPtr[i] != nullptr)
         {
