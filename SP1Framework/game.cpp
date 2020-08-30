@@ -2450,7 +2450,7 @@ void renderCustomer()
             }
             else
             {
-                if (spawnTimer >= 5)
+                if (spawnTimer >= 1)
                 {
                     if (created != true && waveGone == true)
                     {
@@ -2465,7 +2465,7 @@ void renderCustomer()
                 }
             }
         }
-        if (spawnTimer >= 5)
+        if (spawnTimer >= 1)
             spawnTimer = 0;
     }
 }

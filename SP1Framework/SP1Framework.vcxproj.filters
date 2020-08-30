@@ -186,9 +186,6 @@
     <Media Include="TutorialTTSF6.wav">
       <Filter>Resource Files</Filter>
     </Media>
-    <Media Include="IntenseMusic(60sec).wav">
-      <Filter>Resource Files</Filter>
-    </Media>
     <Media Include="IntenseMusic(30).wav">
       <Filter>Resource Files</Filter>
     </Media>

@@ -135,7 +135,6 @@
     <Media Include="..\..\..\..\Downloads\TutorialTTSF3.wav" />
     <Media Include="BGM.wav" />
     <Media Include="IntenseMusic(30).wav" />
-    <Media Include="IntenseMusic(60sec).wav" />
     <Media Include="TutorialTTS10.wav" />
     <Media Include="TutorialTTS11.wav" />
     <Media Include="TutorialTTS12.wav" />
