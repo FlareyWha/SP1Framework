@@ -153,16 +153,6 @@ void init( void )
     boxPosPtr[0]->setX(18);
     boxPosPtr[0]->setY(2);
 
-    /*for (int i = 0; i <= 7; i++) 
-    {
-        if (boxPtr[i] == nullptr) 
-        {
-            boxPtr[i] = new Box;
-            boxPosPtr[i] = new Position;
-        }
-        boxPosPtr[0]->setX(18);
-        boxPosPtr[0]->setY(2);
-    }*/
 
     //init Son objects
     cPtr[0] = new Son;
@@ -563,12 +553,12 @@ void moveCharacter()
     }
 }
 
-// Check if customer and player have collided with each other
+// Check if customer and player's boxes have collided with each other
 void checkCustomerPlayerCollision()
 {
     for (int i = 1; i < 7; i++)
     {
-        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+        if (boxPosPtr[i] != nullptr)
         {
             if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
             {
@@ -796,25 +786,7 @@ void pickUpBoxes()
     }
 }
 
-//void checkCustomerCollision()
-//{
-//    for (int i = 0; i < 6; i++)
-//    {
-//        for (int j = 1; j < 7;j++)
-//        {
-//            if (customerPtr[i] != nullptr && boxPosPtr[j] != nullptr && j != i)
-//            {
-//                if (customerPtr[i]->getX() == boxPosPtr[j]->getX() && customerPtr[i]->getY() == boxPosPtr[j]->getY())
-//                {
-//                    //customerPtr[i]->setPos(customerPtr[i]->getX(), customerPtr[i]->getY());
-//                    boxPosPtr[j]->setX(customerPtr[i]->getX() - 1);
-//                    //customerPtr[i]->setPos(boxPosPtr[i]->getX() + 1, customerPtr[i]->getY());
-//                }
-//
-//            }
-//        }
-//    }
-//}
+
 
 // Register restock inputs from player and updates
 void restockShelf(){
@@ -971,64 +943,7 @@ void deleteCustomer()
     }
 }
 
-// Check for collision with box
-//void checkBoxCollision()
-//{
-//    for (int i = 1; i < 7; i++)
-//    {
-//        if (boxPosPtr[i] != nullptr)
-//        {
-//            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
-//            {
-//                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
-//                    g_sChar.m_cLocation.Y--;
-//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//                }
-//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
-//                    g_sChar.m_cLocation.Y++;
-//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-//                }
-//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
-//                {
-//                    g_sChar.m_cLocation.X++;
-//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
-//                    
-//                }
-//                else
-//                {
-//                    g_sChar.m_cLocation.X--;
-//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
-//                }
-//            }
-//        }
-//    }
-//
-//    //for (int i = 1; i < 7; i++)
-//    //{
-//    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-//    //    {
-//    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-//    //        {
-//    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-//    //                g_sChar.m_cLocation.Y++;
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//    //            }
-//    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-//    //                g_sChar.m_cLocation.Y--;
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-//    //            }
-//    //            else
-//    //            {
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//    //                g_sChar.m_cLocation.Y++;
-//    //            }
-//
-//    //        }
-//
-//    //    }
-//
-//    //}
-//}
+
 
 // Delete customer boxes
 void deleteBoxes()
@@ -1627,11 +1542,7 @@ void renderHUD()
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-    //ss.str(""); //probably can be implemented cleaner
-    //ss << framesPassed << "frames";
-    //c.X = 36;
-    //c.Y = 24;
-    //g_Console.writeToBuffer(c, ss.str(), 0x80);
+    
     ss.str(""); //probably can be implemented cleaner
     ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
     c.X = 1;
@@ -1994,21 +1905,13 @@ void renderEndOfWorkScreen()
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
-    /*c.Y += 8;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;
-    ss.str("");
-    ss << "Customers served: ";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+   
     c.Y += 9;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    /*c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;*/
-    /*ss.str("");
-    ss << "Total number of Strikes: "<< p.getStrikes();
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+    
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
@@ -2294,21 +2197,7 @@ void renderBoxes()
             g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i-1]);
         }
     }
-    //for (int i = 0; i < 6; i++) { //maybe useful
-    //    switch ('1') {
-    //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour); }
-
-    //        case '1': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour); }
-
-    //        case '2': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[0]->getY(), char(221), BoxColour); }
-
-    //        case '3': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour); }
-    //    }
-    //}
+   
 }
 
 bool checkWaveGone(int number)
@@ -2348,10 +2237,7 @@ bool switchWaveGone()
     }
 }
 
-//void moveCustomer()
-//{
-//    //todo
-//}
+
 
 // Render customer current position yeye
 void renderCustomer()
@@ -2415,15 +2301,11 @@ void renderCustomer()
                 customerColour = 0x20;//green
                 if (customerPtr[i]->getState() == false)
                 {
-                    //customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
                     customerColour = 0x44; //red
                 }
-                //else
-                //{
-                //    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
-                //}
+               
                 customerPtr[i]->printOutCustomer(g_Console, map, customerPtr[i]->getQuantity(), customerColour);
-                //checkCustomerCollision();
+               
 
                 if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
                 {
@@ -2466,59 +2348,7 @@ void renderCustomer()
                 {
                     
 
-                    //for (int j = 0; j < 6; j++) {
-
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && (customerPtr[i]->getY() == 7 || customerPtr[i]->getY() == 13 || customerPtr[i]->getY() == 19) )
-                    //        {
-                    //            sPtr[j]->decreaseItem(1);
-
-                    //            p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
-
-                    //            customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
-
-                    //            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
-                    //                switch (j)
-                    //                {
-                    //                case 0:
-                    //                    CustomerBoxColour[i] = 0x50;
-                    //                    break;
-                    //                case 1:
-                    //                    CustomerBoxColour[i] = 0x10;
-                    //                    break;
-                    //                case 2:
-                    //                    CustomerBoxColour[i] = 0xB0;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3))
-                    //            {
-                    //                switch (j)
-                    //                {
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xE0;
-                    //                    break;
-                    //                case 4:
-                    //                    CustomerBoxColour[i] = 0xA0;
-                    //                    break;
-                    //                case 5:
-                    //                    CustomerBoxColour[i] = 0x90;
-                    //                    break;
-                    //                }
-                    //            }
-                    //        }
-
-                    //        else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
-                    //            p.increaseUnsatisfiedCustomers();
-                    //            customerPtr[i]->setEndPoint(79, 15);
-                    //            customerPtr[i]->setAvoiding(5);
-                    //            customerPtr[i]->setMovingBack(true);
-                    //            customerPtr[i]->unSatisfied();
-                    //        }
-                    //    }
-                    //}
+                    
 
                     for (int j = 0; j < 3; j++) {
                      
@@ -2644,27 +2474,7 @@ void renderCustomer()
 // Render player current position
 void renderCharacter()
 {
-    //for (int i = 0; i < 6; i++)
-    //{
-    //    if (customerPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-    //    {
-    //        if (g_sChar.m_cLocation.X == customerPtr[i]->getX() && g_sChar.m_cLocation.Y == customerPtr[i]->getY() )
-    //        {
-    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX()) {
-    //                g_sChar.m_cLocation.Y++;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //            }
-    //            else
-    //            {
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //                g_sChar.m_cLocation.Y++;
-    //            }
-    //            
-    //        }
-    //        
-    //    }
-
-    //}
+    
     // Draw the location of the character
     WORD charColor = 0x99;
     if (g_sChar.m_bActive)

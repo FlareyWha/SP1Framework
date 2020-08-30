@@ -112,7 +112,6 @@ void actuallyMoving();
 void pickUpBoxes();
 
 void restockShelf();
-void updateCustomer();
 void checkCustomerPlayerCollision();
 void checkEnd();
 void deleteBoxes();
