@@ -2646,7 +2646,7 @@ void renderFramerate()
     g_Console.writeToBuffer(c, ss.str(), 0x0F);
 
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 10; i++)
     {
         if (customerPtr[i] != nullptr)
         {
