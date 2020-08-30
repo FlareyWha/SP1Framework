@@ -48,8 +48,8 @@ bool playerSpeedToggle;
 int playerWalkSpeed;
 int playerSpeed;
 
-Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
-Position* boxPosPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
+Box* boxPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
+Position* boxPosPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
 WORD BoxColour;
 Map map;
 saveLoad saves;
@@ -57,7 +57,7 @@ int framesPassed;
 int frameMarker;
 
 int customerDirection[6];
-WORD CustomerBoxColour[6];
+WORD CustomerBoxColour[10];
 
 //tutorial stuff;
 Tutorial tutorial;
@@ -986,7 +986,7 @@ void deleteCustomer()
 // Delete customer boxes
 void deleteBoxes()
 {
-    for (int i = 1; i < 7; i++)
+    for (int i = 1; i < 11; i++)
     {
         if (boxPtr[i] != nullptr)
         {
@@ -1016,6 +1016,10 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
+       // for (int i = 0; i < 10; i++) // delete ltr this is for testing
+        //{
+        //    tutorial.setTutorialFlag(i, true);
+        //}
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
@@ -1616,7 +1620,7 @@ void renderCustomerTimer(int shelf) //works ?
 
             cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
-            for (int i = 0; i <= cTimerArrival; i++) {
+            for (int i = 0; i < cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
                 c.X++;
             }
@@ -1937,12 +1941,12 @@ void renderEndOfWorkScreen()
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
-    c.Y += 8;
+    /*c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Customers served: ";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    c.Y += 1;
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+    c.Y += 9;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
@@ -2202,7 +2206,7 @@ void renderCredits()
     g_Console.writeToBuffer(c, "Credits", 0x0F);
     c.Y += 5;
     c.X -= 20;
-    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    g_Console.writeToBuffer(c, "All dialogue speech sounds are credited to discord bot", 0x0F);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
     c.Y += 2;
@@ -2220,11 +2224,11 @@ void renderCredits()
 void renderBoxes()
 {
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
-    for (int i = 0; i < 6; i++)
+    for (int i = 1; i < 11; i++)
     {
-        if (boxPtr[i + 1] != nullptr)
+        if (boxPtr[i] != nullptr)
         {
-            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', CustomerBoxColour[i]);
+            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i]);
         }
     }
     //for (int i = 0; i < 6; i++) { //maybe useful
@@ -2479,7 +2483,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    CustomerBoxColour[i] = 0x77;
+                                    //CustomerBoxColour[i] = 0x77;
                                 }
 
                             }
@@ -2522,7 +2526,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    CustomerBoxColour[i] = 0x77;
+                                    //CustomerBoxColour[i] = 0x77;
                                 }
                             }
                         }

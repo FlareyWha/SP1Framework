@@ -29,6 +29,7 @@ public:
 	void flagEleven(Console& console);
 
 	bool getTutorialFlag(int number);
+	void setTutorialFlag(int number, bool set);
 	bool getProceed(void);
 };
 
