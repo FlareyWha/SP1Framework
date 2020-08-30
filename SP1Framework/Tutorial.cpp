@@ -115,7 +115,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     }
     if (g_skKeyEvent[K_F4].keyDown)
     {
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < 14; i++)
         {
             tutorialFlags[i] = true;
         }

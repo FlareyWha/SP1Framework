@@ -1,10 +1,10 @@
-Day = 1
-Savings = 45
+Day = 5
+Savings = 1000
 Son One State = 0
 Son Two State = 0
-Cheaper Food = 0
-Cheaper Rent = 0
-Player Shoes = 0
+Cheaper Food = 2
+Cheaper Rent = 2
+Player Shoes = 1
 Slower Customers = 0
-Rich Customers = 0
-Thrifty Customers = 0
+Rich Customers = 1
+Thrifty Customers = 1

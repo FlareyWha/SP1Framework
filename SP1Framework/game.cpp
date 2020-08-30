@@ -15,7 +15,6 @@
 #include "Shelf.h"
 #include "Son.h"
 #include "Tutorial.h"
-#include "saveLoad.h"
 
 //Sound dependencies
 #include <Windows.h>
@@ -52,7 +51,6 @@ Box* boxPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullp
 Position* boxPosPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr }; //spawn player and customer box positions
 WORD BoxColour; //player box colour
 Map map;
-saveLoad saves;
 int framesPassed;
 int frameMarker;
 
@@ -429,8 +427,7 @@ void update(double dt)
                     customerPtr[i]->addTimer(dt);
                 }
             }
-            if (tutorial.getTutorialFlag(14) == true)
-                g_dElapsedWorkTime += dt; 
+            g_dElapsedWorkTime += dt; 
 
             if (tutorial.getComplete() == false)
                 tutorialTimer += dt;
@@ -966,6 +963,9 @@ void deleteBoxes()
 // Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
+    if (tutorial.getTutorialFlag(14) == false) {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
+    }
     if (p.getUnsatisfiedCustomers() == 10) { // change back ltr to 10
             g_eGameState = S_GAMEOVER;
             deleteCustomer();
@@ -1153,9 +1153,11 @@ void processInputMenu() //All input processing related to Main Menu
                 loadSuccessful = false;
                 g_eGameState = S_HOME;
                 g_ePreviousGameState = S_MENU;
-                tutorial.setTutorialFlag(11, true);
-                tutorial.setTutorialFlag(12, true);
-                tutorial.setTutorialFlag(13, true);
+                for (int x = 0; x < 15; x++) {
+                    tutorial.setTutorialFlag(x, true);
+                }
+                g_bRestocking = true;
+                g_dElapsedWorkTime = 0.0;
             }
         }
     }
@@ -1262,6 +1264,10 @@ void processInputGameOver()
         }
         p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
         p.getPowerups()->resetall();
+        for (int x = 0; x < 14; x++) {
+            tutorial.setTutorialFlag(x, false);
+        }
+        g_dElapsedWorkTime = 0;
         g_eGameState = S_MENU;
     }
     day = 0; level = 1;
@@ -1292,6 +1298,7 @@ void processInputHome() //note lol
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
             deleteCustomer();
             deleteBoxes();
+            PlaySound(L"IntenseMusic(30).wav", NULL, SND_ASYNC);
             g_eGameState = S_GAME;
             updateSons();
         }
@@ -1368,8 +1375,9 @@ void processUserInput()
         checkEnd();
         break;
     case S_GAME:
-        if (g_skKeyEvent[K_ESCAPE].keyReleased)// opens main menu if player hits the escape key
-            g_eGameState = S_MENU;
+        if (g_skKeyEvent[K_ESCAPE].keyReleased) {// opens main menu if player hits the escape key
+            g_eGameState = S_MENU; PlaySound(L"BGM.wav", NULL, SND_FILENAME | SND_ASYNC | SND_LOOP);
+        }
         checkEnd();
         break;
     case S_CREDITS: {
@@ -1465,16 +1473,10 @@ void renderGame()
     checkCustomerPlayerCollision();
     
     renderCharacter();
-    if (tutorial.getTutorialFlag(15) == true)
-        renderCustomer();  // renders the character into the buffer
+    renderCustomer();  // renders the character into the buffer
     renderBoxes();
     renderShelfAmount();
     renderHUD();
-
-    if (tutorial.getComplete() == false)
-    {
-        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
-    }
 }
 
 // Render amount of items on the shelf
