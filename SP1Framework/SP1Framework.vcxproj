@@ -143,7 +143,6 @@
     <Media Include="TutorialTTSF4.wav" />
     <Media Include="TutorialTTSF5.wav" />
     <Media Include="TutorialTTSF6.wav" />
-    <Media Include="TutorialTTSF8.wav" />
     <Media Include="TutorialTTSF9.wav" />
   </ItemGroup>
   <ItemGroup>
