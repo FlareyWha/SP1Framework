@@ -39,7 +39,7 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
-Customer* customerPtr[6] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr};
+Customer* customerPtr[10] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr, nullptr , nullptr , nullptr , nullptr };
 Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
 Son* cPtr[2] = { nullptr, nullptr };
 
@@ -1941,12 +1941,12 @@ void renderEndOfWorkScreen()
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
-    c.Y += 8;
+    /*c.Y += 8;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Customers served: ";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    c.Y += 1;
+    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+    c.Y += 9;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
@@ -2206,7 +2206,7 @@ void renderCredits()
     g_Console.writeToBuffer(c, "Credits", 0x0F);
     c.Y += 5;
     c.X -= 20;
-    g_Console.writeToBuffer(c, "All dialog speech sounds are credited to discord bot", 0x0F);
+    g_Console.writeToBuffer(c, "All dialogue speech sounds are credited to discord bot", 0x0F);
     c.Y += 1;
     g_Console.writeToBuffer(c, "Text To Speech #1736", 0x0F);
     c.Y += 2;
@@ -2271,7 +2271,24 @@ void renderCustomer()
             alreadyPlayed = true;
             alreadyPlayed2 = false;
         }
-        for (int i = 0; i < 6; i++) 
+        static bool waveGone;
+
+        //Check if current wave of customers is gone
+        if (customerPtr[(sizeof(customerPtr) / sizeof(customerPtr[0])) - 1] == nullptr) {
+            waveGone = true;
+        }
+        else {
+            waveGone = false;
+        }
+
+        //Scalable difficulty formula
+        int customerMultiplier = 6;
+        customerMultiplier += day;
+        if (customerMultiplier >= 10) {
+            customerMultiplier = 10;
+        }
+
+        for (int i = 0; i < customerMultiplier; i++) 
         {
             if (customerPtr[i] != nullptr)
             {
@@ -2508,7 +2525,7 @@ void renderCustomer()
             {
                 if (spawnTimer >= 5)
                 {
-                    if (created != true)
+                    if (created != true && waveGone)
                     {
                         customerPtr[i] = new Customer(p);
                         customerPtr[i]->setItemToBuy(day + 2);
