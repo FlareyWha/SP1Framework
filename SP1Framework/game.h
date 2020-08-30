@@ -154,6 +154,8 @@ void renderCredits();
 void checkCustomerPlayerCollision();
 
 void renderBoxes();
+bool checkWaveGone(int number);
+bool switchWaveGone(); // holds switch statement required for waves
 void renderCustomer();
 void renderCharacter();     // renders the character into the buffer
 void renderFramerate();     // renders debug information, frame rate, elapsed time, etc
