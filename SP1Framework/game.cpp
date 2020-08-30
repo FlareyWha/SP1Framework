@@ -56,7 +56,7 @@ saveLoad saves;
 int framesPassed;
 int frameMarker;
 
-int customerDirection[6];
+int customerDirection[10];
 WORD CustomerBoxColour[10];
 
 //tutorial stuff;
@@ -2228,7 +2228,7 @@ void renderBoxes()
     {
         if (boxPtr[i] != nullptr)
         {
-            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i]);
+            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i-1]);
         }
     }
     //for (int i = 0; i < 6; i++) { //maybe useful
@@ -2329,7 +2329,7 @@ void renderCustomer()
                 }
 
                 if (customerPtr[i]->getQuantity() == 0 && customerPtr[i]->getMovingBack() != true) {
-                    customerPtr[i]->setEndPoint(79, 15);
+                    customerPtr[i]->setEndPoint(79, 17);
                     customerPtr[i]->setAvoiding(5);
                     customerPtr[i]->setTravelling(false);
                     customerPtr[i]->setMovingBack(true);
@@ -2483,7 +2483,7 @@ void renderCustomer()
 
                                 else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
-                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setEndPoint(79, 17);
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
@@ -2526,7 +2526,7 @@ void renderCustomer()
 
                                 else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
                                     p.increaseUnsatisfiedCustomers();
-                                    customerPtr[i]->setEndPoint(79, 15);
+                                    customerPtr[i]->setEndPoint(79, 17);
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
@@ -2537,7 +2537,7 @@ void renderCustomer()
                     }
                 }
 
-                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 15)
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 17)
                 {
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
@@ -2548,7 +2548,7 @@ void renderCustomer()
                     boxPosPtr[i + 1] = nullptr;
 
                     CustomerBoxColour[i] = 0x77;
-                    map.setGrid(79, 15, '0');
+                    map.setGrid(79, 17, '0');
                 }
             }
             else
