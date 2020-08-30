@@ -4,7 +4,7 @@
 
 Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
-	for (int i = 0; i < 14; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		tutorialFlags[i] = false;
         alreadyPlayed[i] = false;
@@ -50,7 +50,9 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (tutorialFlags[12] == false)
         flagThirteen(console);
     else if (tutorialFlags[13] == false)
-        flagFourteen(console);
+        flagFourteen();
+    else if (tutorialFlags[14] == false)
+        flagFifteen(console);
 
     // Plays TTS for tutorial instructions
     if (alreadyPlayed[0] == false && tutorialFlags[0] == false) {
@@ -133,7 +135,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[8] = true;
     }
-    else if (tutorialTimer >= 120 && tutorialFlags[8] == true && tutorialFlags[9] == false)
+    else if (g_eGameStates == S_ENDOFWORKSCREEN && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
         tutorialFlags[9] = true;
     }
@@ -145,14 +147,19 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[11] = true;
     }
-    else if (g_eGameStates == S_GAME && tutorialFlags[11] == true && tutorialFlags[12] == false)
+    else if (g_eGameStates == S_HOME && tutorialFlags[11] == true && tutorialFlags[12] == false)
     {
         tutorialFlags[12] = true;
-        tutorialTimer = 0;
     }
-    else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && g_eGameStates == S_GAME && tutorialFlags[12] == true && tutorialFlags[13] == false)
+    else if (g_eGameStates == S_GAME && tutorialFlags[12] == true && tutorialFlags[13] == false)
     {
         tutorialFlags[13] = true;
+        tutorialTimer = 0;
+    }
+    else if (g_eGameStates == S_GAME && tutorialTimer > 10 && tutorialFlags[13] == true && tutorialFlags[14] == false)
+    {
+        tutorialFlags[14] = true;
+        complete = true;
     }
 
 }
@@ -447,7 +454,12 @@ void Tutorial::flagThirteen(Console& console)
     console.writeToBuffer(c, "and go to the next day of work by clicking next day.", 0xF0);
 }
 
-void Tutorial::flagFourteen(Console& console)
+void Tutorial::flagFourteen()
+{
+    //yes
+}
+
+void Tutorial::flagFifteen(Console& console)
 {
     COORD c;
     c.Y = 4;
@@ -457,8 +469,6 @@ void Tutorial::flagFourteen(Console& console)
     console.writeToBuffer(c, "you. Its up to you to keep your", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "job and help our town. Good luck!", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "Click to continue.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)

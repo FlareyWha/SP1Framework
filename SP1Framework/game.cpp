@@ -394,7 +394,9 @@ void update(double dt)
                     customerPtr[i]->addTimer(dt);
                 }
             }
-            g_dElapsedWorkTime += dt; 
+            if (tutorial.getTutorialFlag(14) == true)
+                g_dElapsedWorkTime += dt; 
+
             if (tutorial.getComplete() == false)
                 tutorialTimer += dt;
             updateGame();// gameplay logic when we are in the game
@@ -1007,14 +1009,6 @@ void deleteBoxes()
 // Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
-    if (g_skKeyEvent[K_F4].keyDown)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            tutorial.setTutorialFlag(i, true);
-        }
-    }
-
     if (p.getUnsatisfiedCustomers() == 10) { // change back ltr to 10
             g_eGameState = S_GAMEOVER;
             deleteCustomer();
@@ -1332,7 +1326,7 @@ void processInputHome() //note lol
         }
         else if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 34)
-            && g_mouseEvent.mousePosition.Y == 20) //Change to main game state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 20 && tutorial.getTutorialFlag(12) == true) //Change to main game state once mouse clicks on the button
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
@@ -1511,8 +1505,9 @@ void renderGame()
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
     
-    renderCharacter();  // renders the character into the buffer
-    renderCustomer();
+    renderCharacter();
+    if (tutorial.getTutorialFlag(15) == true)
+        renderCustomer();  // renders the character into the buffer
     renderBoxes();
     renderShelfAmount();
     renderHUD();
