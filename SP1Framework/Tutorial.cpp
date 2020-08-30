@@ -121,7 +121,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[8] = true;
     }
-    else if (g_dElaspedWorkTime >= 150 && tutorialFlags[8] == true && tutorialFlags[9] == false)
+    else if (tutorialTimer >= 120 && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
         tutorialFlags[9] = true;
     }

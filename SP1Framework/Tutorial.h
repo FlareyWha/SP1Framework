@@ -10,7 +10,7 @@ private:
 	bool pressed[6];
 	bool allTrue;
 	bool proceed;
-	bool alreadyPlayed[10];
+	bool alreadyPlayed[20];
 
 public:
 	Tutorial();
