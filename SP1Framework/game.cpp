@@ -2263,14 +2263,18 @@ bool switchWaveGone()
     bool returnval;
     switch (day) {
     case 0:
-        returnval = checkWaveGone(6);
+        returnval = checkWaveGone(5);
         return returnval;
         break;
     case 1:
-        returnval = checkWaveGone(7);
+        returnval = checkWaveGone(6);
         return returnval;
         break;
     case 2:
+        returnval = checkWaveGone(7);
+        return returnval;
+        break;
+    case 3:
         returnval = checkWaveGone(8);
         return returnval;
         break;
@@ -2304,7 +2308,7 @@ void renderCustomer()
             alreadyPlayed = true;
             alreadyPlayed2 = false;
         }
-        static bool waveGone;
+        bool waveGone;
         //Check if current wave of customers is gone
         waveGone = switchWaveGone();
         //Scalable difficulty formula
