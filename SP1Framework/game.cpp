@@ -1603,7 +1603,7 @@ void renderCustomerTimer(int shelf) //works ?
     int shelfX;
     int shelfY;
     int cTimerArrival;
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < customerMultiplier; i++)
     {
         if (customerPtr[i] != nullptr && 
             customerPtr[i]->getEndPointX() == customerPtr[i]->getX() && customerPtr[i]->getEndPointY() == customerPtr[i]->getY())
