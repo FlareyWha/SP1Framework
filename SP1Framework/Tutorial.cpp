@@ -181,7 +181,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[13] = true;
         tutorialTimer = 0;
     }
-    else if (g_eGameStates == S_GAME && tutorialTimer > 10 && tutorialFlags[13] == true && tutorialFlags[14] == false)
+    else if (g_eGameStates == S_GAME && tutorialTimer > 6 && tutorialFlags[13] == true && tutorialFlags[14] == false)
     {
         tutorialFlags[14] = true;
         complete = true;
