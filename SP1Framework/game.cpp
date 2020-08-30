@@ -56,7 +56,7 @@ saveLoad saves;
 int framesPassed;
 int frameMarker;
 
-int customerDirection[6];
+int customerDirection[10];
 WORD CustomerBoxColour[10];
 
 //tutorial stuff;
@@ -2228,7 +2228,7 @@ void renderBoxes()
     {
         if (boxPtr[i] != nullptr)
         {
-            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i]);
+            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i-1]);
         }
     }
     //for (int i = 0; i < 6; i++) { //maybe useful
