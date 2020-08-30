@@ -1471,7 +1471,11 @@ void renderGame()
     }
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
-    
+
+    if (tutorial.getTutorialFlag(14) == false) {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer, g_eGameState);
+    }
+
     renderCharacter();
     renderCustomer();  // renders the character into the buffer
     renderBoxes();
