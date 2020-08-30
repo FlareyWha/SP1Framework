@@ -4,7 +4,7 @@
 
 Tutorial::Tutorial(): tutorialFlags {false}, pressed {false}  //add in tutorial if anything go wrong just hide in your box **************
 {
-	for (int i = 0; i < 14; i++)
+	for (int i = 0; i < 15; i++)
 	{
 		tutorialFlags[i] = false;
         alreadyPlayed[i] = false;
@@ -50,7 +50,9 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     else if (tutorialFlags[12] == false)
         flagThirteen(console);
     else if (tutorialFlags[13] == false)
-        flagFourteen(console);
+        flagFourteen();
+    else if (tutorialFlags[14] == false)
+        flagFifteen(console);
 
     // Plays TTS for tutorial instructions
     if (alreadyPlayed[0] == false && tutorialFlags[0] == false) {
@@ -77,15 +79,40 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         PlaySound(L"TutorialTTSF6.wav", NULL, SND_FILENAME | SND_ASYNC);
         alreadyPlayed[5] = true;
     }
-    /*else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[5] == true) {
-        PlaySound(L"BGM1.wav", NULL, SND_FILENAME | SND_ASYNC);
+    else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[5] == true) {
         alreadyPlayed[6] = true;
-    }*/
-    /*else if (alreadyPlayed[6] == false && tutorialFlags[6] == false && tutorialFlags[7] == true) {
-        PlaySound(L"IntenseMusic(30sec).wav", NULL, SND_FILENAME | SND_ASYNC);
-        alreadyPlayed[6] = true;
-    }*/
-
+    }
+    else if (alreadyPlayed[7] == false && tutorialFlags[7] == false && tutorialFlags[6] == true) {
+        PlaySound(L"TutorialTTS8.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[7] = true;
+    }
+    else if (alreadyPlayed[8] == false && tutorialFlags[8] == false && tutorialFlags[7] == true) {
+        PlaySound(L"TutorialTTS9.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[8] = true;
+    }
+    else if (alreadyPlayed[9] == false && tutorialFlags[9] == false && tutorialFlags[8] == true) {
+        PlaySound(L"TutorialTTS10.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[9] = true;
+    }
+    else if (alreadyPlayed[10] == false && tutorialFlags[10] == false && tutorialFlags[9] == true) {
+        PlaySound(L"TutorialTTS11.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[10] = true;
+    }
+    else if (alreadyPlayed[11] == false && tutorialFlags[11] == false && tutorialFlags[10] == true) {
+        PlaySound(L"TutorialTTS12.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[11] = true;
+    }
+    else if (alreadyPlayed[12] == false && tutorialFlags[12] == false && tutorialFlags[11] == true) {
+        PlaySound(L"TutorialTTS13.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[12] = true;
+    }
+    else if (alreadyPlayed[13] == false && tutorialFlags[13] == false && tutorialFlags[12] == true) {
+        alreadyPlayed[13] = true;
+    }
+    else if (alreadyPlayed[14] == false && tutorialFlags[14] == false && tutorialFlags[13] == true) {
+        PlaySound(L"TutorialTTS14.wav", NULL, SND_FILENAME | SND_ASYNC);
+        alreadyPlayed[14] = true;
+    }
     if (g_skKeyEvent[K_F4].keyDown)
     {
         for (int i = 0; i < 10; i++)
@@ -125,15 +152,15 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         tutorialFlags[6] = true;
         tutorialTimer = 0;
     }
-    else if (tutorialTimer >= 5 && tutorialFlags[6] == true && tutorialFlags[7] == false)
+    else if (tutorialTimer >= 13 && tutorialFlags[6] == true && tutorialFlags[7] == false)
     {
         tutorialFlags[7] = true;
     }
-    else if (tutorialTimer >= 15 && tutorialFlags[7] == true && tutorialFlags[8] == false)
+    else if (tutorialTimer >= 46 && tutorialFlags[7] == true && tutorialFlags[8] == false)
     {
         tutorialFlags[8] = true;
     }
-    else if (tutorialTimer >= 120 && tutorialFlags[8] == true && tutorialFlags[9] == false)
+    else if (g_eGameStates == S_ENDOFWORKSCREEN && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
         tutorialFlags[9] = true;
     }
@@ -145,14 +172,19 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     {
         tutorialFlags[11] = true;
     }
-    else if (g_eGameStates == S_GAME && tutorialFlags[11] == true && tutorialFlags[12] == false)
+    else if (g_eGameStates == S_HOME && tutorialFlags[11] == true && tutorialFlags[12] == false)
     {
         tutorialFlags[12] = true;
-        tutorialTimer = 0;
     }
-    else if (g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED && g_eGameStates == S_GAME && tutorialFlags[12] == true && tutorialFlags[13] == false)
+    else if (g_eGameStates == S_GAME && tutorialFlags[12] == true && tutorialFlags[13] == false)
     {
         tutorialFlags[13] = true;
+        tutorialTimer = 0;
+    }
+    else if (g_eGameStates == S_GAME && tutorialTimer > 10 && tutorialFlags[13] == true && tutorialFlags[14] == false)
+    {
+        tutorialFlags[14] = true;
+        complete = true;
     }
 
 }
@@ -385,11 +417,11 @@ void Tutorial::flagTen(Console& console)
 
     c.Y = 16;
     c.X = 17;
-    console.writeToBuffer(c, "The customer is now leaving. For each item a customer buys,", 0xF0);
+    console.writeToBuffer(c, "When a customer leaves, for each item a customer buys,", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "you will earn money. The amount you earn is shown on the top", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "right. You now have about 1min 40secs till the supermarket", 0xF0);
+    console.writeToBuffer(c, "right. You now have about 1min 4secs till the supermarket", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "closes. You can see the time left on the top middle.", 0xF0);
     c.Y += 1;
@@ -447,7 +479,12 @@ void Tutorial::flagThirteen(Console& console)
     console.writeToBuffer(c, "and go to the next day of work by clicking next day.", 0xF0);
 }
 
-void Tutorial::flagFourteen(Console& console)
+void Tutorial::flagFourteen()
+{
+    //yes
+}
+
+void Tutorial::flagFifteen(Console& console)
 {
     COORD c;
     c.Y = 4;
@@ -457,8 +494,6 @@ void Tutorial::flagFourteen(Console& console)
     console.writeToBuffer(c, "you. Its up to you to keep your", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "job and help our town. Good luck!", 0xF0);
-    c.Y += 1;
-    console.writeToBuffer(c, "Click to continue.", 0xF0);
 }
 
 bool Tutorial::getTutorialFlag(int number)

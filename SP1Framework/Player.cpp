@@ -1,6 +1,6 @@
 #include "Player.h"
 
-Player::Player() : strikes{ 0 }, savings{ 0 }, dayEarnings{ 0 }, unsatisfiedCustomers{ 0 }, p_bRentPaid(false), rent{ 200 }, medicine{ 100 }, food{ 30 }, PowerupsPtr{ new Powerup }
+Player::Player() : savings{ 0 }, dayEarnings{ 0 }, unsatisfiedCustomers{ 0 }, p_bRentPaid(false), rent{ 200 }, medicine{ 100 }, food{ 30 }, PowerupsPtr{ new Powerup }
 {
 	holdingProduct = false;
 	pos.setX(18);
@@ -16,9 +16,7 @@ Powerup* Player::getPowerups()
 	return PowerupsPtr;
 }
 
-int Player::getStrikes() {
-	return strikes;
-}
+
 
 int Player::getSavings() {
 	return savings;
@@ -59,9 +57,7 @@ void Player::resetUnsatisfiedCustomers()
 	unsatisfiedCustomers = 0;
 }
 
-void Player::receiveStrike() {
-	strikes++;
-}
+
 
 void Player::receivePay(int pay) {
 	savings = savings + pay;

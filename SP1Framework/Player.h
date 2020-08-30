@@ -8,7 +8,7 @@ class Player :
 	public Entity 
 {
 private:
-	int strikes;
+	
 	int savings; 
 	Powerup* PowerupsPtr;
 
@@ -27,7 +27,7 @@ public:
 
 	Powerup* getPowerups();
 
-	int getStrikes(); // return strikes
+	
 	int getSavings(); // return savings
 	void setSavings(int savings);
 
@@ -39,7 +39,7 @@ public:
 	void increaseUnsatisfiedCustomers();
 	void resetUnsatisfiedCustomers();
 
-	void receiveStrike(); //set strikes, strikes++
+	
 	void receivePay(int pay); //set savings, increase savings
 	void takePay(int pay);
 

@@ -6,11 +6,11 @@
 class Tutorial
 {
 private:
-	bool tutorialFlags[14];
+	bool tutorialFlags[15];
 	bool pressed[6];
 	bool allTrue;
 	bool proceed;
-	bool alreadyPlayed[14];
+	bool alreadyPlayed[15];
 	bool complete;
 
 public:
@@ -30,7 +30,8 @@ public:
 	void flagEleven(Console& console);
 	void flagTwelve(Console& console);
 	void flagThirteen(Console& console);
-	void flagFourteen(Console& console);
+	void flagFourteen();
+	void flagFifteen(Console& console);
 
 	bool getTutorialFlag(int number);
 	bool getComplete(void);

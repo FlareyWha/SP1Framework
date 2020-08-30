@@ -39,8 +39,8 @@ EGAMESTATES g_eGameState = S_SPLASHSCREEN; // initial state
 EGAMESTATES g_ePreviousGameState = S_SPLASHSCREEN; // initial state
 EDEBUGSTATES g_eDebugState = D_OFF; // initial state
 
-Customer* customerPtr[10] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr, nullptr , nullptr , nullptr , nullptr };
-Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };
+Customer* customerPtr[10] = {nullptr , nullptr , nullptr , nullptr , nullptr , nullptr, nullptr , nullptr , nullptr , nullptr }; // spawn customer
+Shelf* sPtr[6] = { nullptr , nullptr , nullptr , nullptr , nullptr , nullptr };// spawn shelf
 Son* cPtr[2] = { nullptr, nullptr };
 
 Player p;
@@ -48,16 +48,16 @@ bool playerSpeedToggle;
 int playerWalkSpeed;
 int playerSpeed;
 
-Box* boxPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
-Position* boxPosPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
-WORD BoxColour;
+Box* boxPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr }; //spawn player and customer box
+Position* boxPosPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr }; //spawn player and customer box positions
+WORD BoxColour; //player box colour
 Map map;
 saveLoad saves;
 int framesPassed;
 int frameMarker;
 
 int customerDirection[10];
-WORD CustomerBoxColour[10];
+WORD CustomerBoxColour[10]; //customer box position
 int customerMultiplier;
 bool increased;
 
@@ -78,6 +78,49 @@ Console g_Console(g_ConsoleX, g_ConsoleY, "SP1 Framework");
 // Input    : void
 // Output   : void
 //--------------------------------------------------------------
+
+void deleteEverything() //delete everything when player exists game
+{
+    deleteCustomer(); //delete customers
+    deleteBoxes(); //delete customer boxes & positions
+
+    //delete player box
+    if (boxPtr[0] != nullptr)
+    {
+        delete boxPtr[0];
+        boxPtr[0] = nullptr;
+    }
+    if (boxPosPtr[0] != nullptr)
+    {
+        delete boxPosPtr[0];
+        boxPosPtr[0] = nullptr;
+
+    }
+
+    //delete shelves
+    for (int i = 0; i < 6; i++)
+    {
+        if (sPtr[i] != nullptr)
+        {
+           delete sPtr[i];
+           sPtr[i] = nullptr;
+        }
+    }
+    
+    //delete Sons
+    for (int i = 0; i < 2;i++)
+    {
+        if (cPtr[i] != nullptr)
+        {
+            delete cPtr[i];
+            cPtr[i] = nullptr;
+        }
+    }
+    
+
+
+}
+
 void init( void )
 {
     
@@ -94,8 +137,7 @@ void init( void )
     g_eGameState = S_SPLASHSCREEN;
     g_ePreviousGameState = S_SPLASHSCREEN;
 
-   /* g_sChar.m_cLocation.X = g_Console.getConsoleSize().X / 2;
-    g_sChar.m_cLocation.Y = g_Console.getConsoleSize().Y / 2;*/
+   
 
     g_sChar.m_cLocation.X = 18; //changed character spawn location
     g_sChar.m_cLocation.Y = 1;
@@ -110,16 +152,6 @@ void init( void )
     boxPosPtr[0]->setX(18);
     boxPosPtr[0]->setY(2);
 
-    /*for (int i = 0; i <= 7; i++) 
-    {
-        if (boxPtr[i] == nullptr) 
-        {
-            boxPtr[i] = new Box;
-            boxPosPtr[i] = new Position;
-        }
-        boxPosPtr[0]->setX(18);
-        boxPosPtr[0]->setY(2);
-    }*/
 
     //init Son objects
     cPtr[0] = new Son;
@@ -127,27 +159,27 @@ void init( void )
 
     //init shelf
 
-    if (sPtr[0] == nullptr && map.getGrid(3, 1) != 'A') { //need to delete Shelf eventually
+    if (sPtr[0] == nullptr && map.getGrid(3, 1) != 'A') { //purple
         sPtr[0] = new Shelf;
         sPtr[0]->setShelf(0x50);
     }
-    if (sPtr[1] == nullptr && map.getGrid(4, 1) != 'A') {
+    if (sPtr[1] == nullptr && map.getGrid(4, 1) != 'A') { //dark blue
         sPtr[1] = new Shelf;
         sPtr[1]->setShelf(0x10);
     }
-    if (sPtr[2] == nullptr && map.getGrid(5, 1) != 'A') {
+    if (sPtr[2] == nullptr && map.getGrid(5, 1) != 'A') { //teal
         sPtr[2] = new Shelf;
         sPtr[2]->setShelf(0xB0);
     }
-    if (sPtr[3] == nullptr && map.getGrid(6, 1) != 'A') {
+    if (sPtr[3] == nullptr && map.getGrid(6, 1) != 'A') { //cream
         sPtr[3] = new Shelf;
         sPtr[3]->setShelf(0xE0);
     }
-    if (sPtr[4] == nullptr && map.getGrid(7, 1) != 'A') {
+    if (sPtr[4] == nullptr && map.getGrid(7, 1) != 'A') { //green
         sPtr[4] = new Shelf;
         sPtr[4]->setShelf(0xA0);
     }
-    if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') {
+    if (sPtr[5] == nullptr && map.getGrid(8, 1) != 'A') { //blue
         sPtr[5] = new Shelf;
         sPtr[5]->setShelf(0x90);
     }
@@ -175,6 +207,7 @@ void shutdown( void )
 {
     // Reset to white text on black background
     colour(FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+    deleteEverything();
 
     g_Console.clearBuffer();
 }
@@ -294,16 +327,18 @@ void gameplayKBHandler(const KEY_EVENT_RECORD& keyboardEvent) //movement
     EKEYS key = K_COUNT;
     switch (keyboardEvent.wVirtualKeyCode)
     {
-    case 0x57: key = K_UP; break; // changed VK_UP to 0x57 "W"
-    case 0x53: key = K_DOWN; break; //changed VK_DOWN to 0x53 "S"
-    case 0x41: key = K_LEFT; break; // changed VK_LEFT to 0x41 "A"
-    case 0x44: key = K_RIGHT; break; // changed VK_RIGHT to 0x44 "D"
-    case VK_SPACE: key = K_SPACE; break;
-    case VK_ESCAPE: key = K_ESCAPE; break;
-    case VK_SHIFT: key = K_SHIFT; break;
-    case VK_F3: key = K_F3; break;
-    case VK_F4: key = K_F4; break;
-    case VK_F5: key = K_F5; break;
+    case 0x57: key = K_UP; break; // up "W"
+    case 0x53: key = K_DOWN; break; //down "S"
+    case 0x41: key = K_LEFT; break; // left "A"
+    case 0x44: key = K_RIGHT; break; // right "D"
+    case VK_SPACE: key = K_SPACE; break; // restocking space
+    case VK_ESCAPE: key = K_ESCAPE; break; // pause menu escape 
+    case VK_SHIFT: key = K_SHIFT; break; //slow player shift
+
+    //cheats
+    case VK_F3: key = K_F3; break; //debugging
+    case VK_F4: key = K_F4; break; //skip level
+    case VK_F5: key = K_F5; break; //free money
     }
     // a key pressed event would be one with bKeyDown == true
     // a key released event would be one with bKeyDown == false
@@ -394,7 +429,9 @@ void update(double dt)
                     customerPtr[i]->addTimer(dt);
                 }
             }
-            g_dElapsedWorkTime += dt; 
+            if (tutorial.getTutorialFlag(14) == true)
+                g_dElapsedWorkTime += dt; 
+
             if (tutorial.getComplete() == false)
                 tutorialTimer += dt;
             updateGame();// gameplay logic when we are in the game
@@ -517,12 +554,12 @@ void moveCharacter()
     }
 }
 
-// Check if customer and player have collided with each other
+// Check if customer and player's boxes have collided with each other
 void checkCustomerPlayerCollision()
 {
     for (int i = 1; i < 7; i++)
     {
-        if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
+        if (boxPosPtr[i] != nullptr)
         {
             if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
             {
@@ -553,7 +590,7 @@ void checkCustomerPlayerCollision()
                     g_sChar.m_cLocation.Y++;
                     boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
                 }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//west
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())
                 {
 
                     if (customerPtr[i - 1]->getX() == boxPosPtr[i]->getX() - 1)
@@ -569,7 +606,7 @@ void checkCustomerPlayerCollision()
 
 
                 }
-                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())//weird pushing problem is here //east
+                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() - 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY())
                 {
 
                     if (boxPosPtr[i]->getX() == 36 || boxPosPtr[i]->getX() == 57)
@@ -750,25 +787,7 @@ void pickUpBoxes()
     }
 }
 
-//void checkCustomerCollision()
-//{
-//    for (int i = 0; i < 6; i++)
-//    {
-//        for (int j = 1; j < 7;j++)
-//        {
-//            if (customerPtr[i] != nullptr && boxPosPtr[j] != nullptr && j != i)
-//            {
-//                if (customerPtr[i]->getX() == boxPosPtr[j]->getX() && customerPtr[i]->getY() == boxPosPtr[j]->getY())
-//                {
-//                    //customerPtr[i]->setPos(customerPtr[i]->getX(), customerPtr[i]->getY());
-//                    boxPosPtr[j]->setX(customerPtr[i]->getX() - 1);
-//                    //customerPtr[i]->setPos(boxPosPtr[i]->getX() + 1, customerPtr[i]->getY());
-//                }
-//
-//            }
-//        }
-//    }
-//}
+
 
 // Register restock inputs from player and updates
 void restockShelf(){
@@ -826,10 +845,7 @@ void restockShelf(){
     }
 }
 
-//void updateCustomer()
-//{
-//    if
-//}
+
 
 // Update son object variables and keep track of well-being state
 void updateSons()
@@ -915,7 +931,7 @@ void processStoreinput()
 // Delete customers and reset their variables
 void deleteCustomer()
 {
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < 10; i++)
     {
         if (customerPtr[i] != nullptr)
         {
@@ -925,64 +941,7 @@ void deleteCustomer()
     }
 }
 
-// Check for collision with box
-//void checkBoxCollision()
-//{
-//    for (int i = 1; i < 7; i++)
-//    {
-//        if (boxPosPtr[i] != nullptr)
-//        {
-//            if (boxPosPtr[0]->getX() == boxPosPtr[i]->getX() && boxPosPtr[0]->getY() == boxPosPtr[i]->getY())
-//            {
-//                if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) { 
-//                    g_sChar.m_cLocation.Y--;
-//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//                }
-//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) { 
-//                    g_sChar.m_cLocation.Y++;
-//                    boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-//                }
-//                else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() + 1 && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() ) 
-//                {
-//                    g_sChar.m_cLocation.X++;
-//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X - 1);
-//                    
-//                }
-//                else
-//                {
-//                    g_sChar.m_cLocation.X--;
-//                    boxPosPtr[0]->setX(g_sChar.m_cLocation.X + 1); 
-//                }
-//            }
-//        }
-//    }
-//
-//    //for (int i = 1; i < 7; i++)
-//    //{
-//    //    if (boxPosPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-//    //    {
-//    //        if (g_sChar.m_cLocation.X == boxPosPtr[i]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[i]->getY())
-//    //        {
-//    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() - 1) {
-//    //                g_sChar.m_cLocation.Y++;
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//    //            }
-//    //            else if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX() && g_sChar.m_cLocation.Y == boxPosPtr[0]->getY() + 1) {
-//    //                g_sChar.m_cLocation.Y--;
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y - 1);
-//    //            }
-//    //            else
-//    //            {
-//    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-//    //                g_sChar.m_cLocation.Y++;
-//    //            }
-//
-//    //        }
-//
-//    //    }
-//
-//    //}
-//}
+
 
 // Delete customer boxes
 void deleteBoxes()
@@ -1007,14 +966,6 @@ void deleteBoxes()
 // Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
-    if (g_skKeyEvent[K_F4].keyDown)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            tutorial.setTutorialFlag(i, true);
-        }
-    }
-
     if (p.getUnsatisfiedCustomers() == 10) { // change back ltr to 10
             g_eGameState = S_GAMEOVER;
             deleteCustomer();
@@ -1335,7 +1286,7 @@ void processInputHome() //note lol
         }
         else if ((g_mouseEvent.mousePosition.X >= 27
             && g_mouseEvent.mousePosition.X <= 34)
-            && g_mouseEvent.mousePosition.Y == 20) //Change to main game state once mouse clicks on the button
+            && g_mouseEvent.mousePosition.Y == 20 && tutorial.getTutorialFlag(12) == true) //Change to main game state once mouse clicks on the button
         {
             day++;
             p.resetUnsatisfiedCustomers(); //reset unsatifiedCustomers to 0
@@ -1473,8 +1424,7 @@ void render()// make render functions for our level and put it in the switch cas
     case D_BOTH: renderFramerate(); renderInputEvents(); break; // render framerate and input events; also includes other debug info
     }
 
-    //renderFramerate();      // renders debug information, frame rate, elapsed time, etc
-    //renderInputEvents();    // renders status of input events
+    
     renderToScreen();       // dump the contents of the buffer to the screen, one frame worth of game
 }
 
@@ -1514,8 +1464,9 @@ void renderGame()
     map.chooseMap(level, g_Console);       // renders the map to the buffer first
     checkCustomerPlayerCollision();
     
-    renderCharacter();  // renders the character into the buffer
-    renderCustomer();
+    renderCharacter();
+    if (tutorial.getTutorialFlag(15) == true)
+        renderCustomer();  // renders the character into the buffer
     renderBoxes();
     renderShelfAmount();
     renderHUD();
@@ -1553,23 +1504,17 @@ void renderHUD()
     framesPassed++; // counts frames
     COORD c;
     std::ostringstream ss;
-    //ss.str("");//display strikes
-    //ss << "Strikes:" << p.getStrikes();
-    //c.X = 4;
-    //c.Y = 0;
-    //g_Console.writeToBuffer(c, ss.str(), 0x80);
+    
     ss.str("");// display the current day
     ss << "Day:" << day;
     c.X = 20;
     c.Y = 0;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
-    
+    g_Console.writeToBuffer(c, ss.str(), 0x80);    
     ss.str("");// display the daily income
     ss << "Money earned: $" << p.getTotalEarned();
     c.X = 60;
     c.Y = 0;
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-
     ss.str("");     // displays the elapsed time
     if (g_bRestocking == false) {
         int minute;
@@ -1590,12 +1535,7 @@ void renderHUD()
     c.X = 30; //change to shift location of timer
     c.Y = 0;  //we might use this or we might need to make a new timer to show when the game starts
     g_Console.writeToBuffer(c, ss.str(), 0x80);
-    ss.str(""); //probably can be implemented cleaner
-    ss << framesPassed << "frames";
-    c.X = 36;
-    c.Y = 24;
-    g_Console.writeToBuffer(c, ss.str(), 0x80);
-
+    
     ss.str(""); //probably can be implemented cleaner
     ss << "Unsatisfied Customers: " << p.getUnsatisfiedCustomers();
     c.X = 1;
@@ -1631,7 +1571,7 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
+            cTimerArrival = ((20 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
             for (int i = 0; i < cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
@@ -1840,7 +1780,7 @@ void renderHome()
 }
 
 // Render animation for menu screens
-void renderMenuAnimation() //tbd
+void renderMenuAnimation() 
 {
     if (framesPassed % 50 == 0)
     {
@@ -1868,7 +1808,7 @@ void renderHomeExpenses(COORD c)
 {
     std::ostringstream ss;
     ss.str("");
-    //g_Console.writeToBuffer(c, "Home", 0xF0);
+   
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 2.5 + 1;
     ss << "Savings : $" << p.getSavings();
@@ -1927,7 +1867,7 @@ void renderHomeExpenses(COORD c)
         }
     }
     c.Y += 1;
-    ss << "Food ($" << p.getFood() << ") [ ]"; //lol
+    ss << "Food ($" << p.getFood() << ") [ ]"; 
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
     ss.str("");
     if (cPtr[1]->getStatusFed() == true) {
@@ -1958,21 +1898,13 @@ void renderEndOfWorkScreen()
     c.Y /= 25;
     c.X = c.X / 2 - 10;
     g_Console.writeToBuffer(c, "End of day report", 0xF0);
-    /*c.Y += 8;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;
-    ss.str("");
-    ss << "Customers served: ";
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+   
     c.Y += 9;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
     ss << "Complaints given: " << p.getUnsatisfiedCustomers();
     g_Console.writeToBuffer(c, ss.str(), 0xF0);
-    /*c.Y += 1;
-    c.X = g_Console.getConsoleSize().X / 6 + 15;*/
-    /*ss.str("");
-    ss << "Total number of Strikes: "<< p.getStrikes();
-    g_Console.writeToBuffer(c, ss.str(), 0xF0);*/
+    
     c.Y += 1;
     c.X = g_Console.getConsoleSize().X / 6 + 15;
     ss.str("");
@@ -2042,7 +1974,7 @@ void renderTutorialLevel()
     renderShelfAmount();
     renderHUD();
 
-    if (tutorial.getTutorialFlag(6) == true) // comment this out if u need test stuff yes
+    if (tutorial.getTutorialFlag(6) == true) 
         renderCustomer();
 
     renderBoxes();
@@ -2258,21 +2190,7 @@ void renderBoxes()
             g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i-1]);
         }
     }
-    //for (int i = 0; i < 6; i++) { //maybe useful
-    //    switch ('1') {
-    //        case '0': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(221), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour); }
-
-    //        case '1': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour); }
-
-    //        case '2': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(222), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[0]->getY(), char(221), BoxColour); }
-
-    //        case '3': {g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(223), BoxColour);
-    //        g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), char(220), BoxColour); }
-    //    }
-    //}
+   
 }
 
 bool checkWaveGone(int number)
@@ -2312,10 +2230,7 @@ bool switchWaveGone()
     }
 }
 
-//void moveCustomer()
-//{
-//    //todo
-//}
+
 
 // Render customer current position yeye
 void renderCustomer()
@@ -2374,24 +2289,20 @@ void renderCustomer()
                     customerPtr[i]->setYLock(false);
                 }
 
-                //checkCustomerCollision();
+                
                 WORD customerColour;
-                customerColour = 0x20;//green
+                customerColour = 0x20;//green satisfied
                 if (customerPtr[i]->getState() == false)
                 {
-                    //customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x20, customerPtr[i]->getState()); //green
-                    customerColour = 0x44; //red
+                    customerColour = 0x44; //red unsatisfied
                 }
-                //else
-                //{
-                //    customerPtr[i]->printOutCustomer(spawned[i], g_Console, customerPtr[i]->getPos(), map, customerPtr[i]->getQuantity(), 0x44, customerPtr[i]->getState()); //red
-                //}
+               
                 customerPtr[i]->printOutCustomer(g_Console, map, customerPtr[i]->getQuantity(), customerColour);
-                //checkCustomerCollision();
+               
 
                 if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
                 {
-                    customerPtr[i]->setTimer(12);
+                    customerPtr[i]->setTimer(5.10);
                     customerPtr[i]->setTimerSet(true);
                     customerPtr[i]->setTravelling(false);
                 }
@@ -2419,83 +2330,31 @@ void renderCustomer()
                     }
                 }
 
-                if (customerPtr[i]->getTimer() >= 10.95 && customerPtr[i]->getTimer() <= 11.05)
+                if (customerPtr[i]->getTimer() >= 4.95 && customerPtr[i]->getTimer() <= 5.05)
                 {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     customerPtr[i]->setTravelling(true);
                     customerPtr[i]->setTimer(-1);
                 }
 
-                if ((customerPtr[i]->getTimer() >= 30.95) && (customerPtr[i]->getTimer() <= 31.05))
+                if ((customerPtr[i]->getTimer() >= 19.95) && (customerPtr[i]->getTimer() <= 20.05))
                 {
                     
 
-                    //for (int j = 0; j < 6; j++) {
+                    
 
-                    //    if (sPtr[j] != nullptr) {
-
-                    //        if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && (customerPtr[i]->getY() == 7 || customerPtr[i]->getY() == 13 || customerPtr[i]->getY() == 19) )
-                    //        {
-                    //            sPtr[j]->decreaseItem(1);
-
-                    //            p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
-
-                    //            customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1); //causing money to go to negative
-
-                    //            if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
-                    //                switch (j)
-                    //                {
-                    //                case 0:
-                    //                    CustomerBoxColour[i] = 0x50;
-                    //                    break;
-                    //                case 1:
-                    //                    CustomerBoxColour[i] = 0x10;
-                    //                    break;
-                    //                case 2:
-                    //                    CustomerBoxColour[i] = 0xB0;
-                    //                    break;
-                    //                }
-                    //            }
-
-                    //            else if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3))
-                    //            {
-                    //                switch (j)
-                    //                {
-                    //                case 3:
-                    //                    CustomerBoxColour[i] = 0xE0;
-                    //                    break;
-                    //                case 4:
-                    //                    CustomerBoxColour[i] = 0xA0;
-                    //                    break;
-                    //                case 5:
-                    //                    CustomerBoxColour[i] = 0x90;
-                    //                    break;
-                    //                }
-                    //            }
-                    //        }
-
-                    //        else if (sPtr[j]->getAmount() < customerPtr[i]->getQuantity() && (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58) && customerPtr[i]->getY() == 7 + 6 * j && customerPtr[i]->getMovingBack() != true && CustomerBoxColour[i] == 0x77) { //&& (customerPtr[i]->getX() == 37 || customerPtr[i]->getX() == 58 ) && customerPtr[i]->getY() == 7 + 6 * j
-                    //            p.increaseUnsatisfiedCustomers();
-                    //            customerPtr[i]->setEndPoint(79, 15);
-                    //            customerPtr[i]->setAvoiding(5);
-                    //            customerPtr[i]->setMovingBack(true);
-                    //            customerPtr[i]->unSatisfied();
-                    //        }
-                    //    }
-                    //}
-
-                    for (int j = 0; j < 3; j++) {
+                    for (int j = 0; j < 3; j++) { //right hand shelves
                      
                         if (sPtr[j] != nullptr) {
 
                             if (customerPtr[i]->getX() == 37 && customerPtr[i]->getY() == 7 + 6 * j) {
    
 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity()) //satisfied
                                 {
                                     sPtr[j]->decreaseItem(1);
 
-                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+                                    p.AddDayEarnings(1); //for adding amount earned daily
 
                                     customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
@@ -2513,7 +2372,7 @@ void renderCustomer()
                                     }
                                 }
 
-                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) { //unsatisfied
                                     p.increaseUnsatisfiedCustomers();
                                     customerPtr[i]->setEndPoint(79, 17);
                                     customerPtr[i]->setAvoiding(5);
@@ -2527,18 +2386,18 @@ void renderCustomer()
                         }
                     }
 
-                    for (int j = 3; j < 6; j++) {
+                    for (int j = 3; j < 6; j++) { //left hand shelves
 
                         if (sPtr[j] != nullptr) {
 
                             if (customerPtr[i]->getX() == 58 && customerPtr[i]->getY() == 7 + 6 * (j-3)) {
                                 
                                 
-                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity())
+                                if (sPtr[j]->getAmount() >= customerPtr[i]->getQuantity()) //satisfied
                                 {
                                     sPtr[j]->decreaseItem(1);
 
-                                    p.AddDayEarnings(1); //for adding amount earned daily// can change it if need be
+                                    p.AddDayEarnings(1); //for adding amount earned daily
 
                                     customerPtr[i]->setQuantity(customerPtr[i]->getQuantity() - 1);
 
@@ -2556,7 +2415,7 @@ void renderCustomer()
                                     }
                                 }
 
-                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) {
+                                else if (CustomerBoxColour[i] = 0x77 && sPtr[j]->getAmount() < customerPtr[i]->getQuantity()) { //unsatisfied
                                     p.increaseUnsatisfiedCustomers();
                                     customerPtr[i]->setEndPoint(79, 17);
                                     customerPtr[i]->setAvoiding(5);
@@ -2569,7 +2428,7 @@ void renderCustomer()
                     }
                 }
 
-                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 17)
+                else if (customerPtr[i]->getPos().getX() == 79 && customerPtr[i]->getPos().getY() == 17) //when customer exits store
                 {
                     delete customerPtr[i];
                     customerPtr[i] = nullptr;
@@ -2608,27 +2467,7 @@ void renderCustomer()
 // Render player current position
 void renderCharacter()
 {
-    //for (int i = 0; i < 6; i++)
-    //{
-    //    if (customerPtr[i] != nullptr)//&& g_sChar.m_cLocation.X == boxPosPtr[0]->getX()
-    //    {
-    //        if (g_sChar.m_cLocation.X == customerPtr[i]->getX() && g_sChar.m_cLocation.Y == customerPtr[i]->getY() )
-    //        {
-    //            if (g_sChar.m_cLocation.X == boxPosPtr[0]->getX()) {
-    //                g_sChar.m_cLocation.Y++;
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //            }
-    //            else
-    //            {
-    //                boxPosPtr[0]->setY(g_sChar.m_cLocation.Y + 1);
-    //                g_sChar.m_cLocation.Y++;
-    //            }
-    //            
-    //        }
-    //        
-    //    }
-
-    //}
+    
     // Draw the location of the character
     WORD charColor = 0x99;
     if (g_sChar.m_bActive)
