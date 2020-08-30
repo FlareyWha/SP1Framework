@@ -64,6 +64,7 @@ bool increased;
 //tutorial stuff;
 Tutorial tutorial;
 double tutorialTimer;
+bool tutorialComplete;
 
 // Console object
 int g_ConsoleX = 80;
@@ -154,6 +155,8 @@ void init( void )
 
     customerMultiplier = 6;
     increased = false;
+
+    tutorialComplete = false;
 
     g_sChar.m_bActive = true;
     // sets the width, height and the font name to use in the console
@@ -1004,20 +1007,24 @@ void deleteBoxes()
 // Check if day has ended and if lose conditions have been met; Reset variables
 void checkEnd() //Check if day has ended and update variables as well as game over conditions
 {
-    if (p.getUnsatisfiedCustomers() == 50) { // change back ltr to 10
+    if (g_skKeyEvent[K_F4].keyDown)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            tutorial.setTutorialFlag(i, true);
+        }
+    }
+
+    if (p.getUnsatisfiedCustomers() == 10) { // change back ltr to 10
             g_eGameState = S_GAMEOVER;
             deleteCustomer();
             deleteBoxes();
-        }
+    }
     else if (g_dElapsedWorkTime >= 30) { //change back ltr to 30
         g_bRestocking = false;
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
-       // for (int i = 0; i < 10; i++) // delete ltr this is for testing
-        //{
-        //    tutorial.setTutorialFlag(i, true);
-        //}
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
@@ -1495,6 +1502,10 @@ void renderSplashScreen()  // renders the splash screen
 // Render game levels and entities
 void renderGame()
 {
+    if (tutorialComplete == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
+    }
    
     if (day < 5) {
         level = day + 1;
@@ -1783,6 +1794,10 @@ void renderMainMenu()
 // Render home menu
 void renderHome() 
 {
+    if (tutorialComplete == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
+    }
     map.chooseMap(6, g_Console);
     renderMenuAnimation();
     COORD c = g_Console.getConsoleSize();
@@ -1933,6 +1948,11 @@ void renderHomeExpenses(COORD c)
 // Render end of work screen information
 void renderEndOfWorkScreen()
 {
+    if (tutorialComplete == false)
+    {
+        tutorial.tutorial(g_Console, g_sChar, g_mouseEvent, g_skKeyEvent, g_dElapsedWorkTime, p, BoxColour, tutorialTimer);
+    }
+
     map.chooseMap(7, g_Console);
     COORD c = g_Console.getConsoleSize();
     std::ostringstream ss;

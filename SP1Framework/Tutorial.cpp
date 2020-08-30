@@ -81,6 +81,13 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         alreadyPlayed[6] = true;
     }*/
 
+    if (g_skKeyEvent[K_F4].keyDown)
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            tutorialFlags[i] = true;
+        }
+    }
     if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
         tutorialFlags[0] = true;
     else if (allTrue == true && tutorialFlags[0] == true && tutorialFlags[1] == false)
@@ -354,7 +361,7 @@ void Tutorial::flagTen(Console& console)
 {
     COORD c;
 
-    c.Y = 19;
+    c.Y = 16;
     c.X = 17;
     console.writeToBuffer(c, "The customer is now leaving. For each item a customer buys,", 0xF0);
     c.Y += 1;
@@ -363,6 +370,12 @@ void Tutorial::flagTen(Console& console)
     console.writeToBuffer(c, "right. You now have about 1min 30secs till the supermarket", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "closes. You can see the time left on the top middle.", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "One more thing, customers will come in waves due to social", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "distancing regulations. The more shelves we get, the more", 0xF0);
+    c.Y += 1;
+    console.writeToBuffer(c, "customers we can let in. Right now its 6.", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "Satisfy as many customers as you can. Good luck!", 0xF0);
 }
