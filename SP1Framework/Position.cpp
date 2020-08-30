@@ -14,7 +14,7 @@ void Position::gotoxy(int x, int y) const
 Position::Position()
 {
 	x = 0;
-	y = 0;
+	y = 25;
 }
 
 Position::Position(int x, int y)
