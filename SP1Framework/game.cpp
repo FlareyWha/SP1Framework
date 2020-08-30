@@ -1626,7 +1626,7 @@ void renderCustomerTimer(int shelf) //works ?
             if (shelfX == 0) { shelf = shelfY; }
             else {shelf = shelfY + 3;}
 
-            cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
+            cTimerArrival = ((20 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
             for (int i = 0; i < cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
@@ -2386,7 +2386,7 @@ void renderCustomer()
 
                 if (customerPtr[i]->getPos().getX() == customerPtr[i]->getEndPoint().getX() && customerPtr[i]->getPos().getY() == customerPtr[i]->getEndPoint().getY() && customerPtr[i]->getTimerSet() == false)
                 {
-                    customerPtr[i]->setTimer(12);
+                    customerPtr[i]->setTimer(5.10);
                     customerPtr[i]->setTimerSet(true);
                     customerPtr[i]->setTravelling(false);
                 }
@@ -2414,14 +2414,14 @@ void renderCustomer()
                     }
                 }
 
-                if (customerPtr[i]->getTimer() >= 10.95 && customerPtr[i]->getTimer() <= 11.05)
+                if (customerPtr[i]->getTimer() >= 4.95 && customerPtr[i]->getTimer() <= 5.05)
                 {
                     customerPtr[i]->moveToShelfContainingItem(customerPtr[i]->getItemToBuy());
                     customerPtr[i]->setTravelling(true);
                     customerPtr[i]->setTimer(-1);
                 }
 
-                if ((customerPtr[i]->getTimer() >= 30.95) && (customerPtr[i]->getTimer() <= 31.05))
+                if ((customerPtr[i]->getTimer() >= 19.95) && (customerPtr[i]->getTimer() <= 20.05))
                 {
                     
 
