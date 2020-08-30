@@ -347,7 +347,7 @@ void Tutorial::flagEight(Console& console)
     c.Y += 1;
     console.writeToBuffer(c, "The number on the customer", 0xF0);
     c.Y += 1;
-    console.writeToBuffer(c, "represents how much of an item they", 0xF0);
+    console.writeToBuffer(c, "represents the quantity of items they", 0xF0);
     c.Y += 1;
     console.writeToBuffer(c, "want to buy. For now, keep on", 0xF0);
     c.Y += 1;
