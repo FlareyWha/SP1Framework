@@ -201,6 +201,27 @@
     <Media Include="BGM.wav">
       <Filter>Resource Files</Filter>
     </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS8.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS9.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS10.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS11.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS12.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS13.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS14.wav">
+      <Filter>Resource Files</Filter>
+    </Media>
   </ItemGroup>
   <ItemGroup>
     <None Include="Save.dat">

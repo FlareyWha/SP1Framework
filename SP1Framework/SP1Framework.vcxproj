@@ -134,6 +134,13 @@
   </ItemGroup>
   <ItemGroup>
     <Media Include="..\..\..\..\..\..\temp\TutorialTTSF1.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS10.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS11.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS12.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS13.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS14.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS8.wav" />
+    <Media Include="..\..\..\..\Downloads\Tutorial audio\wav\TutorialTTS9.wav" />
     <Media Include="..\..\..\..\Downloads\TutorialTTSF3.wav" />
     <Media Include="BGM.wav" />
     <Media Include="IntenseMusic(30).wav" />
