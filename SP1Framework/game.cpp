@@ -1202,6 +1202,9 @@ void processInputMenu() //All input processing related to Main Menu
                 loadSuccessful = false;
                 g_eGameState = S_HOME;
                 g_ePreviousGameState = S_MENU;
+                tutorial.setTutorialFlag(11, true);
+                tutorial.setTutorialFlag(12, true);
+                tutorial.setTutorialFlag(13, true);
             }
         }
     }
