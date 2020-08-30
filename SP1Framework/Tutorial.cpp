@@ -81,14 +81,7 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
         alreadyPlayed[6] = true;
     }*/
 
-    if (g_skKeyEvent[K_F4].keyDown)
-    {
-        for (int i = 0; i < 10; i++) // delete ltr this is for testing
-        {
-            tutorialFlags[i] = true;
-        }
-    }
-    else if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
+    if ((g_mouseEvent.buttonState == FROM_LEFT_1ST_BUTTON_PRESSED) && (tutorialFlags[0] == false) && (tutorialTimer > 1))
         tutorialFlags[0] = true;
     else if (allTrue == true && tutorialFlags[0] == true && tutorialFlags[1] == false)
         tutorialFlags[1] = true;
@@ -130,10 +123,6 @@ void Tutorial::tutorial(Console& console, SGameChar& g_sChar, SMouseEvent& g_mou
     }
     else if (g_dElaspedWorkTime >= 150 && tutorialFlags[8] == true && tutorialFlags[9] == false)
     {
-        for (int i = 0; i < 9; i++) // delete ltr this is for testing
-        {
-            tutorialFlags[i] = true;
-        }
         tutorialFlags[9] = true;
     }
 }
@@ -394,6 +383,11 @@ void Tutorial::flagEleven(Console& console)
 bool Tutorial::getTutorialFlag(int number)
 {
     return tutorialFlags[number];
+}
+
+void Tutorial::setTutorialFlag(int number, bool set)
+{
+    tutorialFlags[number] = set;
 }
 
 bool Tutorial::getProceed(void)

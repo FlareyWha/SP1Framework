@@ -1016,6 +1016,10 @@ void checkEnd() //Check if day has ended and update variables as well as game ov
     }
     if (g_skKeyEvent[K_F4].keyDown || g_dElapsedWorkTime >= 150)
     {
+       // for (int i = 0; i < 10; i++) // delete ltr this is for testing
+        //{
+        //    tutorial.setTutorialFlag(i, true);
+        //}
         g_sChar.moving.UP = false;
         g_sChar.moving.DOWN = false;
         g_sChar.moving.LEFT = false;
@@ -1616,7 +1620,7 @@ void renderCustomerTimer(int shelf) //works ?
 
             cTimerArrival = ((30 - customerPtr[i]->getTimer())/2)+2; //change this formula if u change anything about customer timer
             
-            for (int i = 0; i <= cTimerArrival; i++) {
+            for (int i = 0; i < cTimerArrival; i++) {
                 g_Console.writeToBuffer(c, char(220), colors[shelf]);
                 c.X++;
             }
