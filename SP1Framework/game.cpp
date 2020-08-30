@@ -48,8 +48,8 @@ bool playerSpeedToggle;
 int playerWalkSpeed;
 int playerSpeed;
 
-Box* boxPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
-Position* boxPosPtr[7] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
+Box* boxPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
+Position* boxPosPtr[11] = { nullptr, nullptr, nullptr, nullptr, nullptr , nullptr, nullptr, nullptr, nullptr , nullptr, nullptr };
 WORD BoxColour;
 Map map;
 saveLoad saves;
@@ -57,7 +57,7 @@ int framesPassed;
 int frameMarker;
 
 int customerDirection[6];
-WORD CustomerBoxColour[6];
+WORD CustomerBoxColour[10];
 
 //tutorial stuff;
 Tutorial tutorial;
@@ -986,7 +986,7 @@ void deleteCustomer()
 // Delete customer boxes
 void deleteBoxes()
 {
-    for (int i = 1; i < 7; i++)
+    for (int i = 1; i < 11; i++)
     {
         if (boxPtr[i] != nullptr)
         {
@@ -2220,11 +2220,11 @@ void renderCredits()
 void renderBoxes()
 {
     g_Console.writeToBuffer(boxPosPtr[0]->getX(), boxPosPtr[0]->getY(), ' ', BoxColour);
-    for (int i = 0; i < 6; i++)
+    for (int i = 1; i < 11; i++)
     {
-        if (boxPtr[i + 1] != nullptr)
+        if (boxPtr[i] != nullptr)
         {
-            g_Console.writeToBuffer(boxPosPtr[i + 1]->getX(), boxPosPtr[i + 1]->getY(), ' ', CustomerBoxColour[i]);
+            g_Console.writeToBuffer(boxPosPtr[i]->getX(), boxPosPtr[i]->getY(), ' ', CustomerBoxColour[i]);
         }
     }
     //for (int i = 0; i < 6; i++) { //maybe useful
@@ -2453,7 +2453,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    CustomerBoxColour[i] = 0x77;
+                                    //CustomerBoxColour[i] = 0x77;
                                 }
 
                             }
@@ -2496,7 +2496,7 @@ void renderCustomer()
                                     customerPtr[i]->setAvoiding(5);
                                     customerPtr[i]->setMovingBack(true);
                                     customerPtr[i]->unSatisfied();
-                                    CustomerBoxColour[i] = 0x77;
+                                    //CustomerBoxColour[i] = 0x77;
                                 }
                             }
                         }
