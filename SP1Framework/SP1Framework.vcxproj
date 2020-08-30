@@ -90,7 +90,6 @@
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Position.cpp" />
     <ClCompile Include="Powerup.cpp" />
-    <ClCompile Include="saveLoad.cpp" />
     <ClCompile Include="Shelf.cpp" />
     <ClCompile Include="Son.cpp" />
     <ClCompile Include="Tutorial.cpp" />
@@ -107,7 +106,6 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="Position.h" />
     <ClInclude Include="Powerup.h" />
-    <ClInclude Include="saveLoad.h" />
     <ClInclude Include="Shelf.h" />
     <ClInclude Include="Son.h" />
     <ClInclude Include="Tutorial.h" />
